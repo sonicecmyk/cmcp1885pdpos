@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#17324d">
+<title>展場收銀 APP</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#1d2730;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif}
+header{background:#17324d;color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:5}header h1{font-size:22px;margin:0 0 4px}.datebar{font-size:14px;opacity:.85}
+main{max-width:760px;margin:auto;padding:12px 12px 90px}.tabbar{position:sticky;top:74px;background:#eef2f5;z-index:4;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 0}
+.tabbar button{border:0;background:#dbe2e8;color:#344653;border-radius:10px;padding:10px 4px;font-weight:700}.tabbar button.active{background:#17324d;color:#fff}
+.page{display:none}.page.active{display:block}.card{background:#fff;border-radius:15px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #0000000b}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:12px 0 8px}.muted{color:#697781;font-size:13px}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.product{border:1px solid #d8dee3;border-radius:12px;padding:10px;text-align:center}.product .name{font-weight:700;font-size:14px}.price{font-size:13px;color:#63727d}.qty{width:100%;font-size:21px;text-align:center;margin-top:8px}
+input,select{width:100%;border:1px solid #ccd5dc;border-radius:9px;padding:10px;font-size:16px;background:#fff}.qty{border:1px solid #ccd5dc;border-radius:9px}
+.payments{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.paybtn{padding:12px 4px;border:1px solid #ccd5dc;background:#fff;border-radius:10px;font-weight:700}.paybtn.active{background:#e4eef6;border:2px solid #17324d}
+.bigtotal{text-align:center;background:#f4f7f9;border-radius:12px;padding:12px;margin:12px 0}.bigtotal small{display:block;color:#697781}.bigtotal strong{font-size:30px}
+.primary{width:100%;background:#17324d;color:#fff;border:0;border-radius:11px;padding:13px;font-size:17px;font-weight:700}.secondary{background:#e8edf1;color:#253640;border:0;border-radius:10px;padding:10px 12px;font-weight:700}.danger{background:#b43d3d;color:white}
+.summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:#f5f7f8;border-radius:11px;padding:11px}.stat span{display:block;color:#697781;font-size:13px}.stat b{font-size:20px}
+table{width:100%;border-collapse:collapse}th,td{padding:8px 4px;border-bottom:1px solid #e7ebee}th{text-align:right;font-size:13px;color:#697781}th:first-child,td:first-child{text-align:left}.moneyInput{width:90px;text-align:right;padding:8px}
+.cashTotal{font-size:26px;font-weight:800;text-align:right;margin-top:12px}.check{padding:12px;border-radius:11px;margin-top:10px;font-weight:700}.ok{background:#e7f5eb;color:#1e7040}.warn{background:#fff2df;color:#8a5a12}.bad{background:#fde8e8;color:#a52828}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.listrow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
+details.card{padding:0}details.card summary{list-style:none;cursor:pointer;padding:15px;font-weight:700}details.card summary::-webkit-details-marker{display:none}details.card summary:after{content:"▾";float:right}details.card[open] summary:after{content:"▴"}details.card .inner{padding:0 15px 15px}
+.edititem{display:flex;align-items:center;gap:8px;margin:4px 0}.edititem .lbl{flex:0 0 66px;font-size:13px;color:#454f57}
+.serial{font-size:12px;padding:7px;border:1px solid #ccd5dc;border-radius:8px}
+.product .serial{margin-top:6px;width:100%}
+.saleCard{border:1px solid #e3e8eb;border-radius:12px;padding:10px;margin:8px 0}
+.badge{display:inline-block;background:#e4eef6;color:#17324d;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700}
+</style>
+</head>
+<body>
+<header><h1>🧾 展場收銀</h1><div class="datebar" id="headerDate"></div></header>
+<main>
+<div class="tabbar">
+<button id="t-sale" class="active" onclick="tab('sale')">收銀</button>
+<button id="t-cash" onclick="tab('cash')">現金清點</button>
+<button id="t-report" onclick="tab('report')">今日營收</button>
+<button id="t-history" onclick="tab('history')">日期報表</button>
+</div>
+
+<section id="sale" class="page active">
+<div class="card">
+<h2>新增銷售</h2>
+<h3>銷售日期</h3>
+<input type="date" id="saleDate" onchange="renderQuick()">
+<h3>販售項目</h3>
+<div class="products" id="productsGrid"></div>
+<h3>折扣（選填）</h3>
+<input id="saleDiscount" type="number" min="0" value="0" placeholder="折扣金額" oninput="calcSale()">
+<div class="bigtotal">
+<small>本筆金額</small>
+<div id="discountRow" class="muted" style="display:none">小計 $<span id="saleSubtotal">0</span>　折扣 -$<span id="saleDiscountShow">0</span></div>
+<strong id="saleTotal">$0</strong>
+</div>
+<h3>付款方式</h3>
+<div class="payments">
+<button class="paybtn active" data-pay="現金" onclick="choosePay(this)">現金</button>
+<button class="paybtn" data-pay="匯款" onclick="choosePay(this)">匯款</button>
+<button class="paybtn" data-pay="刷卡" onclick="choosePay(this)">刷卡</button>
+</div>
+<div id="transferField" style="display:none;margin-top:8px">
+<input type="text" id="transferLast5" placeholder="匯款帳號末5碼" maxlength="5" inputmode="numeric">
+</div>
+<br><button class="primary" onclick="addSale()">＋ 完成收款</button>
+</div>
+
+<details class="card">
+<summary>🛠️ 管理販售項目（新增／調整金額）</summary>
+<div class="inner">
+<div id="manageList"></div>
+<div class="row" style="margin-top:8px">
+<input id="newProdName" placeholder="項目名稱">
+<input id="newProdPrice" type="number" min="0" placeholder="金額">
+<button class="secondary" style="flex:0 0 64px" onclick="addProduct()">新增</button>
+</div>
+</div>
+</details>
+
+<div class="card"><h2 id="quickTitle">快速統計</h2><div id="quick"></div></div>
+</section>
+
+<section id="cash" class="page">
+<div class="card">
+<h2>💵 原零用金</h2>
+<p class="muted">輸入今天開店準備的零用金總額。</p>
+<input type="number" id="floatAmount" min="0" placeholder="例如 8000">
+<button class="primary" style="margin-top:10px" onclick="saveFloat()">儲存原零用金</button>
+</div>
+<div class="card">
+<h2>🔄 今日結算零用金</h2>
+<p class="muted">收班時，先把要留下當零用金的各面額數量點出來（正常應與「原零用金」相同）。</p>
+<div id="closeFloatTable"></div>
+<div class="cashTotal">結算零用金：$<span id="closeFloatTotal">0</span></div>
+<button class="primary" onclick="saveCloseFloat()">儲存結算零用金</button>
+</div>
+<div class="card">
+<h2>🧮 今日營收現金</h2>
+<p class="muted">扣除零用金之後，屬於今天營收的現金，請點清各面額數量，系統會自動比對差額。</p>
+<div id="countTable"></div>
+<div class="cashTotal">今日營收現金：$<span id="countTotal">0</span></div>
+<div id="cashCheck"></div>
+<button class="primary" onclick="saveCount()">儲存今日營收現金</button>
+</div>
+</section>
+
+<section id="report" class="page">
+<div class="card">
+<div class="row"><span class="muted" style="flex:0 0 60px">日期</span><input type="date" id="reportEditDate" onchange="renderReport()"></div>
+</div>
+<div id="reportCapture">
+<div class="card"><h2>📊 營收統計</h2><div id="todayReport"></div></div>
+<div class="card"><h2>💰 現金驗算</h2><div id="todayCash"></div></div>
+<div class="card"><h2>🧾 交易明細（可調整數量／折扣／付款方式／票號）</h2><div id="saleEdit"></div></div>
+<div class="card"><h2>🏦 匯款紀錄（末5碼）</h2><div id="transferList"></div></div>
+<div class="card"><h2>🔖 票號紀錄</h2><div id="serialList"></div></div>
+</div>
+<button class="secondary" style="width:100%;margin-top:10px" onclick="downloadImage('reportCapture','今日營收_'+(reportEditDate.value||today))">⬇️ 下載圖片報表</button>
+</section>
+
+<section id="history" class="page">
+<div class="card"><h2>📅 單日報表</h2><input type="date" id="reportDate" onchange="renderHistory()"><div id="historyReport"></div></div>
+<div class="card">
+<h2>📆 區間報表</h2>
+<div class="row">
+<input type="date" id="rangeStart">
+<input type="date" id="rangeEnd">
+</div>
+<button class="secondary" style="width:100%;margin-top:8px" onclick="renderRange()">統計區間</button>
+<div id="rangeCapture"><div id="rangeReport" style="margin-top:10px"></div></div>
+<button class="secondary" style="width:100%;margin-top:10px" onclick="downloadImage('rangeCapture','區間報表_'+(rangeStart.value||'')+'_'+(rangeEnd.value||''))">⬇️ 下載圖片報表</button>
+</div>
+<div class="card"><h2>🗓️ 每日營收列表</h2><div id="dateList"></div></div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+const DEN=[1,5,10,50,100,500,1000];
+const KEY='expoCashierV3';
+const KEY_OLD='expoCashierV2';
+let selectedPay='現金';
+const dateStr=()=>new Date().toLocaleDateString('sv-SE');
+let today=dateStr();
+
+function uid(prefix){return prefix+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function money(n){return Number(n||0).toLocaleString('zh-TW')}
+
+function loadDb(){
+ let raw=localStorage.getItem(KEY);
+ if(raw){try{return JSON.parse(raw)}catch(e){}}
+ let base={products:[{id:'ticket',name:'門票',price:100},{id:'pack',name:'套票',price:1588},{id:'roll',name:'肉捲',price:280}],sales:[],float:{},closeFloat:{},count:{}};
+ let old=localStorage.getItem(KEY_OLD);
+ if(old){
+  try{
+   let o=JSON.parse(old);
+   base.float=o.float||{};
+   base.count=o.count||{};
+   base.sales=(o.sales||[]).map((s,i)=>{
+    let items=[];
+    if(s.ticket) items.push({id:'ticket',name:'門票',price:100,qty:s.ticket});
+    if(s.pack) items.push({id:'pack',name:'套票',price:1588,qty:s.pack});
+    if(s.roll) items.push({id:'roll',name:'肉捲',price:280,qty:s.roll});
+    return {id:uid('m'),date:s.date,time:s.time||'',items,discount:0,subtotal:s.total,total:s.total,pay:s.pay};
+   });
+  }catch(e){}
+ }
+ return base;
+}
+let db=loadDb();
+db.closeFloat=db.closeFloat||{};
+db.floatAmount=db.floatAmount||{};
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+
+document.getElementById('headerDate').textContent=today;
+document.getElementById('reportDate').value=today;
+document.getElementById('reportEditDate').value=today;
+document.getElementById('saleDate').value=today;
+
+function tab(id){
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.tabbar button').forEach(x=>x.classList.remove('active'));document.getElementById('t-'+id).classList.add('active');
+ if(id==='cash')renderCash();
+ if(id==='report')renderReport();
+ if(id==='history'){renderHistory();renderDateList()}
+}
+function choosePay(btn){
+ selectedPay=btn.dataset.pay;
+ document.querySelectorAll('.paybtn').forEach(x=>x.classList.remove('active'));
+ btn.classList.add('active');
+ transferField.style.display=selectedPay==='匯款'?'block':'none';
+}
+
+/* ---------- 商品管理 ---------- */
+function renderProductGrid(){
+ productsGrid.innerHTML=db.products.map(p=>`<div class="product"><div class="name">${esc(p.name)}</div><div class="price">$${money(p.price)}</div><input class="qty saleQty" data-id="${p.id}" type="number" min="0" value="0" oninput="calcSale()"><input class="serial saleSerial" data-id="${p.id}" type="text" placeholder="票號(選填)"></div>`).join('');
+}
+function renderProductManage(){
+ manageList.innerHTML=db.products.length?db.products.map(p=>`<div class="edititem"><span class="lbl">項目</span><input value="${esc(p.name)}" oninput="updateProductField('${p.id}','name',this.value)"><span class="lbl">金額</span><input type="number" min="0" value="${p.price}" oninput="updateProductField('${p.id}','price',this.value)"><button class="secondary danger" style="flex:0 0 40px" onclick="deleteProduct('${p.id}')">✕</button></div>`).join(''):'<p class="muted">尚無販售項目</p>';
+}
+function addProduct(){
+ let name=newProdName.value.trim(),price=+newProdPrice.value;
+ if(!name||!price){alert('請輸入項目名稱與金額');return}
+ db.products.push({id:uid('p'),name,price});
+ newProdName.value='';newProdPrice.value='';
+ save();renderProductGrid();renderProductManage();calcSale();
+}
+function updateProductField(id,field,val){
+ let p=db.products.find(x=>x.id===id);if(!p)return;
+ if(field==='price')p.price=+val||0;else p.name=val;
+ save();
+ if(field==='price'){renderProductGrid();calcSale()}
+}
+function deleteProduct(id){
+ if(!confirm('確定刪除此項目？（已產生的銷售紀錄不受影響）'))return;
+ db.products=db.products.filter(x=>x.id!==id);
+ save();renderProductGrid();renderProductManage();calcSale();
+}
+
+/* ---------- 收銀 ---------- */
+function calcSale(){
+ let subtotal=0;
+ document.querySelectorAll('.saleQty').forEach(inp=>{let p=db.products.find(x=>x.id===inp.dataset.id);if(p)subtotal+=(+inp.value||0)*p.price});
+ let discount=+saleDiscount.value||0;if(discount<0)discount=0;if(discount>subtotal)discount=subtotal;
+ let total=subtotal-discount;
+ saleSubtotal.textContent=money(subtotal);
+ saleDiscountShow.textContent=money(discount);
+ discountRow.style.display=discount>0?'block':'none';
+ saleTotal.textContent='$'+money(total);
+}
+function addSale(){
+ let items=[];
+ document.querySelectorAll('.saleQty').forEach(inp=>{
+  let qty=+inp.value||0;
+  if(qty>0){
+   let p=db.products.find(x=>x.id===inp.dataset.id);
+   let serialInput=document.querySelector(`.saleSerial[data-id="${inp.dataset.id}"]`);
+   let serial=serialInput?serialInput.value.trim():'';
+   if(p)items.push({id:p.id,name:p.name,price:p.price,qty,serial});
+  }
+ });
+ if(!items.length){alert('請先輸入販售數量');return}
+ let subtotal=items.reduce((s,i)=>s+i.qty*i.price,0);
+ let discount=+saleDiscount.value||0;if(discount<0)discount=0;if(discount>subtotal)discount=subtotal;
+ let total=subtotal-discount;
+ let d=saleDate.value||today;
+ let transferLast5=selectedPay==='匯款'?transferLast5Input().value.trim():'';
+ db.sales.push({id:uid('s'),date:d,items,discount,subtotal,total,pay:selectedPay,transferLast5,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})});
+ save();
+ document.querySelectorAll('.saleQty').forEach(i=>i.value=0);
+ document.querySelectorAll('.saleSerial').forEach(i=>i.value='');
+ saleDiscount.value=0;
+ transferLast5Input().value='';
+ calcSale();renderQuick();
+ alert('收款完成！');
+}
+function transferLast5Input(){return document.getElementById('transferLast5')}
+function salesOf(d){return db.sales.filter(x=>x.date===d)}
+function totals(d){
+ let rows=salesOf(d);
+ let r={itemQty:{},itemNames:{},現金:0,匯款:0,刷卡:0,total:0,discount:0,subtotal:0,count:rows.length};
+ rows.forEach(x=>{
+  (x.items||[]).forEach(it=>{r.itemQty[it.id]=(r.itemQty[it.id]||0)+it.qty;r.itemNames[it.id]=it.name});
+  r[x.pay]=(r[x.pay]||0)+x.total;
+  r.total+=x.total;
+  r.discount+=x.discount||0;
+  r.subtotal+=(x.subtotal!=null?x.subtotal:x.total);
+ });
+ return r;
+}
+function buildStatsHtml(r){
+ let itemsHtml=Object.keys(r.itemQty).map(id=>`<div class="stat"><span>${esc(r.itemNames[id])}</span><b>${r.itemQty[id]}</b></div>`).join('');
+ return `<div class="summary">
+ <div class="stat"><span>營業額</span><b>$${money(r.total)}</b></div>
+ <div class="stat"><span>交易筆數</span><b>${r.count}</b></div>
+ <div class="stat"><span>現金</span><b>$${money(r.現金||0)}</b></div>
+ <div class="stat"><span>匯款</span><b>$${money(r.匯款||0)}</b></div>
+ <div class="stat"><span>刷卡</span><b>$${money(r.刷卡||0)}</b></div>
+ <div class="stat"><span>折扣總額</span><b>$${money(r.discount||0)}</b></div>
+ ${itemsHtml}
+ </div>`;
+}
+function getFloatAmount(d){
+ if(db.floatAmount&&Object.prototype.hasOwnProperty.call(db.floatAmount,d))return +db.floatAmount[d]||0;
+ if(db.float&&db.float[d])return sumCash(db.float[d]);
+ return null;
+}
+function hasFloatSet(d){
+ return !!(db.floatAmount&&Object.prototype.hasOwnProperty.call(db.floatAmount,d))||!!(db.float&&db.float[d]);
+}
+function buildCashCheckHtml(d,r){
+ let hasFloat=hasFloatSet(d),hasClose=!!(db.closeFloat&&db.closeFloat[d]),hasCount=!!db.count[d];
+ if(!hasFloat&&!hasClose&&!hasCount)return '<div class="check warn">此日期尚未輸入零用金與現金清點資料。</div>';
+ let float=getFloatAmount(d)||0;
+ let closeFloat=sumCash((db.closeFloat&&db.closeFloat[d])||{});
+ let counted=sumCash(db.count[d]||{});
+ let floatDiff=closeFloat-float;
+ let cashDiff=counted-(r.現金||0);
+ let html='<div class="listrow"><span>原零用金</span><b>$'+money(float)+'</b></div>'
+ +'<div class="listrow"><span>今日結算零用金</span><b>$'+money(closeFloat)+'</b></div>'
+ +'<div class="listrow"><span>零用金差額</span><b>'+(floatDiff===0?'$0':(floatDiff>0?'+':'-')+'$'+money(Math.abs(floatDiff)))+'</b></div>';
+ if(hasFloat&&hasClose){
+  html+= floatDiff===0?'<div class="check ok">✅ 零用金相符</div>':`<div class="check bad">⚠️ 零用金差額 $${money(Math.abs(floatDiff))}（結算${floatDiff>0?'多':'少'}於原零用金）</div>`;
+ }
+ html+='<div class="listrow" style="margin-top:10px"><span>系統計算現金營收</span><b>$'+money(r.現金||0)+'</b></div>'
+ +'<div class="listrow"><span>今日營收現金（實際點）</span><b>$'+money(counted)+'</b></div>'
+ +'<div class="listrow"><span>現金營收差額</span><b>'+(cashDiff===0?'$0':(cashDiff>0?'+':'-')+'$'+money(Math.abs(cashDiff)))+'</b></div>';
+ html+= hasCount?(cashDiff===0?'<div class="check ok">✅ 現金營收相符</div>':`<div class="check bad">⚠️ 現金差額 $${money(Math.abs(cashDiff))}（實際${cashDiff>0?'多':'少'}於系統紀錄）</div>`):'<div class="check warn">尚未輸入今日營收現金清點。</div>';
+ return html;
+}
+function buildSerialHtml(rows){
+ let map={};
+ rows.forEach(x=>(x.items||[]).forEach(it=>{
+  if(it.serial&&it.serial.trim()){
+   map[it.id]=map[it.id]||{name:it.name,list:[]};
+   map[it.id].list.push(it.serial.trim());
+  }
+ }));
+ let keys=Object.keys(map);
+ if(!keys.length)return '<p class="muted">尚無票號紀錄</p>';
+ return keys.map(id=>`<div class="listrow" style="display:block"><b>${esc(map[id].name)}</b><div class="muted" style="margin-top:4px">${map[id].list.map(esc).join('、')}</div></div>`).join('');
+}
+function renderQuick(){
+ let d=saleDate.value||today;
+ quickTitle.textContent=(d===today?'今日':d)+' 快速統計';
+ let r=totals(d);
+ quick.innerHTML=buildStatsHtml(r);
+}
+
+/* ---------- 現金清點 ---------- */
+function makeCashTable(kind){
+ let saved=db[kind][today]||{};
+ return `<table><thead><tr><th>面額</th><th>數量</th><th>小計</th></tr></thead><tbody>`+
+ DEN.map(d=>`<tr><td>$${money(d)}</td><td><input class="moneyInput cashnum" data-kind="${kind}" data-den="${d}" type="number" min="0" value="${saved[d]||0}" oninput="updateCash('${kind}')"></td><td id="${kind}-${d}">$${money((saved[d]||0)*d)}</td></tr>`).join('')+
+ `</tbody></table>`;
+}
+function renderCash(){
+ let fa=getFloatAmount(today);
+ floatAmount.value=fa!=null?fa:'';
+ closeFloatTable.innerHTML=makeCashTable('closeFloat');
+ countTable.innerHTML=makeCashTable('count');
+ updateCash('closeFloat');updateCash('count');
+ renderCashCheck();
+}
+function getCash(kind){let o={};document.querySelectorAll(`.cashnum[data-kind="${kind}"]`).forEach(i=>o[i.dataset.den]=+i.value||0);return o}
+function sumCash(o){return DEN.reduce((s,d)=>s+d*(+o[d]||0),0)}
+function updateCash(kind){let o=getCash(kind);DEN.forEach(d=>document.getElementById(kind+'-'+d).textContent='$'+money(d*(o[d]||0)));document.getElementById(kind+'Total').textContent=money(sumCash(o));if(kind==='closeFloat'||kind==='count')renderCashCheck()}
+function saveFloat(){db.floatAmount[today]=+floatAmount.value||0;save();renderCashCheck();alert('原零用金已儲存')}
+function saveCloseFloat(){db.closeFloat[today]=getCash('closeFloat');save();renderCashCheck();alert('今日結算零用金已儲存')}
+function saveCount(){db.count[today]=getCash('count');save();renderCashCheck();alert('今日營收現金已儲存')}
+function renderCashCheck(){let r=totals(today);cashCheck.innerHTML=buildCashCheckHtml(today,r)}
+
+/* ---------- 今日營收（可調整） ---------- */
+function buildTransferHtml(rows){
+ let list=rows.filter(x=>x.pay==='匯款');
+ if(!list.length)return '<p class="muted">尚無匯款紀錄</p>';
+ return list.map(x=>`<div class="listrow"><span>${esc(x.time||'')}　末5碼 ${esc(x.transferLast5||'—')}</span><b>$${money(x.total)}</b></div>`).join('');
+}
+function renderReport(){
+ let d=reportEditDate.value||today;
+ let r=totals(d),rows=salesOf(d);
+ todayReport.innerHTML=buildStatsHtml(r);
+ todayCash.innerHTML=buildCashCheckHtml(d,r);
+ saleEdit.innerHTML=rows.length?rows.map(renderSaleEditRow).join(''):'<p class="muted">此日期尚無交易</p>';
+ transferList.innerHTML=buildTransferHtml(rows);
+ serialList.innerHTML=buildSerialHtml(rows);
+}
+function renderReportStatsOnly(){
+ let d=reportEditDate.value||today;
+ let r=totals(d);
+ todayReport.innerHTML=buildStatsHtml(r);
+ todayCash.innerHTML=buildCashCheckHtml(d,r);
+}
+function renderSaleEditRow(sale){
+ let itemsHtml=db.products.map(p=>{
+  let it=(sale.items||[]).find(i=>i.id===p.id);
+  let qty=it?it.qty:0;
+  let serial=it?(it.serial||''):'';
+  return `<div class="edititem"><span class="lbl">${esc(p.name)}</span><input id="qty-${sale.id}-${p.id}" type="number" min="0" value="${qty}" oninput="updateSaleItem('${sale.id}','${p.id}')" style="flex:0 0 70px"><input id="serial-${sale.id}-${p.id}" class="serial" type="text" placeholder="票號(選填)" value="${esc(serial)}" oninput="updateSaleItemSerial('${sale.id}','${p.id}')"></div>`;
+ }).join('');
+ return `<div class="saleCard" id="saleRow-${sale.id}">
+ <div class="row">
+  <span class="badge">${esc(sale.time||'')}</span>
+  <select onchange="updateSalePay('${sale.id}',this.value)">
+   <option ${sale.pay==='現金'?'selected':''}>現金</option>
+   <option ${sale.pay==='匯款'?'selected':''}>匯款</option>
+   <option ${sale.pay==='刷卡'?'selected':''}>刷卡</option>
+  </select>
+  <button class="secondary danger" style="flex:0 0 40px" onclick="deleteSale('${sale.id}')">✕</button>
+ </div>
+ <div id="transferRow-${sale.id}" class="edititem" style="display:${sale.pay==='匯款'?'flex':'none'}">
+  <span class="lbl">末5碼</span><input id="transfer-${sale.id}" type="text" maxlength="5" inputmode="numeric" placeholder="匯款末5碼" value="${esc(sale.transferLast5||'')}" oninput="updateSaleTransfer('${sale.id}',this.value)">
+ </div>
+ ${itemsHtml}
+ <div class="edititem"><span class="lbl">折扣</span><input type="number" min="0" value="${sale.discount||0}" oninput="updateSaleDiscount('${sale.id}',this.value)"></div>
+ <div style="text-align:right;font-weight:700;margin-top:6px">小計 $<span id="saleSub-${sale.id}">${money(sale.subtotal!=null?sale.subtotal:sale.total)}</span>　應收 $<span id="saleFinal-${sale.id}">${money(sale.total)}</span></div>
+ </div>`;
+}
+function recalcSale(sale){
+ sale.subtotal=(sale.items||[]).reduce((s,i)=>s+i.qty*i.price,0);
+ if(sale.discount>sale.subtotal)sale.discount=sale.subtotal;
+ if(sale.discount<0)sale.discount=0;
+ sale.total=sale.subtotal-(sale.discount||0);
+}
+function refreshSaleRowTotals(sale){
+ let subEl=document.getElementById('saleSub-'+sale.id),finEl=document.getElementById('saleFinal-'+sale.id);
+ if(subEl)subEl.textContent=money(sale.subtotal);
+ if(finEl)finEl.textContent=money(sale.total);
+}
+function updateSaleItem(saleId,pid){
+ let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
+ let qtyInput=document.getElementById('qty-'+saleId+'-'+pid);
+ let serialInput=document.getElementById('serial-'+saleId+'-'+pid);
+ let qty=+(qtyInput?qtyInput.value:0)||0;
+ let serial=serialInput?serialInput.value:'';
+ let p=db.products.find(x=>x.id===pid);
+ let existing=(sale.items||[]).find(i=>i.id===pid);
+ if(qty<=0){sale.items=(sale.items||[]).filter(i=>i.id!==pid)}
+ else if(existing){existing.qty=qty;existing.serial=serial}
+ else{sale.items=sale.items||[];sale.items.push({id:pid,name:p?p.name:pid,price:p?p.price:0,qty,serial})}
+ recalcSale(sale);save();refreshSaleRowTotals(sale);renderReportStatsOnly();serialList.innerHTML=buildSerialHtml(salesOf(sale.date));
+}
+function updateSaleItemSerial(saleId,pid){
+ let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
+ let existing=(sale.items||[]).find(i=>i.id===pid);
+ if(!existing)return;
+ let serialInput=document.getElementById('serial-'+saleId+'-'+pid);
+ existing.serial=serialInput?serialInput.value:'';
+ save();
+ serialList.innerHTML=buildSerialHtml(salesOf(sale.date));
+}
+function updateSaleDiscount(saleId,val){
+ let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
+ sale.discount=+val||0;recalcSale(sale);save();refreshSaleRowTotals(sale);renderReportStatsOnly();
+}
+function updateSalePay(saleId,val){
+ let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
+ sale.pay=val;save();
+ let row=document.getElementById('transferRow-'+saleId);
+ if(row)row.style.display=val==='匯款'?'flex':'none';
+ renderReportStatsOnly();
+ transferList.innerHTML=buildTransferHtml(salesOf(sale.date));
+}
+function updateSaleTransfer(saleId,val){
+ let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
+ sale.transferLast5=val;save();
+ transferList.innerHTML=buildTransferHtml(salesOf(sale.date));
+}
+function deleteSale(saleId){
+ if(!confirm('確定刪除這筆交易紀錄？'))return;
+ db.sales=db.sales.filter(s=>s.id!==saleId);
+ save();renderReport();
+}
+
+/* ---------- 日期報表 ---------- */
+function renderHistory(){
+ let d=reportDate.value||today;
+ let rows=salesOf(d);
+ let r=totals(d);
+ historyReport.innerHTML=`<h3>${d}</h3>`+buildStatsHtml(r)+'<h3 style="margin-top:14px">🏦 匯款紀錄</h3>'+buildTransferHtml(rows)+'<h3 style="margin-top:14px">🔖 票號紀錄</h3>'+buildSerialHtml(rows);
+}
+function renderRange(){
+ let s=rangeStart.value,e=rangeEnd.value;
+ if(!s||!e){alert('請選擇起訖日期');return}
+ if(s>e){alert('起始日期需早於或等於結束日期');return}
+ let rows=db.sales.filter(x=>x.date>=s&&x.date<=e);
+ let r={itemQty:{},itemNames:{},現金:0,匯款:0,刷卡:0,total:0,discount:0,count:rows.length};
+ rows.forEach(x=>{
+  (x.items||[]).forEach(it=>{r.itemQty[it.id]=(r.itemQty[it.id]||0)+it.qty;r.itemNames[it.id]=it.name});
+  r[x.pay]=(r[x.pay]||0)+x.total;r.total+=x.total;r.discount+=x.discount||0;
+ });
+ rangeReport.innerHTML=`<h3>${s} ～ ${e}</h3>`+buildStatsHtml(r)+'<h3 style="margin-top:14px">🏦 匯款紀錄</h3>'+buildTransferHtml(rows)+'<h3 style="margin-top:14px">🔖 票號紀錄</h3>'+buildSerialHtml(rows);
+}
+function renderDateList(){
+ let dates=Array.from(new Set(db.sales.map(x=>x.date))).sort().reverse();
+ if(!dates.length){dateList.innerHTML='<p class="muted">尚無銷售紀錄</p>';return}
+ dateList.innerHTML=`<table><thead><tr><th>日期</th><th>營業額</th><th>筆數</th></tr></thead><tbody>`+
+ dates.map(d=>{let r=totals(d);return `<tr><td>${d}</td><td>$${money(r.total)}</td><td>${r.count}</td></tr>`}).join('')+`</tbody></table>`;
+}
+
+/* ---------- 圖片報表匯出 ---------- */
+function downloadImage(elId,filename){
+ let el=document.getElementById(elId);
+ if(!el)return;
+ if(typeof html2canvas==='undefined'){alert('圖片功能載入失敗，請確認網路連線後重試');return}
+ html2canvas(el,{backgroundColor:'#eef2f5',scale:2}).then(canvas=>{
+  showImagePreview(canvas,filename);
+ }).catch(err=>{alert('圖片產生失敗：'+err.message)});
+}
+function showImagePreview(canvas,filename){
+ let overlay=document.createElement('div');
+ overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;overflow:auto';
+ let img=document.createElement('img');
+ img.src=canvas.toDataURL('image/png');
+ img.style.cssText='max-width:100%;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.5);margin-top:10px';
+ let tip=document.createElement('div');
+ tip.style.cssText='color:#fff;margin-top:14px;font-size:14px;text-align:center';
+ tip.textContent='📱 iPhone 請長按圖片選擇「儲存影像」／電腦請右鍵另存圖片';
+ let dlLink=document.createElement('a');
+ dlLink.href=img.src;dlLink.download=(filename||'報表')+'.png';dlLink.textContent='⬇️ 下載圖片';
+ dlLink.style.cssText='display:inline-block;text-decoration:none;text-align:center;margin-top:14px;padding:12px 26px;border-radius:11px;background:#17324d;color:#fff;font-weight:700';
+ let closeBtn=document.createElement('button');
+ closeBtn.textContent='關閉';
+ closeBtn.className='secondary';
+ closeBtn.style.cssText='margin-top:12px;padding:10px 24px;width:auto';
+ closeBtn.onclick=()=>overlay.remove();
+ overlay.appendChild(img);overlay.appendChild(tip);overlay.appendChild(dlLink);overlay.appendChild(closeBtn);
+ document.body.appendChild(overlay);
+}
+
+/* ---------- 初始化 ---------- */
+renderProductGrid();
+renderProductManage();
+calcSale();
+renderQuick();
+</script>
+</body></html>
