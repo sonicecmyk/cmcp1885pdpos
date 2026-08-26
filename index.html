@@ -15,6 +15,7 @@ h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:12px 0 8px}.muted{col
 .products{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.product{border:1px solid #d8dee3;border-radius:12px;padding:10px;text-align:center}.product .name{font-weight:700;font-size:14px}.price{font-size:13px;color:#63727d}.qty{width:100%;font-size:21px;text-align:center;margin-top:8px}
 input,select{width:100%;border:1px solid #ccd5dc;border-radius:9px;padding:10px;font-size:16px;background:#fff}.qty{border:1px solid #ccd5dc;border-radius:9px}
 input[type=checkbox]{width:18px;flex:0 0 18px;padding:0;height:18px}
+input[type=file]{padding:8px;font-size:13px}
 .payments{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.paybtn{padding:12px 4px;border:1px solid #ccd5dc;background:#fff;border-radius:10px;font-weight:700}.paybtn.active{background:#e4eef6;border:2px solid #17324d}
 .bigtotal{text-align:center;background:#f4f7f9;border-radius:12px;padding:12px;margin:12px 0}.bigtotal small{display:block;color:#697781}.bigtotal strong{font-size:30px}
 .primary{width:100%;background:#17324d;color:#fff;border:0;border-radius:11px;padding:13px;font-size:17px;font-weight:700}.secondary{background:#e8edf1;color:#253640;border:0;border-radius:10px;padding:10px 12px;font-weight:700}.danger{background:#b43d3d;color:white}
@@ -24,8 +25,6 @@ table{width:100%;border-collapse:collapse}th,td{padding:8px 4px;border-bottom:1p
 .row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.listrow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
 details.card{padding:0}details.card summary{list-style:none;cursor:pointer;padding:15px;font-weight:700}details.card summary::-webkit-details-marker{display:none}details.card summary:after{content:"▾";float:right}details.card[open] summary:after{content:"▴"}details.card .inner{padding:0 15px 15px}
 .edititem{display:flex;align-items:center;gap:8px;margin:4px 0}.edititem .lbl{flex:0 0 66px;font-size:13px;color:#454f57}
-.serial{font-size:12px;padding:7px;border:1px solid #ccd5dc;border-radius:8px}
-.product .serial{margin-top:0;width:100%}
 .saleCard{border:1px solid #e3e8eb;border-radius:12px;padding:10px;margin:8px 0}
 .badge{display:inline-block;background:#e4eef6;color:#17324d;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700}
 .cashDual table{font-size:13px}.cashDual th,.cashDual td{padding:6px 3px}
@@ -36,6 +35,10 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 .quickRangeBtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.quickRangeBtns button{flex:1;min-width:70px;padding:8px 4px;font-size:13px}
 .saveMsg{font-size:12px;color:#1e7040;font-weight:700}
 .chartWrap{padding:6px 0 0}
+.fieldLabel{font-size:11px;color:#697781;margin-bottom:2px}
+.prefixGroup{display:flex;border:1px solid #ccd5dc;border-radius:9px;overflow:hidden}
+.prefixGroup .ptag{background:#eef2f5;padding:0 8px;display:flex;align-items:center;font-size:12px;color:#33424d;font-weight:800;white-space:nowrap}
+.prefixGroup input{border:0;border-radius:0;flex:1;padding:8px}
 </style>
 </head>
 <body>
@@ -43,26 +46,32 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <main>
 <div class="tabbar">
 <button id="t-sale" class="active" onclick="tab('sale')">收銀</button>
-<button id="t-cash" onclick="tab('cash')">現金清點</button>
+<button id="t-cash" onclick="tab('cash')">清點</button>
 <button id="t-report" onclick="tab('report')">今日營收</button>
 <button id="t-history" onclick="tab('history')">日期報表</button>
 </div>
 
 <section id="sale" class="page active">
 
-<details class="card" id="citySettings">
-<summary>📍 展會城市設定</summary>
+<details class="card" id="appSettings">
+<summary>⚙️ 展會設定</summary>
 <div class="inner">
-<p class="muted">設定一次即可，之後所有報表會自動帶入，不需每次重選。</p>
-<select id="citySelect" onchange="onCityChange()">
-<option value="">請選擇城市</option>
-<option value="台北">台北</option>
-<option value="台中">台中</option>
-<option value="高雄">高雄</option>
-<option value="其他">其他（自行輸入）</option>
-</select>
-<input id="cityCustom" placeholder="輸入城市／展會名稱" style="display:none;margin-top:8px">
-<button class="primary" style="margin-top:10px" onclick="saveCity()">儲存設定</button>
+<h3>📍 展會城市</h3>
+<p class="muted">設定一次即可，之後所有報表、Excel、文字摘要會自動帶入「OO旅展」。</p>
+<select id="citySelect" onchange="onCityChange()"></select>
+<input id="cityCustom" placeholder="輸入自訂展會名稱" style="display:none;margin-top:8px">
+<button class="primary" style="margin-top:10px" onclick="saveCity()">儲存城市設定</button>
+<h3 style="margin-top:18px">🛠️ 販售項目管理</h3>
+<div id="manageList"></div>
+<div class="row" style="margin-top:8px">
+<input id="newProdName" placeholder="項目名稱">
+<input id="newProdPrice" type="number" min="0" placeholder="金額">
+</div>
+<div class="row" style="margin-top:6px">
+<label class="muted" style="flex:0 0 92px;display:flex;align-items:center;gap:6px"><input type="checkbox" id="newProdNeedSerial">需要票號</label>
+<input id="newProdPrefix" placeholder="票號前綴 例如BC">
+<button class="secondary" style="flex:0 0 60px" onclick="addProduct()">新增</button>
+</div>
 </div>
 </details>
 
@@ -93,35 +102,6 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <br><button class="primary" onclick="addSale()">＋ 完成收款</button>
 </div>
 
-<details class="card">
-<summary>🛠️ 管理販售項目（新增／調整金額／票號設定）</summary>
-<div class="inner">
-<div id="manageList"></div>
-<div class="row" style="margin-top:8px">
-<input id="newProdName" placeholder="項目名稱">
-<input id="newProdPrice" type="number" min="0" placeholder="金額">
-</div>
-<div class="row" style="margin-top:6px">
-<label class="muted" style="flex:0 0 92px;display:flex;align-items:center;gap:6px"><input type="checkbox" id="newProdNeedSerial">需要票號</label>
-<input id="newProdPrefix" placeholder="票號前綴 例如BC">
-<button class="secondary" style="flex:0 0 60px" onclick="addProduct()">新增</button>
-</div>
-</div>
-</details>
-
-<details class="card">
-<summary>🎫 票券／發票清點</summary>
-<div class="inner">
-<p class="muted">輸入起訖票號，快速計算張數（例如盤點剩餘票券／發票）。</p>
-<div class="row">
-<input id="stockStart" type="text" placeholder="起始票號 例如 BC442786">
-<input id="stockEnd" type="text" placeholder="結束票號 例如 BC442810">
-</div>
-<button class="secondary" style="width:100%;margin-top:8px" onclick="calcStock()">計算張數</button>
-<div id="stockResult" class="muted" style="margin-top:8px;font-size:15px;font-weight:700"></div>
-</div>
-</details>
-
 <div class="card"><h2 id="quickTitle">快速統計</h2><div id="quick"></div></div>
 </section>
 
@@ -147,6 +127,18 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <div id="cashCheck"></div>
 <button class="primary" onclick="saveCount()">儲存今日營收現金</button>
 </div>
+<details class="card">
+<summary>🎫 票券／發票清點</summary>
+<div class="inner">
+<p class="muted">輸入起訖票號，快速計算張數（例如盤點剩餘票券／發票）。</p>
+<div class="row">
+<input id="stockStart" type="text" placeholder="起始票號 例如 000000">
+<input id="stockEnd" type="text" placeholder="結束票號 例如 000015">
+</div>
+<button class="secondary" style="width:100%;margin-top:8px" onclick="calcStock()">計算張數</button>
+<div id="stockResult" class="muted" style="margin-top:8px;font-size:15px;font-weight:700"></div>
+</div>
+</details>
 </section>
 
 <section id="report" class="page">
@@ -211,6 +203,15 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 </div>
 
 <div class="card"><h2>🗓️ 每日營收列表</h2><div id="dateList"></div></div>
+
+<details class="card">
+<summary>📥 匯入交易資料（Excel）</summary>
+<div class="inner">
+<p class="muted">請先下載範例檔，依格式填寫後上傳。匯入為「附加」，不會覆蓋或刪除既有資料。</p>
+<button class="secondary" style="width:100%" onclick="downloadImportTemplate()">⬇️ 下載範例檔</button>
+<input type="file" accept=".xlsx,.xls" id="importFile" style="margin-top:8px" onchange="importExcelFile(this)">
+</div>
+</details>
 </section>
 </main>
 
@@ -221,6 +222,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 const DEN=[1,5,10,50,100,500,1000];
 const KEY='expoCashierV3';
 const KEY_OLD='expoCashierV2';
+const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣','澎湖縣','金門縣','連江縣'];
 let selectedPay='現金';
 const dateStr=()=>new Date().toLocaleDateString('sv-SE');
 const fmtDate=d=>d.toLocaleDateString('sv-SE');
@@ -261,7 +263,7 @@ db.floatAmount=db.floatAmount||{};
 db.nextSerial=db.nextSerial||{};
 if(db.city===undefined)db.city='';
 db.products=db.products||[];
-db.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix=''});
+db.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix='';p.serialPrefix=(p.serialPrefix||'').toUpperCase()});
 function save(){localStorage.setItem(KEY,JSON.stringify(db))}
 
 document.getElementById('headerDate').textContent=today;
@@ -286,20 +288,28 @@ function choosePay(btn){
 }
 
 /* ---------- 展會城市設定 ---------- */
+function buildCitySelect(){
+ let opts=['<option value="">請選擇城市</option>']
+  .concat(TW_CITIES.map(c=>`<option value="${c}">${c}</option>`))
+  .concat(['<option value="其他">其他（自行輸入）</option>']);
+ citySelect.innerHTML=opts.join('');
+}
+function cityDisplay(){return db.city?db.city+'旅展':''}
 function onCityChange(){cityCustom.style.display=citySelect.value==='其他'?'block':'none'}
 function saveCity(){
  let v=citySelect.value;
  let city=v==='其他'?cityCustom.value.trim():v;
  db.city=city;save();updateHeaderCity();
- alert('已儲存展會城市：'+(city||'（未設定）'));
+ alert('已儲存展會城市：'+(city?cityDisplay():'（未設定）'));
 }
-function updateHeaderCity(){headerCity.textContent=db.city?('📍 '+db.city):''}
+function updateHeaderCity(){headerCity.textContent=db.city?('📍 '+cityDisplay()):''}
 function initCitySettings(){
+ buildCitySelect();
  if(db.city){
-  if(['台北','台中','高雄'].includes(db.city)){citySelect.value=db.city}
+  if(TW_CITIES.includes(db.city)){citySelect.value=db.city}
   else{citySelect.value='其他';cityCustom.value=db.city;cityCustom.style.display='block'}
  } else {
-  citySettings.setAttribute('open','open');
+  appSettings.setAttribute('open','open');
  }
  updateHeaderCity();
 }
@@ -310,13 +320,13 @@ function composeSerial(p,typed){
  typed=(typed||'').trim();
  if(!typed)return '';
  let prefix=p.serialPrefix||'';
- if(prefix&&typed.startsWith(prefix))return typed;
+ if(prefix&&typed.toUpperCase().startsWith(prefix))return typed;
  return prefix+typed;
 }
 function serialDisplayValue(p,fullSerial){
  if(!fullSerial)return '';
  let prefix=p.serialPrefix||'';
- if(prefix&&fullSerial.startsWith(prefix))return fullSerial.slice(prefix.length);
+ if(prefix&&fullSerial.toUpperCase().startsWith(prefix))return fullSerial.slice(prefix.length);
  return fullSerial;
 }
 function renderProductGrid(){
@@ -326,13 +336,19 @@ function renderProductGrid(){
   if(p.needSerial){
    let nextVal=getNextSerial(d,p.id);
    serialBlock=`
-    <div class="row" style="margin-top:6px;gap:4px">
-     <span class="muted" style="flex:0 0 26px;font-size:11px;text-align:right">${esc(p.serialPrefix||'')}</span>
-     <input class="serial saleSerial" data-id="${p.id}" type="text" placeholder="票號/區間" oninput="markManualSerial('${p.id}')">
+    <div style="margin-top:6px">
+     <div class="fieldLabel">起始票號</div>
+     <div class="prefixGroup">
+      <span class="ptag">${esc(p.serialPrefix||'')}</span>
+      <input class="startSerial" data-id="${p.id}" type="number" placeholder="000000" value="${nextVal!=null?nextVal:''}" oninput="calcSale()">
+     </div>
     </div>
-    <div class="row" style="margin-top:4px;gap:4px">
-     <span class="muted" style="flex:0 0 26px;font-size:10px;text-align:right">起始</span>
-     <input class="startSerial" data-id="${p.id}" type="number" placeholder="起始號" value="${nextVal!=null?nextVal:''}" oninput="calcSale()">
+    <div style="margin-top:6px">
+     <div class="fieldLabel">票號／區間</div>
+     <div class="prefixGroup">
+      <span class="ptag">${esc(p.serialPrefix||'')}</span>
+      <input class="serial saleSerial" data-id="${p.id}" type="text" placeholder="自動帶入或手動輸入" oninput="markManualSerial('${p.id}')">
+     </div>
     </div>`;
   }
   return `<div class="product"><div class="name">${esc(p.name)}</div><div class="price">$${money(p.price)}</div><input class="qty saleQty" data-id="${p.id}" type="number" min="0" value="0" oninput="calcSale()">${serialBlock}</div>`;
@@ -364,7 +380,7 @@ function addProduct(){
  let name=newProdName.value.trim(),price=+newProdPrice.value;
  if(!name||!price){alert('請輸入項目名稱與金額');return}
  let needSerial=newProdNeedSerial.checked;
- let prefix=newProdPrefix.value.trim();
+ let prefix=newProdPrefix.value.trim().toUpperCase();
  db.products.push({id:uid('p'),name,price,needSerial,serialPrefix:prefix});
  newProdName.value='';newProdPrice.value='';newProdNeedSerial.checked=false;newProdPrefix.value='';
  save();renderProductGrid();renderProductManage();calcSale();
@@ -373,7 +389,7 @@ function updateProductField(id,field,val){
  let p=db.products.find(x=>x.id===id);if(!p)return;
  if(field==='price')p.price=+val||0;
  else if(field==='needSerial')p.needSerial=!!val;
- else if(field==='serialPrefix')p.serialPrefix=val;
+ else if(field==='serialPrefix')p.serialPrefix=(val||'').toUpperCase();
  else p.name=val;
  save();
  if(field==='price'||field==='needSerial'||field==='serialPrefix'){renderProductGrid();calcSale()}
@@ -389,7 +405,7 @@ function deleteProduct(id){
 function calcStock(){
  let a=stockStart.value.trim(),b=stockEnd.value.trim();
  let ma=a.match(/^([A-Za-z]*)(\d+)$/),mb=b.match(/^([A-Za-z]*)(\d+)$/);
- if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 BC442786）';return}
+ if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 000000 或 BC442786）';return}
  let start=parseInt(ma[2],10),end=parseInt(mb[2],10);
  if(end<start){let t=start;start=end;end=t}
  let count=end-start+1;
@@ -475,9 +491,13 @@ function addSale(){
 function transferLast5Input(){return document.getElementById('transferLast5')}
 function salesOf(d){return db.sales.filter(x=>x.date===d)}
 function aggregateRows(rows){
- let r={itemQty:{},itemNames:{},現金:0,匯款:0,刷卡:0,total:0,discount:0,subtotal:0,count:rows.length};
+ let r={itemQty:{},itemNames:{},itemRevenue:{},現金:0,匯款:0,刷卡:0,total:0,discount:0,subtotal:0,count:rows.length};
  rows.forEach(x=>{
-  (x.items||[]).forEach(it=>{r.itemQty[it.id]=(r.itemQty[it.id]||0)+it.qty;r.itemNames[it.id]=it.name});
+  (x.items||[]).forEach(it=>{
+   r.itemQty[it.id]=(r.itemQty[it.id]||0)+it.qty;
+   r.itemNames[it.id]=it.name;
+   r.itemRevenue[it.id]=(r.itemRevenue[it.id]||0)+it.qty*it.price;
+  });
   r[x.pay]=(r[x.pay]||0)+x.total;
   r.total+=x.total;
   r.discount+=x.discount||0;
@@ -533,12 +553,12 @@ function parseSerialToken(tok){
  if(parts.length===1){
   let m=parts[0].match(/^([A-Za-z]*)(\d+)$/);
   if(!m)return {raw:tok};
-  return {prefix:m[1],start:parseInt(m[2],10),end:parseInt(m[2],10),width:m[2].length};
+  return {prefix:m[1].toUpperCase(),start:parseInt(m[2],10),end:parseInt(m[2],10),width:m[2].length};
  } else if(parts.length===2){
   let m1=parts[0].match(/^([A-Za-z]*)(\d+)$/);
   let m2=parts[1].match(/^([A-Za-z]*)(\d+)$/);
   if(!m1||!m2)return {raw:tok};
-  let prefix=m1[1]||m2[1]||'';
+  let prefix=(m1[1]||m2[1]||'').toUpperCase();
   let start=parseInt(m1[2],10),end=parseInt(m2[2],10);
   let width=m1[2].length;
   if(end<start){let t=start;start=end;end=t}
@@ -637,7 +657,7 @@ function toROCDate(dateStr){
 }
 function buildSummaryText(r,label){
  let itemsText=Object.keys(r.itemQty).map(id=>`${r.itemNames[id]}*${r.itemQty[id]}`).join('｜')||'無銷售';
- let cityLine=db.city?db.city+'\n':'';
+ let cityLine=db.city?cityDisplay()+'\n':'';
  return `${cityLine}${label}\n${itemsText}\n共計 ${money(r.total)} 元`;
 }
 function renderSummaryBlock(elId,key,r,label){
@@ -670,7 +690,7 @@ function flashCopied(btn){
  setTimeout(()=>{btn.textContent=orig},1500);
 }
 function bannerHtml(title){
- return `<div class="banner"><div class="sub">展場收銀報表${db.city?'．'+esc(db.city):''}</div><div class="main">${esc(title)}</div></div>`;
+ return `<div class="banner"><div class="sub">展場收銀報表${db.city?'．'+esc(cityDisplay()):''}</div><div class="main">${esc(title)}</div></div>`;
 }
 
 /* ---------- 今日營收（可調整） ---------- */
@@ -705,7 +725,7 @@ function renderSaleEditRow(sale){
   let serialField='';
   if(p.needSerial){
    let serialVal=it?serialDisplayValue(p,it.serial||''):'';
-   serialField=`<span class="muted" style="flex:0 0 24px;font-size:11px;text-align:right">${esc(p.serialPrefix||'')}</span><input id="serial-${sale.id}-${p.id}" class="serial" type="text" placeholder="票號" value="${esc(serialVal)}" oninput="updateSaleItemSerial('${sale.id}','${p.id}')">`;
+   serialField=`<div class="prefixGroup" style="flex:1"><span class="ptag">${esc(p.serialPrefix||'')}</span><input id="serial-${sale.id}-${p.id}" type="text" placeholder="票號" value="${esc(serialVal)}" oninput="updateSaleItemSerial('${sale.id}','${p.id}')"></div>`;
   }
   return `<div class="edititem"><span class="lbl">${esc(p.name)}</span><input id="qty-${sale.id}-${p.id}" type="number" min="0" value="${qty}" oninput="updateSaleItem('${sale.id}','${p.id}')" style="flex:0 0 56px">${serialField}</div>`;
  }).join('');
@@ -865,33 +885,67 @@ function exportExcel(rows,label,cashDate,dailyBreakdown){
  if(typeof XLSX==='undefined'){alert('Excel功能載入失敗，請確認網路連線後重試');return}
  let wb=XLSX.utils.book_new();
  let r=aggregateRows(rows);
- let summaryAOA=[['城市/展會',db.city||''],['報表範圍',label],['營業額',r.total],['現金',r.現金||0],['匯款',r.匯款||0],['刷卡',r.刷卡||0],['折扣總額',r.discount||0],['交易筆數',r.count]];
- Object.keys(r.itemQty).forEach(id=>summaryAOA.push([r.itemNames[id],r.itemQty[id]]));
+ let aoa=[];
+ aoa.push(['展場收銀　營業報表']);
+ aoa.push(['城市/展會',cityDisplay()||'（未設定）']);
+ aoa.push(['報表範圍',label]);
+ aoa.push(['產生時間',new Date().toLocaleString('zh-TW')]);
+ aoa.push([]);
+ aoa.push(['營收總覽']);
+ aoa.push(['項目','金額']);
+ aoa.push(['現金營收',r.現金||0]);
+ aoa.push(['匯款營收',r.匯款||0]);
+ aoa.push(['刷卡營收',r.刷卡||0]);
+ aoa.push(['折扣總額',r.discount||0]);
+ aoa.push(['營業額（淨額）',r.total]);
+ aoa.push(['交易筆數',r.count]);
+ aoa.push([]);
+ aoa.push(['商品銷售明細']);
+ aoa.push(['商品','數量','小計金額','佔營業額比例']);
+ Object.keys(r.itemQty).forEach(id=>{
+  let rev=r.itemRevenue[id]||0;
+  let pct=r.total?(rev/r.total*100).toFixed(1)+'%':'0%';
+  aoa.push([r.itemNames[id],r.itemQty[id],rev,pct]);
+ });
  if(cashDate){
   let float=getFloatAmount(cashDate)||0,closeFloat=sumCash((db.closeFloat&&db.closeFloat[cashDate])||{}),counted=sumCash(db.count[cashDate]||{});
-  summaryAOA.push(['原零用金',float]);
-  summaryAOA.push(['今日結算零用金',closeFloat]);
-  summaryAOA.push(['零用金差額',closeFloat-float]);
-  summaryAOA.push(['系統現金營收',r.現金||0]);
-  summaryAOA.push(['今日營收現金(實際)',counted]);
-  summaryAOA.push(['現金營收差額',counted-(r.現金||0)]);
+  aoa.push([]);
+  aoa.push(['現金驗算（'+cashDate+'）']);
+  aoa.push(['項目','金額']);
+  aoa.push(['原零用金',float]);
+  aoa.push(['今日結算零用金',closeFloat]);
+  aoa.push(['零用金差額',closeFloat-float]);
+  aoa.push(['系統計算現金營收',r.現金||0]);
+  aoa.push(['今日營收現金(實際)',counted]);
+  aoa.push(['現金營收差額',counted-(r.現金||0)]);
  }
- XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(summaryAOA),'營收總表');
- let detailAOA=[['日期','時間','付款方式','匯款末5碼','項目','數量','單價','金額','票號','折扣(整筆)','應收(整筆)','備註']];
- rows.forEach(x=>{
-  (x.items||[]).forEach(it=>{detailAOA.push([x.date,x.time||'',x.pay,x.transferLast5||'',it.name,it.qty,it.price,it.qty*it.price,it.serial||'',x.discount||0,x.total,x.note||''])});
+ let ws=XLSX.utils.aoa_to_sheet(aoa);
+ ws['!cols']=[{wch:20},{wch:16},{wch:14},{wch:14}];
+ XLSX.utils.book_append_sheet(wb,ws,'營業報表總覽');
+
+ let detailAOA=[['交易編號','日期','時間','付款方式','匯款末5碼','項目','數量','單價','金額','票號','折扣(整筆)','應收(整筆)','備註']];
+ rows.forEach((x,idx)=>{
+  (x.items||[]).forEach(it=>{detailAOA.push(['T'+(idx+1),x.date,x.time||'',x.pay,x.transferLast5||'',it.name,it.qty,it.price,it.qty*it.price,it.serial||'',x.discount||0,x.total,x.note||''])});
  });
- XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(detailAOA),'交易明細');
+ let ws2=XLSX.utils.aoa_to_sheet(detailAOA);
+ ws2['!cols']=[{wch:6},{wch:11},{wch:8},{wch:8},{wch:10},{wch:10},{wch:6},{wch:8},{wch:9},{wch:16},{wch:8},{wch:9},{wch:20}];
+ XLSX.utils.book_append_sheet(wb,ws2,'交易明細');
+
  let serialAOA=[['項目','票號彙總','總張數']];
  let smap={};
  rows.forEach(x=>(x.items||[]).forEach(it=>{if(it.serial&&it.serial.trim()){smap[it.id]=smap[it.id]||{name:it.name,serials:[]};smap[it.id].serials.push(it.serial)}}));
  Object.keys(smap).forEach(id=>{let sum=summarizeSerials(smap[id].serials);serialAOA.push([smap[id].name,sum.lines.join('、'),sum.total])});
- XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(serialAOA),'票號彙總');
+ let ws3=XLSX.utils.aoa_to_sheet(serialAOA);
+ ws3['!cols']=[{wch:14},{wch:30},{wch:10}];
+ XLSX.utils.book_append_sheet(wb,ws3,'票號彙總');
+
  if(dailyBreakdown){
   let dates=Array.from(new Set(rows.map(x=>x.date))).sort();
-  let aoa=[['日期','營業額','現金','匯款','刷卡','交易筆數']];
-  dates.forEach(d=>{let rr=aggregateRows(rows.filter(x=>x.date===d));aoa.push([d,rr.total,rr.現金||0,rr.匯款||0,rr.刷卡||0,rr.count])});
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(aoa),'每日明細');
+  let daoa=[['日期','營業額','現金','匯款','刷卡','交易筆數']];
+  dates.forEach(d=>{let rr=aggregateRows(rows.filter(x=>x.date===d));daoa.push([d,rr.total,rr.現金||0,rr.匯款||0,rr.刷卡||0,rr.count])});
+  let ws4=XLSX.utils.aoa_to_sheet(daoa);
+  ws4['!cols']=[{wch:12},{wch:12},{wch:10},{wch:10},{wch:10},{wch:10}];
+  XLSX.utils.book_append_sheet(wb,ws4,'每日明細');
  }
  XLSX.writeFile(wb,label+'.xlsx');
 }
@@ -900,6 +954,81 @@ function exportExcelRange(){
  if(!s||!e){alert('請先選擇並統計區間');return}
  let rows=db.sales.filter(x=>x.date>=s&&x.date<=e);
  exportExcel(rows,'區間報表_'+s+'_'+e,null,true);
+}
+
+/* ---------- Excel 匯入 ---------- */
+function downloadImportTemplate(){
+ if(typeof XLSX==='undefined'){alert('Excel功能載入失敗，請確認網路連線後重試');return}
+ let aoa=[
+  ['交易編號','日期','時間','付款方式','匯款末5碼','項目','數量','單價','票號','折扣(整筆)','備註'],
+  ['T1','2026-08-24','10:15','現金','','門票',2,100,'BC442786~BC442787','',''],
+  ['T1','2026-08-24','10:15','現金','','肉捲',1,280,'',0,''],
+  ['T2','2026-08-24','10:40','匯款','88888','套票',1,1588,'BC442788','','客人臨時加購']
+ ];
+ let ws=XLSX.utils.aoa_to_sheet(aoa);
+ ws['!cols']=[{wch:10},{wch:12},{wch:8},{wch:10},{wch:10},{wch:10},{wch:6},{wch:8},{wch:18},{wch:10},{wch:18}];
+ let wb=XLSX.utils.book_new();
+ XLSX.utils.book_append_sheet(wb,ws,'交易明細範例');
+ let noteWs=XLSX.utils.aoa_to_sheet([
+  ['匯入說明'],
+  ['1. 「交易編號」相同的列會合併成同一筆交易（例如同一筆訂單買了多樣商品）。'],
+  ['2. 「日期」請填 YYYY-MM-DD 格式，例如 2026-08-24。'],
+  ['3. 「付款方式」請填：現金／匯款／刷卡。'],
+  ['4. 「項目」名稱若與目前設定的販售項目相同會自動對應；不同的話會另外建立一筆對應紀錄。'],
+  ['5. 「折扣(整筆)」與「備註」同一筆交易只需填在其中一列即可。'],
+  ['6. 匯入為「附加」，不會覆蓋或刪除既有資料，建議先備份確認再匯入。']
+ ]);
+ XLSX.utils.book_append_sheet(wb,noteWs,'說明');
+ XLSX.writeFile(wb,'展場收銀_匯入範例檔.xlsx');
+}
+function importExcelFile(input){
+ let file=input.files[0];if(!file)return;
+ if(typeof XLSX==='undefined'){alert('Excel功能載入失敗，請確認網路連線後重試');return}
+ let reader=new FileReader();
+ reader.onload=e=>{
+  try{
+   let data=new Uint8Array(e.target.result);
+   let wb=XLSX.read(data,{type:'array'});
+   let sheetName=wb.SheetNames.find(n=>n.indexOf('交易')>=0)||wb.SheetNames[0];
+   let ws=wb.Sheets[sheetName];
+   let json=XLSX.utils.sheet_to_json(ws,{defval:''});
+   if(!json.length){alert('找不到資料，請確認檔案格式');return}
+   let groups={},order=[];
+   json.forEach(row=>{
+    let tid=String(row['交易編號']||'').trim()||('row_'+order.length);
+    if(!groups[tid]){groups[tid]={date:'',time:'',pay:'現金',transferLast5:'',discount:0,note:'',items:[]};order.push(tid)}
+    let g=groups[tid];
+    if(row['日期'])g.date=String(row['日期']).trim();
+    if(row['時間'])g.time=String(row['時間']).trim();
+    if(row['付款方式'])g.pay=String(row['付款方式']).trim();
+    if(row['匯款末5碼'])g.transferLast5=String(row['匯款末5碼']).trim();
+    if(row['折扣(整筆)']!==undefined&&row['折扣(整筆)']!=='')g.discount=+row['折扣(整筆)']||0;
+    if(row['備註'])g.note=String(row['備註']).trim();
+    let name=String(row['項目']||'').trim();
+    let qty=+row['數量']||0;
+    if(name&&qty>0)g.items.push({name,qty,price:+row['單價']||0,serial:String(row['票號']||'').trim()});
+   });
+   let newSales=order.map(tid=>{
+    let g=groups[tid];
+    let subtotal=g.items.reduce((s,i)=>s+i.qty*i.price,0);
+    let discount=Math.min(Math.max(g.discount,0),subtotal);
+    let total=subtotal-discount;
+    let items=g.items.map(it=>{
+     let p=db.products.find(pp=>pp.name===it.name);
+     return {id:p?p.id:uid('imp'),name:it.name,price:it.price,qty:it.qty,serial:it.serial};
+    });
+    return {id:uid('s'),date:g.date||today,time:g.time||'',items,discount,subtotal,total,pay:g.pay||'現金',transferLast5:g.transferLast5,note:g.note};
+   }).filter(s=>s.items.length);
+   if(!newSales.length){alert('沒有可匯入的交易資料，請確認欄位格式');return}
+   if(!confirm(`即將匯入 ${newSales.length} 筆交易紀錄，確定要繼續嗎？（附加匯入，不會覆蓋既有資料）`))return;
+   db.sales=db.sales.concat(newSales);
+   save();
+   alert('匯入完成，共新增 '+newSales.length+' 筆交易！');
+   renderDateList();
+   input.value='';
+  }catch(err){alert('匯入失敗：'+err.message)}
+ };
+ reader.readAsArrayBuffer(file);
 }
 
 /* ---------- 圖片報表匯出 ---------- */
