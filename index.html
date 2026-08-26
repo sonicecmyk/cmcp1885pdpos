@@ -14,23 +14,32 @@ main{max-width:760px;margin:auto;padding:12px 12px 90px}.tabbar{position:sticky;
 h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:12px 0 8px}.muted{color:#697781;font-size:13px}
 .products{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.product{border:1px solid #d8dee3;border-radius:12px;padding:10px;text-align:center}.product .name{font-weight:700;font-size:14px}.price{font-size:13px;color:#63727d}.qty{width:100%;font-size:21px;text-align:center;margin-top:8px}
 input,select{width:100%;border:1px solid #ccd5dc;border-radius:9px;padding:10px;font-size:16px;background:#fff}.qty{border:1px solid #ccd5dc;border-radius:9px}
+input[type=checkbox]{width:18px;flex:0 0 18px;padding:0;height:18px}
 .payments{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.paybtn{padding:12px 4px;border:1px solid #ccd5dc;background:#fff;border-radius:10px;font-weight:700}.paybtn.active{background:#e4eef6;border:2px solid #17324d}
 .bigtotal{text-align:center;background:#f4f7f9;border-radius:12px;padding:12px;margin:12px 0}.bigtotal small{display:block;color:#697781}.bigtotal strong{font-size:30px}
 .primary{width:100%;background:#17324d;color:#fff;border:0;border-radius:11px;padding:13px;font-size:17px;font-weight:700}.secondary{background:#e8edf1;color:#253640;border:0;border-radius:10px;padding:10px 12px;font-weight:700}.danger{background:#b43d3d;color:white}
 .summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:#f5f7f8;border-radius:11px;padding:11px}.stat span{display:block;color:#697781;font-size:13px}.stat b{font-size:20px}
-table{width:100%;border-collapse:collapse}th,td{padding:8px 4px;border-bottom:1px solid #e7ebee}th{text-align:right;font-size:13px;color:#697781}th:first-child,td:first-child{text-align:left}.moneyInput{width:90px;text-align:right;padding:8px}
+table{width:100%;border-collapse:collapse}th,td{padding:8px 4px;border-bottom:1px solid #e7ebee}th{text-align:right;font-size:13px;color:#697781}th:first-child,td:first-child{text-align:left}.moneyInput{width:100%;text-align:center;padding:6px 2px;font-size:14px}
 .cashTotal{font-size:26px;font-weight:800;text-align:right;margin-top:12px}.check{padding:12px;border-radius:11px;margin-top:10px;font-weight:700}.ok{background:#e7f5eb;color:#1e7040}.warn{background:#fff2df;color:#8a5a12}.bad{background:#fde8e8;color:#a52828}
 .row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.listrow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
 details.card{padding:0}details.card summary{list-style:none;cursor:pointer;padding:15px;font-weight:700}details.card summary::-webkit-details-marker{display:none}details.card summary:after{content:"▾";float:right}details.card[open] summary:after{content:"▴"}details.card .inner{padding:0 15px 15px}
 .edititem{display:flex;align-items:center;gap:8px;margin:4px 0}.edititem .lbl{flex:0 0 66px;font-size:13px;color:#454f57}
 .serial{font-size:12px;padding:7px;border:1px solid #ccd5dc;border-radius:8px}
-.product .serial{margin-top:6px;width:100%}
+.product .serial{margin-top:0;width:100%}
 .saleCard{border:1px solid #e3e8eb;border-radius:12px;padding:10px;margin:8px 0}
 .badge{display:inline-block;background:#e4eef6;color:#17324d;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700}
+.cashDual table{font-size:13px}.cashDual th,.cashDual td{padding:6px 3px}
+.summaryBox{background:#f5f7f8;border-radius:10px;padding:12px;font-size:13px;line-height:1.7;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}
+.banner{background:linear-gradient(135deg,#17324d,#1f4a73);color:#fff;border-radius:14px;padding:16px;margin-bottom:10px;text-align:center}
+.banner .sub{font-size:12px;opacity:.85;margin-bottom:4px}
+.banner .main{font-size:20px;font-weight:800}
+.quickRangeBtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.quickRangeBtns button{flex:1;min-width:70px;padding:8px 4px;font-size:13px}
+.saveMsg{font-size:12px;color:#1e7040;font-weight:700}
+.chartWrap{padding:6px 0 0}
 </style>
 </head>
 <body>
-<header><h1>🧾 展場收銀</h1><div class="datebar" id="headerDate"></div></header>
+<header><h1>🧾 展場收銀</h1><div class="datebar" id="headerDate"></div><div class="datebar" id="headerCity" style="margin-top:2px;font-weight:700"></div></header>
 <main>
 <div class="tabbar">
 <button id="t-sale" class="active" onclick="tab('sale')">收銀</button>
@@ -40,12 +49,31 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 </div>
 
 <section id="sale" class="page active">
+
+<details class="card" id="citySettings">
+<summary>📍 展會城市設定</summary>
+<div class="inner">
+<p class="muted">設定一次即可，之後所有報表會自動帶入，不需每次重選。</p>
+<select id="citySelect" onchange="onCityChange()">
+<option value="">請選擇城市</option>
+<option value="台北">台北</option>
+<option value="台中">台中</option>
+<option value="高雄">高雄</option>
+<option value="其他">其他（自行輸入）</option>
+</select>
+<input id="cityCustom" placeholder="輸入城市／展會名稱" style="display:none;margin-top:8px">
+<button class="primary" style="margin-top:10px" onclick="saveCity()">儲存設定</button>
+</div>
+</details>
+
 <div class="card">
 <h2>新增銷售</h2>
 <h3>銷售日期</h3>
-<input type="date" id="saleDate" onchange="renderQuick()">
+<input type="date" id="saleDate" onchange="renderProductGrid();renderQuick()">
 <h3>販售項目</h3>
 <div class="products" id="productsGrid"></div>
+<h3>備註（選填）</h3>
+<input id="saleNote" type="text" placeholder="例如：客人現場改數量、贈品等突發狀況">
 <h3>折扣（選填）</h3>
 <input id="saleDiscount" type="number" min="0" value="0" placeholder="折扣金額" oninput="calcSale()">
 <div class="bigtotal">
@@ -66,14 +94,31 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 </div>
 
 <details class="card">
-<summary>🛠️ 管理販售項目（新增／調整金額）</summary>
+<summary>🛠️ 管理販售項目（新增／調整金額／票號設定）</summary>
 <div class="inner">
 <div id="manageList"></div>
 <div class="row" style="margin-top:8px">
 <input id="newProdName" placeholder="項目名稱">
 <input id="newProdPrice" type="number" min="0" placeholder="金額">
-<button class="secondary" style="flex:0 0 64px" onclick="addProduct()">新增</button>
 </div>
+<div class="row" style="margin-top:6px">
+<label class="muted" style="flex:0 0 92px;display:flex;align-items:center;gap:6px"><input type="checkbox" id="newProdNeedSerial">需要票號</label>
+<input id="newProdPrefix" placeholder="票號前綴 例如BC">
+<button class="secondary" style="flex:0 0 60px" onclick="addProduct()">新增</button>
+</div>
+</div>
+</details>
+
+<details class="card">
+<summary>🎫 票券／發票清點</summary>
+<div class="inner">
+<p class="muted">輸入起訖票號，快速計算張數（例如盤點剩餘票券／發票）。</p>
+<div class="row">
+<input id="stockStart" type="text" placeholder="起始票號 例如 BC442786">
+<input id="stockEnd" type="text" placeholder="結束票號 例如 BC442810">
+</div>
+<button class="secondary" style="width:100%;margin-top:8px" onclick="calcStock()">計算張數</button>
+<div id="stockResult" class="muted" style="margin-top:8px;font-size:15px;font-weight:700"></div>
 </div>
 </details>
 
@@ -109,38 +154,76 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <div class="row"><span class="muted" style="flex:0 0 60px">日期</span><input type="date" id="reportEditDate" onchange="renderReport()"></div>
 </div>
 <div id="reportCapture">
+<div id="reportBanner"></div>
 <div class="card"><h2>📊 營收統計</h2><div id="todayReport"></div></div>
 <div class="card"><h2>💰 現金驗算</h2><div id="todayCash"></div></div>
-<div class="card"><h2>🧾 交易明細（可調整數量／折扣／付款方式／票號）</h2><div id="saleEdit"></div></div>
-<div class="card"><h2>🏦 匯款紀錄（末5碼）</h2><div id="transferList"></div></div>
-<div class="card"><h2>🔖 票號紀錄</h2><div id="serialList"></div></div>
+<div class="card"><h2>🔖 票號彙總</h2><div id="serialList"></div></div>
 </div>
-<button class="secondary" style="width:100%;margin-top:10px" onclick="downloadImage('reportCapture','今日營收_'+(reportEditDate.value||today))">⬇️ 下載圖片報表</button>
+<div class="row" style="margin:10px 0">
+<button class="secondary" onclick="downloadImage('reportCapture','今日營收_'+(reportEditDate.value||today))">⬇️ 圖片報表</button>
+<button class="secondary" onclick="exportExcel(salesOf(reportEditDate.value||today),'今日營收_'+(reportEditDate.value||today),reportEditDate.value||today,false)">⬇️ Excel報表</button>
+</div>
+<div class="card"><h2>📋 文字摘要</h2><div id="reportSummary"></div></div>
+<div class="card"><h2>🧾 交易明細（可調整數量／折扣／付款方式／票號／備註）</h2><div id="saleEdit"></div></div>
+<div class="card"><h2>🏦 匯款紀錄（末5碼）</h2><div id="transferList"></div></div>
 </section>
 
 <section id="history" class="page">
-<div class="card"><h2>📅 單日報表</h2><input type="date" id="reportDate" onchange="renderHistory()"><div id="historyReport"></div></div>
+<div class="card">
+<h2>📅 單日報表</h2>
+<input type="date" id="reportDate" onchange="renderHistory()">
+<div id="historyCapture">
+<div id="historyBanner"></div>
+<div id="historyReport"></div>
+</div>
+<div class="row" style="margin:10px 0">
+<button class="secondary" onclick="downloadImage('historyCapture','單日報表_'+(reportDate.value||today))">⬇️ 圖片報表</button>
+<button class="secondary" onclick="exportExcel(salesOf(reportDate.value||today),'單日報表_'+(reportDate.value||today),reportDate.value||today,false)">⬇️ Excel報表</button>
+</div>
+<div id="historySummary"></div>
+<div id="historyTransfer" style="margin-top:10px"></div>
+</div>
+
 <div class="card">
 <h2>📆 區間報表</h2>
 <div class="row">
 <input type="date" id="rangeStart">
 <input type="date" id="rangeEnd">
 </div>
-<button class="secondary" style="width:100%;margin-top:8px" onclick="renderRange()">統計區間</button>
-<div id="rangeCapture"><div id="rangeReport" style="margin-top:10px"></div></div>
-<button class="secondary" style="width:100%;margin-top:10px" onclick="downloadImage('rangeCapture','區間報表_'+(rangeStart.value||'')+'_'+(rangeEnd.value||''))">⬇️ 下載圖片報表</button>
+<div class="quickRangeBtns">
+<button class="secondary" onclick="quickRange('7d')">近7天</button>
+<button class="secondary" onclick="quickRange('1m')">近1個月</button>
+<button class="secondary" onclick="quickRange('6m')">近6個月</button>
+<button class="secondary" onclick="quickRange('1y')">近1年</button>
 </div>
+<button class="secondary" style="width:100%;margin-top:8px" onclick="renderRange()">統計區間</button>
+<div id="rangeCapture">
+<div id="rangeBanner"></div>
+<div id="rangeReport" style="margin-top:10px"></div>
+<div class="chartWrap"><canvas id="rangeChartCanvas" height="160"></canvas></div>
+</div>
+<div class="row" style="margin:10px 0">
+<button class="secondary" onclick="downloadImage('rangeCapture','區間報表_'+(rangeStart.value||'')+'_'+(rangeEnd.value||''))">⬇️ 圖片報表</button>
+<button class="secondary" onclick="exportExcelRange()">⬇️ Excel報表</button>
+</div>
+<div id="rangeSummary"></div>
+<div id="rangeTransfer" style="margin-top:10px"></div>
+</div>
+
 <div class="card"><h2>🗓️ 每日營收列表</h2><div id="dateList"></div></div>
 </section>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script>
 const DEN=[1,5,10,50,100,500,1000];
 const KEY='expoCashierV3';
 const KEY_OLD='expoCashierV2';
 let selectedPay='現金';
 const dateStr=()=>new Date().toLocaleDateString('sv-SE');
+const fmtDate=d=>d.toLocaleDateString('sv-SE');
 let today=dateStr();
 
 function uid(prefix){return prefix+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
@@ -150,7 +233,11 @@ function money(n){return Number(n||0).toLocaleString('zh-TW')}
 function loadDb(){
  let raw=localStorage.getItem(KEY);
  if(raw){try{return JSON.parse(raw)}catch(e){}}
- let base={products:[{id:'ticket',name:'門票',price:100},{id:'pack',name:'套票',price:1588},{id:'roll',name:'肉捲',price:280}],sales:[],float:{},closeFloat:{},count:{}};
+ let base={products:[
+  {id:'ticket',name:'門票',price:100,needSerial:true,serialPrefix:'BC'},
+  {id:'pack',name:'套票',price:1588,needSerial:true,serialPrefix:'BC'},
+  {id:'roll',name:'肉捲',price:280,needSerial:false,serialPrefix:''}
+ ],sales:[],float:{},closeFloat:{},floatAmount:{},count:{},nextSerial:{},city:''};
  let old=localStorage.getItem(KEY_OLD);
  if(old){
   try{
@@ -171,19 +258,25 @@ function loadDb(){
 let db=loadDb();
 db.closeFloat=db.closeFloat||{};
 db.floatAmount=db.floatAmount||{};
+db.nextSerial=db.nextSerial||{};
+if(db.city===undefined)db.city='';
+db.products=db.products||[];
+db.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix=''});
 function save(){localStorage.setItem(KEY,JSON.stringify(db))}
 
 document.getElementById('headerDate').textContent=today;
 document.getElementById('reportDate').value=today;
 document.getElementById('reportEditDate').value=today;
 document.getElementById('saleDate').value=today;
+document.getElementById('rangeStart').value=today;
+document.getElementById('rangeEnd').value=today;
 
 function tab(id){
  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');
  document.querySelectorAll('.tabbar button').forEach(x=>x.classList.remove('active'));document.getElementById('t-'+id).classList.add('active');
  if(id==='cash')renderCash();
  if(id==='report')renderReport();
- if(id==='history'){renderHistory();renderDateList()}
+ if(id==='history'){renderHistory();renderDateList();renderRange()}
 }
 function choosePay(btn){
  selectedPay=btn.dataset.pay;
@@ -192,36 +285,142 @@ function choosePay(btn){
  transferField.style.display=selectedPay==='匯款'?'block':'none';
 }
 
+/* ---------- 展會城市設定 ---------- */
+function onCityChange(){cityCustom.style.display=citySelect.value==='其他'?'block':'none'}
+function saveCity(){
+ let v=citySelect.value;
+ let city=v==='其他'?cityCustom.value.trim():v;
+ db.city=city;save();updateHeaderCity();
+ alert('已儲存展會城市：'+(city||'（未設定）'));
+}
+function updateHeaderCity(){headerCity.textContent=db.city?('📍 '+db.city):''}
+function initCitySettings(){
+ if(db.city){
+  if(['台北','台中','高雄'].includes(db.city)){citySelect.value=db.city}
+  else{citySelect.value='其他';cityCustom.value=db.city;cityCustom.style.display='block'}
+ } else {
+  citySettings.setAttribute('open','open');
+ }
+ updateHeaderCity();
+}
+
 /* ---------- 商品管理 ---------- */
+function getNextSerial(d,pid){return db.nextSerial&&db.nextSerial[d+'_'+pid]!=null?db.nextSerial[d+'_'+pid]:null}
+function composeSerial(p,typed){
+ typed=(typed||'').trim();
+ if(!typed)return '';
+ let prefix=p.serialPrefix||'';
+ if(prefix&&typed.startsWith(prefix))return typed;
+ return prefix+typed;
+}
+function serialDisplayValue(p,fullSerial){
+ if(!fullSerial)return '';
+ let prefix=p.serialPrefix||'';
+ if(prefix&&fullSerial.startsWith(prefix))return fullSerial.slice(prefix.length);
+ return fullSerial;
+}
 function renderProductGrid(){
- productsGrid.innerHTML=db.products.map(p=>`<div class="product"><div class="name">${esc(p.name)}</div><div class="price">$${money(p.price)}</div><input class="qty saleQty" data-id="${p.id}" type="number" min="0" value="0" oninput="calcSale()"><input class="serial saleSerial" data-id="${p.id}" type="text" placeholder="票號(選填)"></div>`).join('');
+ let d=(document.getElementById('saleDate')&&saleDate.value)||today;
+ productsGrid.innerHTML=db.products.map(p=>{
+  let serialBlock='';
+  if(p.needSerial){
+   let nextVal=getNextSerial(d,p.id);
+   serialBlock=`
+    <div class="row" style="margin-top:6px;gap:4px">
+     <span class="muted" style="flex:0 0 26px;font-size:11px;text-align:right">${esc(p.serialPrefix||'')}</span>
+     <input class="serial saleSerial" data-id="${p.id}" type="text" placeholder="票號/區間" oninput="markManualSerial('${p.id}')">
+    </div>
+    <div class="row" style="margin-top:4px;gap:4px">
+     <span class="muted" style="flex:0 0 26px;font-size:10px;text-align:right">起始</span>
+     <input class="startSerial" data-id="${p.id}" type="number" placeholder="起始號" value="${nextVal!=null?nextVal:''}" oninput="calcSale()">
+    </div>`;
+  }
+  return `<div class="product"><div class="name">${esc(p.name)}</div><div class="price">$${money(p.price)}</div><input class="qty saleQty" data-id="${p.id}" type="number" min="0" value="0" oninput="calcSale()">${serialBlock}</div>`;
+ }).join('');
 }
 function renderProductManage(){
- manageList.innerHTML=db.products.length?db.products.map(p=>`<div class="edititem"><span class="lbl">項目</span><input value="${esc(p.name)}" oninput="updateProductField('${p.id}','name',this.value)"><span class="lbl">金額</span><input type="number" min="0" value="${p.price}" oninput="updateProductField('${p.id}','price',this.value)"><button class="secondary danger" style="flex:0 0 40px" onclick="deleteProduct('${p.id}')">✕</button></div>`).join(''):'<p class="muted">尚無販售項目</p>';
+ manageList.innerHTML=db.products.length?db.products.map(p=>`
+ <div class="edititem">
+  <span class="lbl">項目</span><input value="${esc(p.name)}" oninput="updateProductField('${p.id}','name',this.value)">
+  <span class="lbl">金額</span><input type="number" min="0" value="${p.price}" oninput="updateProductField('${p.id}','price',this.value)">
+ </div>
+ <div class="edititem" style="margin-top:-2px">
+  <label class="muted" style="flex:0 0 92px;display:flex;align-items:center;gap:6px"><input type="checkbox" ${p.needSerial?'checked':''} onchange="updateProductField('${p.id}','needSerial',this.checked)">需要票號</label>
+  <input value="${esc(p.serialPrefix||'')}" placeholder="前綴 例如BC" oninput="updateProductField('${p.id}','serialPrefix',this.value)">
+  <button class="secondary" style="flex:0 0 46px" onclick="manualSaveProduct('${p.id}')">💾</button>
+  <button class="secondary danger" style="flex:0 0 40px" onclick="deleteProduct('${p.id}')">✕</button>
+ </div>
+ <div class="row" style="justify-content:flex-end"><span class="saveMsg" id="saveMsgP-${p.id}"></span></div>
+ `).join(''):'<p class="muted">尚無販售項目</p>';
+}
+function manualSaveProduct(id){save();flashSaved('saveMsgP-'+id)}
+function flashSaved(elId){
+ let el=document.getElementById(elId);
+ if(!el)return;
+ el.textContent='✅ 已儲存';
+ setTimeout(()=>{let e2=document.getElementById(elId);if(e2)e2.textContent=''},1500);
 }
 function addProduct(){
  let name=newProdName.value.trim(),price=+newProdPrice.value;
  if(!name||!price){alert('請輸入項目名稱與金額');return}
- db.products.push({id:uid('p'),name,price});
- newProdName.value='';newProdPrice.value='';
+ let needSerial=newProdNeedSerial.checked;
+ let prefix=newProdPrefix.value.trim();
+ db.products.push({id:uid('p'),name,price,needSerial,serialPrefix:prefix});
+ newProdName.value='';newProdPrice.value='';newProdNeedSerial.checked=false;newProdPrefix.value='';
  save();renderProductGrid();renderProductManage();calcSale();
 }
 function updateProductField(id,field,val){
  let p=db.products.find(x=>x.id===id);if(!p)return;
- if(field==='price')p.price=+val||0;else p.name=val;
+ if(field==='price')p.price=+val||0;
+ else if(field==='needSerial')p.needSerial=!!val;
+ else if(field==='serialPrefix')p.serialPrefix=val;
+ else p.name=val;
  save();
- if(field==='price'){renderProductGrid();calcSale()}
+ if(field==='price'||field==='needSerial'||field==='serialPrefix'){renderProductGrid();calcSale()}
 }
 function deleteProduct(id){
- if(!confirm('確定刪除此項目？（已產生的銷售紀錄不受影響）'))return;
+ let p=db.products.find(x=>x.id===id);
+ if(!confirm(`確定要刪除「${p?p.name:''}」這個項目嗎？\n此動作無法復原（已產生的銷售紀錄不會受影響）。`))return;
  db.products=db.products.filter(x=>x.id!==id);
  save();renderProductGrid();renderProductManage();calcSale();
+}
+
+/* ---------- 票券／發票清點 ---------- */
+function calcStock(){
+ let a=stockStart.value.trim(),b=stockEnd.value.trim();
+ let ma=a.match(/^([A-Za-z]*)(\d+)$/),mb=b.match(/^([A-Za-z]*)(\d+)$/);
+ if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 BC442786）';return}
+ let start=parseInt(ma[2],10),end=parseInt(mb[2],10);
+ if(end<start){let t=start;start=end;end=t}
+ let count=end-start+1;
+ stockResult.textContent=`共 ${count} 張（${a} ～ ${b}）`;
 }
 
 /* ---------- 收銀 ---------- */
 function calcSale(){
  let subtotal=0;
- document.querySelectorAll('.saleQty').forEach(inp=>{let p=db.products.find(x=>x.id===inp.dataset.id);if(p)subtotal+=(+inp.value||0)*p.price});
+ document.querySelectorAll('.saleQty').forEach(inp=>{
+  let pid=inp.dataset.id;
+  let p=db.products.find(x=>x.id===pid);
+  if(!p)return;
+  let qty=+inp.value||0;
+  subtotal+=qty*p.price;
+  if(p.needSerial){
+   let startInput=document.querySelector(`.startSerial[data-id="${pid}"]`);
+   let serialInput=document.querySelector(`.saleSerial[data-id="${pid}"]`);
+   if(startInput&&serialInput&&!serialInput.dataset.manual){
+    let startVal=+startInput.value;
+    if(startVal&&qty>0){
+     let width=String(startVal).length;
+     let endVal=startVal+qty-1;
+     let pad=n=>String(n).padStart(width,'0');
+     serialInput.value=qty===1?pad(startVal):(pad(startVal)+'~'+pad(endVal));
+    } else if(qty===0){
+     serialInput.value='';
+    }
+   }
+  }
+ });
  let discount=+saleDiscount.value||0;if(discount<0)discount=0;if(discount>subtotal)discount=subtotal;
  let total=subtotal-discount;
  saleSubtotal.textContent=money(subtotal);
@@ -229,16 +428,30 @@ function calcSale(){
  discountRow.style.display=discount>0?'block':'none';
  saleTotal.textContent='$'+money(total);
 }
+function markManualSerial(pid){
+ let serialInput=document.querySelector(`.saleSerial[data-id="${pid}"]`);
+ if(!serialInput)return;
+ if(serialInput.value.trim()==='')delete serialInput.dataset.manual;
+ else serialInput.dataset.manual='1';
+}
 function addSale(){
  let items=[];
+ let serialAdvances=[];
  document.querySelectorAll('.saleQty').forEach(inp=>{
-  let qty=+inp.value||0;
-  if(qty>0){
-   let p=db.products.find(x=>x.id===inp.dataset.id);
-   let serialInput=document.querySelector(`.saleSerial[data-id="${inp.dataset.id}"]`);
-   let serial=serialInput?serialInput.value.trim():'';
-   if(p)items.push({id:p.id,name:p.name,price:p.price,qty,serial});
+  let pid=inp.dataset.id,qty=+inp.value||0;
+  if(qty<=0)return;
+  let p=db.products.find(x=>x.id===pid);
+  if(!p)return;
+  let serial='';
+  if(p.needSerial){
+   let serialInput=document.querySelector(`.saleSerial[data-id="${pid}"]`);
+   let rawSerial=serialInput?serialInput.value.trim():'';
+   serial=composeSerial(p,rawSerial);
+   let startInput=document.querySelector(`.startSerial[data-id="${pid}"]`);
+   let startVal=startInput?+startInput.value:0;
+   if(startVal){serialAdvances.push({pid,newNext:startVal+qty})}
   }
+  items.push({id:p.id,name:p.name,price:p.price,qty,serial});
  });
  if(!items.length){alert('請先輸入販售數量');return}
  let subtotal=items.reduce((s,i)=>s+i.qty*i.price,0);
@@ -246,19 +459,22 @@ function addSale(){
  let total=subtotal-discount;
  let d=saleDate.value||today;
  let transferLast5=selectedPay==='匯款'?transferLast5Input().value.trim():'';
- db.sales.push({id:uid('s'),date:d,items,discount,subtotal,total,pay:selectedPay,transferLast5,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})});
+ let note=document.getElementById('saleNote')?saleNote.value.trim():'';
+ db.sales.push({id:uid('s'),date:d,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})});
+ db.nextSerial=db.nextSerial||{};
+ serialAdvances.forEach(a=>{db.nextSerial[d+'_'+a.pid]=a.newNext});
  save();
  document.querySelectorAll('.saleQty').forEach(i=>i.value=0);
- document.querySelectorAll('.saleSerial').forEach(i=>i.value='');
  saleDiscount.value=0;
+ if(document.getElementById('saleNote'))saleNote.value='';
  transferLast5Input().value='';
+ renderProductGrid();
  calcSale();renderQuick();
  alert('收款完成！');
 }
 function transferLast5Input(){return document.getElementById('transferLast5')}
 function salesOf(d){return db.sales.filter(x=>x.date===d)}
-function totals(d){
- let rows=salesOf(d);
+function aggregateRows(rows){
  let r={itemQty:{},itemNames:{},現金:0,匯款:0,刷卡:0,total:0,discount:0,subtotal:0,count:rows.length};
  rows.forEach(x=>{
   (x.items||[]).forEach(it=>{r.itemQty[it.id]=(r.itemQty[it.id]||0)+it.qty;r.itemNames[it.id]=it.name});
@@ -269,6 +485,7 @@ function totals(d){
  });
  return r;
 }
+function totals(d){return aggregateRows(salesOf(d))}
 function buildStatsHtml(r){
  let itemsHtml=Object.keys(r.itemQty).map(id=>`<div class="stat"><span>${esc(r.itemNames[id])}</span><b>${r.itemQty[id]}</b></div>`).join('');
  return `<div class="summary">
@@ -309,17 +526,72 @@ function buildCashCheckHtml(d,r){
  html+= hasCount?(cashDiff===0?'<div class="check ok">✅ 現金營收相符</div>':`<div class="check bad">⚠️ 現金差額 $${money(Math.abs(cashDiff))}（實際${cashDiff>0?'多':'少'}於系統紀錄）</div>`):'<div class="check warn">尚未輸入今日營收現金清點。</div>';
  return html;
 }
+function parseSerialToken(tok){
+ tok=tok.trim();
+ if(!tok)return null;
+ let parts=tok.split(/[~～]/).map(x=>x.trim()).filter(Boolean);
+ if(parts.length===1){
+  let m=parts[0].match(/^([A-Za-z]*)(\d+)$/);
+  if(!m)return {raw:tok};
+  return {prefix:m[1],start:parseInt(m[2],10),end:parseInt(m[2],10),width:m[2].length};
+ } else if(parts.length===2){
+  let m1=parts[0].match(/^([A-Za-z]*)(\d+)$/);
+  let m2=parts[1].match(/^([A-Za-z]*)(\d+)$/);
+  if(!m1||!m2)return {raw:tok};
+  let prefix=m1[1]||m2[1]||'';
+  let start=parseInt(m1[2],10),end=parseInt(m2[2],10);
+  let width=m1[2].length;
+  if(end<start){let t=start;start=end;end=t}
+  return {prefix,start,end,width};
+ }
+ return {raw:tok};
+}
+function summarizeSerials(list){
+ let tokens=[];
+ list.forEach(s=>{s.split(/[,、;；]/).forEach(t=>{if(t.trim())tokens.push(t)})});
+ let groups={},raws=[];
+ tokens.forEach(t=>{
+  let p=parseSerialToken(t);
+  if(!p)return;
+  if(p.raw){raws.push(p.raw);return}
+  groups[p.prefix]=groups[p.prefix]||[];
+  groups[p.prefix].push(p);
+ });
+ let lines=[],total=0;
+ Object.keys(groups).forEach(prefix=>{
+  let ivs=groups[prefix].sort((a,b)=>a.start-b.start);
+  let merged=[];
+  ivs.forEach(iv=>{
+   if(merged.length&&iv.start<=merged[merged.length-1].end+1){
+    merged[merged.length-1].end=Math.max(merged[merged.length-1].end,iv.end);
+    merged[merged.length-1].width=Math.max(merged[merged.length-1].width,iv.width);
+   } else {
+    merged.push({start:iv.start,end:iv.end,width:iv.width});
+   }
+  });
+  merged.forEach(iv=>{
+   total+=iv.end-iv.start+1;
+   let pad=n=>String(n).padStart(iv.width,'0');
+   lines.push(iv.start===iv.end?(prefix+pad(iv.start)):(prefix+pad(iv.start)+'~'+prefix+pad(iv.end)));
+  });
+ });
+ if(raws.length){total+=raws.length;lines.push(raws.join('、'))}
+ return {lines,total};
+}
 function buildSerialHtml(rows){
  let map={};
  rows.forEach(x=>(x.items||[]).forEach(it=>{
   if(it.serial&&it.serial.trim()){
-   map[it.id]=map[it.id]||{name:it.name,list:[]};
-   map[it.id].list.push(it.serial.trim());
+   map[it.id]=map[it.id]||{name:it.name,serials:[]};
+   map[it.id].serials.push(it.serial);
   }
  }));
  let keys=Object.keys(map);
  if(!keys.length)return '<p class="muted">尚無票號紀錄</p>';
- return keys.map(id=>`<div class="listrow" style="display:block"><b>${esc(map[id].name)}</b><div class="muted" style="margin-top:4px">${map[id].list.map(esc).join('、')}</div></div>`).join('');
+ return keys.map(id=>{
+  let sum=summarizeSerials(map[id].serials);
+  return `<div class="listrow" style="display:block"><b>${esc(map[id].name)}</b><div class="muted" style="margin-top:4px">${sum.lines.map(esc).join('、')}，共 ${sum.total} 張</div></div>`;
+ }).join('');
 }
 function renderQuick(){
  let d=saleDate.value||today;
@@ -331,9 +603,14 @@ function renderQuick(){
 /* ---------- 現金清點 ---------- */
 function makeCashTable(kind){
  let saved=db[kind][today]||{};
- return `<table><thead><tr><th>面額</th><th>數量</th><th>小計</th></tr></thead><tbody>`+
- DEN.map(d=>`<tr><td>$${money(d)}</td><td><input class="moneyInput cashnum" data-kind="${kind}" data-den="${d}" type="number" min="0" value="${saved[d]||0}" oninput="updateCash('${kind}')"></td><td id="${kind}-${d}">$${money((saved[d]||0)*d)}</td></tr>`).join('')+
- `</tbody></table>`;
+ let half=Math.ceil(DEN.length/2);
+ let col1=DEN.slice(0,half),col2=DEN.slice(half);
+ function colHtml(list){
+  return `<table><thead><tr><th>面額</th><th>數量</th><th>小計</th></tr></thead><tbody>`+
+  list.map(d=>`<tr><td>$${money(d)}</td><td><input class="moneyInput cashnum" data-kind="${kind}" data-den="${d}" type="number" min="0" value="${saved[d]||0}" oninput="updateCash('${kind}')"></td><td id="${kind}-${d}">$${money((saved[d]||0)*d)}</td></tr>`).join('')+
+  `</tbody></table>`;
+ }
+ return `<div class="row cashDual" style="align-items:flex-start">${colHtml(col1)}${colHtml(col2)}</div>`;
 }
 function renderCash(){
  let fa=getFloatAmount(today);
@@ -351,6 +628,51 @@ function saveCloseFloat(){db.closeFloat[today]=getCash('closeFloat');save();rend
 function saveCount(){db.count[today]=getCash('count');save();renderCashCheck();alert('今日營收現金已儲存')}
 function renderCashCheck(){let r=totals(today);cashCheck.innerHTML=buildCashCheckHtml(today,r)}
 
+/* ---------- 文字摘要／複製 ---------- */
+let summaryTexts={};
+function toROCDate(dateStr){
+ let parts=dateStr.split('-').map(Number);
+ let y=parts[0],m=parts[1],d=parts[2];
+ return `${y-1911}/${String(m).padStart(2,'0')}/${String(d).padStart(2,'0')}`;
+}
+function buildSummaryText(r,label){
+ let itemsText=Object.keys(r.itemQty).map(id=>`${r.itemNames[id]}*${r.itemQty[id]}`).join('｜')||'無銷售';
+ let cityLine=db.city?db.city+'\n':'';
+ return `${cityLine}${label}\n${itemsText}\n共計 ${money(r.total)} 元`;
+}
+function renderSummaryBlock(elId,key,r,label){
+ let text=buildSummaryText(r,label);
+ summaryTexts[key]=text;
+ let el=document.getElementById(elId);
+ if(!el)return;
+ el.innerHTML=`<div class="summaryBox">${esc(text)}</div><button class="secondary" style="width:100%;margin-top:8px" id="copyBtn-${key}" onclick="copySummary('${key}')">📋 複製文字摘要</button>`;
+}
+function copySummary(key){
+ let text=summaryTexts[key];
+ if(!text)return;
+ let btn=document.getElementById('copyBtn-'+key);
+ if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(text).then(()=>flashCopied(btn)).catch(()=>fallbackCopy(text,btn));
+ } else fallbackCopy(text,btn);
+}
+function fallbackCopy(text,btn){
+ let ta=document.createElement('textarea');
+ ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
+ document.body.appendChild(ta);ta.select();
+ try{document.execCommand('copy')}catch(e){}
+ document.body.removeChild(ta);
+ flashCopied(btn);
+}
+function flashCopied(btn){
+ if(!btn)return;
+ let orig=btn.textContent;
+ btn.textContent='✅ 已複製';
+ setTimeout(()=>{btn.textContent=orig},1500);
+}
+function bannerHtml(title){
+ return `<div class="banner"><div class="sub">展場收銀報表${db.city?'．'+esc(db.city):''}</div><div class="main">${esc(title)}</div></div>`;
+}
+
 /* ---------- 今日營收（可調整） ---------- */
 function buildTransferHtml(rows){
  let list=rows.filter(x=>x.pay==='匯款');
@@ -360,24 +682,32 @@ function buildTransferHtml(rows){
 function renderReport(){
  let d=reportEditDate.value||today;
  let r=totals(d),rows=salesOf(d);
+ reportBanner.innerHTML=bannerHtml(toROCDate(d));
  todayReport.innerHTML=buildStatsHtml(r);
  todayCash.innerHTML=buildCashCheckHtml(d,r);
+ serialList.innerHTML=buildSerialHtml(rows);
  saleEdit.innerHTML=rows.length?rows.map(renderSaleEditRow).join(''):'<p class="muted">此日期尚無交易</p>';
  transferList.innerHTML=buildTransferHtml(rows);
- serialList.innerHTML=buildSerialHtml(rows);
+ renderSummaryBlock('reportSummary','report',r,toROCDate(d));
 }
 function renderReportStatsOnly(){
  let d=reportEditDate.value||today;
- let r=totals(d);
+ let r=totals(d),rows=salesOf(d);
  todayReport.innerHTML=buildStatsHtml(r);
  todayCash.innerHTML=buildCashCheckHtml(d,r);
+ serialList.innerHTML=buildSerialHtml(rows);
+ renderSummaryBlock('reportSummary','report',r,toROCDate(d));
 }
 function renderSaleEditRow(sale){
  let itemsHtml=db.products.map(p=>{
   let it=(sale.items||[]).find(i=>i.id===p.id);
   let qty=it?it.qty:0;
-  let serial=it?(it.serial||''):'';
-  return `<div class="edititem"><span class="lbl">${esc(p.name)}</span><input id="qty-${sale.id}-${p.id}" type="number" min="0" value="${qty}" oninput="updateSaleItem('${sale.id}','${p.id}')" style="flex:0 0 70px"><input id="serial-${sale.id}-${p.id}" class="serial" type="text" placeholder="票號(選填)" value="${esc(serial)}" oninput="updateSaleItemSerial('${sale.id}','${p.id}')"></div>`;
+  let serialField='';
+  if(p.needSerial){
+   let serialVal=it?serialDisplayValue(p,it.serial||''):'';
+   serialField=`<span class="muted" style="flex:0 0 24px;font-size:11px;text-align:right">${esc(p.serialPrefix||'')}</span><input id="serial-${sale.id}-${p.id}" class="serial" type="text" placeholder="票號" value="${esc(serialVal)}" oninput="updateSaleItemSerial('${sale.id}','${p.id}')">`;
+  }
+  return `<div class="edititem"><span class="lbl">${esc(p.name)}</span><input id="qty-${sale.id}-${p.id}" type="number" min="0" value="${qty}" oninput="updateSaleItem('${sale.id}','${p.id}')" style="flex:0 0 56px">${serialField}</div>`;
  }).join('');
  return `<div class="saleCard" id="saleRow-${sale.id}">
  <div class="row">
@@ -394,6 +724,11 @@ function renderSaleEditRow(sale){
  </div>
  ${itemsHtml}
  <div class="edititem"><span class="lbl">折扣</span><input type="number" min="0" value="${sale.discount||0}" oninput="updateSaleDiscount('${sale.id}',this.value)"></div>
+ <div class="edititem"><span class="lbl">備註</span><input type="text" value="${esc(sale.note||'')}" placeholder="備註" oninput="updateSaleNote('${sale.id}',this.value)"></div>
+ <div class="row" style="margin-top:8px;align-items:center">
+  <button class="secondary" style="flex:0 0 90px" onclick="manualSaveSale('${sale.id}')">💾 儲存</button>
+  <span class="saveMsg" id="saveMsg-${sale.id}"></span>
+ </div>
  <div style="text-align:right;font-weight:700;margin-top:6px">小計 $<span id="saleSub-${sale.id}">${money(sale.subtotal!=null?sale.subtotal:sale.total)}</span>　應收 $<span id="saleFinal-${sale.id}">${money(sale.total)}</span></div>
  </div>`;
 }
@@ -408,31 +743,37 @@ function refreshSaleRowTotals(sale){
  if(subEl)subEl.textContent=money(sale.subtotal);
  if(finEl)finEl.textContent=money(sale.total);
 }
+function manualSaveSale(saleId){save();flashSaved('saveMsg-'+saleId)}
 function updateSaleItem(saleId,pid){
  let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
  let qtyInput=document.getElementById('qty-'+saleId+'-'+pid);
  let serialInput=document.getElementById('serial-'+saleId+'-'+pid);
  let qty=+(qtyInput?qtyInput.value:0)||0;
- let serial=serialInput?serialInput.value:'';
  let p=db.products.find(x=>x.id===pid);
+ let serial=(p&&p.needSerial)?composeSerial(p,serialInput?serialInput.value:''):'';
  let existing=(sale.items||[]).find(i=>i.id===pid);
  if(qty<=0){sale.items=(sale.items||[]).filter(i=>i.id!==pid)}
  else if(existing){existing.qty=qty;existing.serial=serial}
  else{sale.items=sale.items||[];sale.items.push({id:pid,name:p?p.name:pid,price:p?p.price:0,qty,serial})}
- recalcSale(sale);save();refreshSaleRowTotals(sale);renderReportStatsOnly();serialList.innerHTML=buildSerialHtml(salesOf(sale.date));
+ recalcSale(sale);save();refreshSaleRowTotals(sale);renderReportStatsOnly();
 }
 function updateSaleItemSerial(saleId,pid){
  let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
  let existing=(sale.items||[]).find(i=>i.id===pid);
  if(!existing)return;
+ let p=db.products.find(x=>x.id===pid);
  let serialInput=document.getElementById('serial-'+saleId+'-'+pid);
- existing.serial=serialInput?serialInput.value:'';
+ existing.serial=(p&&p.needSerial)?composeSerial(p,serialInput?serialInput.value:''):'';
  save();
  serialList.innerHTML=buildSerialHtml(salesOf(sale.date));
 }
 function updateSaleDiscount(saleId,val){
  let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
  sale.discount=+val||0;recalcSale(sale);save();refreshSaleRowTotals(sale);renderReportStatsOnly();
+}
+function updateSaleNote(saleId,val){
+ let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
+ sale.note=val;save();
 }
 function updateSalePay(saleId,val){
  let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
@@ -448,7 +789,8 @@ function updateSaleTransfer(saleId,val){
  transferList.innerHTML=buildTransferHtml(salesOf(sale.date));
 }
 function deleteSale(saleId){
- if(!confirm('確定刪除這筆交易紀錄？'))return;
+ let sale=db.sales.find(s=>s.id===saleId);
+ if(!confirm(`確定要刪除這筆交易紀錄嗎？（金額 $${sale?money(sale.total):''}）\n此動作無法復原。`))return;
  db.sales=db.sales.filter(s=>s.id!==saleId);
  save();renderReport();
 }
@@ -458,25 +800,106 @@ function renderHistory(){
  let d=reportDate.value||today;
  let rows=salesOf(d);
  let r=totals(d);
- historyReport.innerHTML=`<h3>${d}</h3>`+buildStatsHtml(r)+'<h3 style="margin-top:14px">🏦 匯款紀錄</h3>'+buildTransferHtml(rows)+'<h3 style="margin-top:14px">🔖 票號紀錄</h3>'+buildSerialHtml(rows);
+ historyBanner.innerHTML=bannerHtml(toROCDate(d));
+ historyReport.innerHTML=buildStatsHtml(r)+'<h3 style="margin-top:14px">🔖 票號彙總</h3>'+buildSerialHtml(rows);
+ renderSummaryBlock('historySummary','history',r,toROCDate(d));
+ historyTransfer.innerHTML='<h3>🏦 匯款紀錄</h3>'+buildTransferHtml(rows);
+}
+function quickRange(type){
+ let end=new Date();
+ let start=new Date();
+ if(type==='7d')start.setDate(start.getDate()-6);
+ else if(type==='1m')start.setMonth(start.getMonth()-1);
+ else if(type==='6m')start.setMonth(start.getMonth()-6);
+ else if(type==='1y')start.setFullYear(start.getFullYear()-1);
+ rangeStart.value=fmtDate(start);
+ rangeEnd.value=fmtDate(end);
+ renderRange();
 }
 function renderRange(){
  let s=rangeStart.value,e=rangeEnd.value;
  if(!s||!e){alert('請選擇起訖日期');return}
  if(s>e){alert('起始日期需早於或等於結束日期');return}
  let rows=db.sales.filter(x=>x.date>=s&&x.date<=e);
- let r={itemQty:{},itemNames:{},現金:0,匯款:0,刷卡:0,total:0,discount:0,count:rows.length};
+ let r=aggregateRows(rows);
+ let title=s===e?toROCDate(s):(toROCDate(s)+'～'+toROCDate(e));
+ rangeBanner.innerHTML=bannerHtml(title);
+ rangeReport.innerHTML=buildStatsHtml(r)+'<h3 style="margin-top:14px">🔖 票號彙總</h3>'+buildSerialHtml(rows);
+ renderSummaryBlock('rangeSummary','range',r,title);
+ rangeTransfer.innerHTML='<h3>🏦 匯款紀錄</h3>'+buildTransferHtml(rows);
+ renderRangeChart(rows,s,e);
+}
+function renderRangeChart(rows,s,e){
+ let canvas=document.getElementById('rangeChartCanvas');
+ if(!canvas||typeof Chart==='undefined')return;
+ if(window._rangeChart){window._rangeChart.destroy()}
+ let startD=new Date(s),endD=new Date(e);
+ let spanDays=Math.round((endD-startD)/86400000)+1;
+ let mode=spanDays<=31?'day':spanDays<=180?'week':'month';
+ let buckets={};
  rows.forEach(x=>{
-  (x.items||[]).forEach(it=>{r.itemQty[it.id]=(r.itemQty[it.id]||0)+it.qty;r.itemNames[it.id]=it.name});
-  r[x.pay]=(r[x.pay]||0)+x.total;r.total+=x.total;r.discount+=x.discount||0;
+  let key;
+  if(mode==='day')key=x.date;
+  else if(mode==='week'){let dt=new Date(x.date);let day=dt.getDay();let diff=(day+6)%7;dt.setDate(dt.getDate()-diff);key=fmtDate(dt)}
+  else key=x.date.slice(0,7);
+  buckets[key]=(buckets[key]||0)+x.total;
  });
- rangeReport.innerHTML=`<h3>${s} ～ ${e}</h3>`+buildStatsHtml(r)+'<h3 style="margin-top:14px">🏦 匯款紀錄</h3>'+buildTransferHtml(rows)+'<h3 style="margin-top:14px">🔖 票號紀錄</h3>'+buildSerialHtml(rows);
+ let labels=Object.keys(buckets).sort();
+ if(!labels.length){labels=[s];buckets[s]=0}
+ let ctx=canvas.getContext('2d');
+ window._rangeChart=new Chart(ctx,{
+  type:'bar',
+  data:{labels,datasets:[{label:'營業額',data:labels.map(k=>buckets[k]),backgroundColor:'#17324d'}]},
+  options:{animation:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+ });
 }
 function renderDateList(){
  let dates=Array.from(new Set(db.sales.map(x=>x.date))).sort().reverse();
  if(!dates.length){dateList.innerHTML='<p class="muted">尚無銷售紀錄</p>';return}
  dateList.innerHTML=`<table><thead><tr><th>日期</th><th>營業額</th><th>筆數</th></tr></thead><tbody>`+
  dates.map(d=>{let r=totals(d);return `<tr><td>${d}</td><td>$${money(r.total)}</td><td>${r.count}</td></tr>`}).join('')+`</tbody></table>`;
+}
+
+/* ---------- Excel 匯出 ---------- */
+function exportExcel(rows,label,cashDate,dailyBreakdown){
+ if(typeof XLSX==='undefined'){alert('Excel功能載入失敗，請確認網路連線後重試');return}
+ let wb=XLSX.utils.book_new();
+ let r=aggregateRows(rows);
+ let summaryAOA=[['城市/展會',db.city||''],['報表範圍',label],['營業額',r.total],['現金',r.現金||0],['匯款',r.匯款||0],['刷卡',r.刷卡||0],['折扣總額',r.discount||0],['交易筆數',r.count]];
+ Object.keys(r.itemQty).forEach(id=>summaryAOA.push([r.itemNames[id],r.itemQty[id]]));
+ if(cashDate){
+  let float=getFloatAmount(cashDate)||0,closeFloat=sumCash((db.closeFloat&&db.closeFloat[cashDate])||{}),counted=sumCash(db.count[cashDate]||{});
+  summaryAOA.push(['原零用金',float]);
+  summaryAOA.push(['今日結算零用金',closeFloat]);
+  summaryAOA.push(['零用金差額',closeFloat-float]);
+  summaryAOA.push(['系統現金營收',r.現金||0]);
+  summaryAOA.push(['今日營收現金(實際)',counted]);
+  summaryAOA.push(['現金營收差額',counted-(r.現金||0)]);
+ }
+ XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(summaryAOA),'營收總表');
+ let detailAOA=[['日期','時間','付款方式','匯款末5碼','項目','數量','單價','金額','票號','折扣(整筆)','應收(整筆)','備註']];
+ rows.forEach(x=>{
+  (x.items||[]).forEach(it=>{detailAOA.push([x.date,x.time||'',x.pay,x.transferLast5||'',it.name,it.qty,it.price,it.qty*it.price,it.serial||'',x.discount||0,x.total,x.note||''])});
+ });
+ XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(detailAOA),'交易明細');
+ let serialAOA=[['項目','票號彙總','總張數']];
+ let smap={};
+ rows.forEach(x=>(x.items||[]).forEach(it=>{if(it.serial&&it.serial.trim()){smap[it.id]=smap[it.id]||{name:it.name,serials:[]};smap[it.id].serials.push(it.serial)}}));
+ Object.keys(smap).forEach(id=>{let sum=summarizeSerials(smap[id].serials);serialAOA.push([smap[id].name,sum.lines.join('、'),sum.total])});
+ XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(serialAOA),'票號彙總');
+ if(dailyBreakdown){
+  let dates=Array.from(new Set(rows.map(x=>x.date))).sort();
+  let aoa=[['日期','營業額','現金','匯款','刷卡','交易筆數']];
+  dates.forEach(d=>{let rr=aggregateRows(rows.filter(x=>x.date===d));aoa.push([d,rr.total,rr.現金||0,rr.匯款||0,rr.刷卡||0,rr.count])});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(aoa),'每日明細');
+ }
+ XLSX.writeFile(wb,label+'.xlsx');
+}
+function exportExcelRange(){
+ let s=rangeStart.value,e=rangeEnd.value;
+ if(!s||!e){alert('請先選擇並統計區間');return}
+ let rows=db.sales.filter(x=>x.date>=s&&x.date<=e);
+ exportExcel(rows,'區間報表_'+s+'_'+e,null,true);
 }
 
 /* ---------- 圖片報表匯出 ---------- */
@@ -514,5 +937,6 @@ renderProductGrid();
 renderProductManage();
 calcSale();
 renderQuick();
+initCitySettings();
 </script>
 </body></html>
