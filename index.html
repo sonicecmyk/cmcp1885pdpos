@@ -181,21 +181,6 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 
 <section id="history" class="page">
 <div class="card">
-<h2>📅 單日報表</h2>
-<input type="date" id="reportDate" onchange="renderHistory()">
-<div id="historyCapture">
-<div id="historyBanner"></div>
-<div id="historyReport"></div>
-</div>
-<div class="row" style="margin:10px 0">
-<button class="secondary" onclick="downloadImage('historyCapture','單日報表_'+(reportDate.value||today))">⬇️ 圖片報表</button>
-<button class="secondary" onclick="exportExcel(salesOf(reportDate.value||today),'單日報表_'+(reportDate.value||today),reportDate.value||today,false)">⬇️ Excel報表</button>
-</div>
-<div id="historySummary"></div>
-<div id="historyTransfer" style="margin-top:10px"></div>
-</div>
-
-<div class="card">
 <h2>📆 區間報表</h2>
 <div class="row">
 <input type="date" id="rangeStart">
@@ -388,7 +373,6 @@ function pushToCloud(){
  }
 
 document.getElementById('headerDate').textContent=today;
-document.getElementById('reportDate').value=today;
 document.getElementById('reportEditDate').value=today;
 document.getElementById('saleDate').value=today;
 document.getElementById('rangeStart').value=today;
@@ -399,7 +383,7 @@ function tab(id){
  document.querySelectorAll('.tabbar button').forEach(x=>x.classList.remove('active'));document.getElementById('t-'+id).classList.add('active');
  if(id==='cash')renderCash();
  if(id==='report')renderReport();
- if(id==='history'){renderHistory();renderDateList();renderRange()}
+ if(id==='history'){renderDateList();renderRange()}
 }
 function choosePay(btn){
  selectedPay=btn.dataset.pay;
@@ -422,14 +406,27 @@ function cityDisplay(){
 }
 /* 每筆交易都保存展會名稱；以下檔期也會自動回補舊資料。 */
 const EXPO_SCHEDULE=[
- {start:'2026-02-27',end:'2026-03-02',name:'高雄旅展'},
- {start:'2026-04-10',end:'2026-04-13',name:'台北旅展'},
- {start:'2026-06-26',end:'2026-06-29',name:'台中旅展'},
- {start:'2026-08-21',end:'2026-08-24',name:'台北旅展'}
+ {start:'2026-02-27',end:'2026-03-02',label:'高雄旅展（2/27–3/2）'},
+ {start:'2026-04-10',end:'2026-04-13',label:'台北旅展（4/10–4/13）'},
+ {start:'2026-06-26',end:'2026-06-29',label:'台中旅展（6/26–6/29）'},
+ {start:'2026-08-21',end:'2026-08-24',label:'台北旅展（8/21–8/24）'}
 ];
-function expoForDate(d){let m=EXPO_SCHEDULE.find(x=>d>=x.start&&d<=x.end);return m?m.name:''}
-function expoForSale(s){return s.expo||expoForDate(s.date)||'未設定展會'}
-function expoGroups(rows){let g={};rows.forEach(s=>{let n=expoForSale(s);(g[n]||(g[n]=[])).push(s)});return g}
+function expoForDate(d){let m=EXPO_SCHEDULE.find(x=>d>=x.start&&d<=x.end);return m?m.label:''}
+function expoForSale(s){return expoForDate(s.date)||s.expo||'未設定展會'}
+function expoGroups(rows){
+ let byExpo={};rows.forEach(s=>{let n=expoForSale(s);(byExpo[n]||(byExpo[n]=[])).push(s)});
+ let groups={};
+ Object.entries(byExpo).forEach(([expo,list])=>{
+  list.sort((a,b)=>a.date.localeCompare(b.date));let batch=[],last='';
+  let addBatch=()=>{if(!batch.length)return;let first=batch[0].date,end=batch[batch.length-1].date;
+   let label=expo.includes('（')?expo:`${expo}（${first.replaceAll('-','/')}～${end.replaceAll('-','/')}）`;
+   groups[label]=batch;batch=[];
+  };
+  list.forEach(s=>{let gap=last?Math.round((new Date(s.date)-new Date(last))/86400000):0;if(last&&gap>7)addBatch();batch.push(s);last=s.date});
+  addBatch();
+ });
+ return groups;
+}
 function onCityChange(){cityCustom.style.display=citySelect.value==='其他'?'block':'none'}
 function saveCity(){
  let v=citySelect.value;
@@ -618,7 +615,7 @@ function addSale(){
   let transferLast5=selectedPay==='匯款'?transferLast5Input().value.trim():'';
   if(selectedPay==='匯款'&&!/^\d{5}$/.test(transferLast5)){alert('匯款請輸入 5 碼數字帳號末碼');return}
   let note=document.getElementById('saleNote')?saleNote.value.trim():'';
-  let expo=cityDisplay()||expoForDate(d);
+  let expo=expoForDate(d)||cityDisplay();
   if(!expo){alert('請先在「展會設定」選擇本場展會城市，再完成收款。');return}
   let sale={id:uid('s'),date:d,expo,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})};
   db.sales.push(sale);
@@ -812,8 +809,17 @@ function toROCDate(dateStr){
 }
 function buildSummaryText(r,label){
  let itemsText=Object.keys(r.itemQty).map(id=>`${r.itemNames[id]}*${r.itemQty[id]}`).join('｜')||'無銷售';
- let cityLine=db.city?cityDisplay()+'\n':'';
- return `${cityLine}${label}\n${itemsText}\n共計 ${money(r.total)} 元`;
+ return `${label}\n${itemsText}\n共計 ${money(r.total)} 元`;
+}
+function buildExpoSummaryText(rows,label){
+ let groups=expoGroups(rows),names=Object.keys(groups);
+ if(!names.length)return `${label}\n無銷售`;
+ return `${label}\n\n`+names.map(name=>buildSummaryText(aggregateRows(groups[name]),name)).join('\n\n');
+}
+function renderExpoSummaryBlock(elId,key,rows,label){
+ let text=buildExpoSummaryText(rows,label);summaryTexts[key]=text;
+ let el=document.getElementById(elId);if(!el)return;
+ el.innerHTML=`<div class="summaryBox" id="summary-${key}">${esc(text)}</div><button class="secondary" style="margin-top:8px" onclick="copySummary('${key}')">📋 複製文字摘要</button>`;
 }
 function renderSummaryBlock(elId,key,r,label){
  let text=buildSummaryText(r,label);
@@ -980,15 +986,6 @@ function deleteSale(saleId){
 }
 
 /* ---------- 日期報表 ---------- */
-function renderHistory(){
- let d=reportDate.value||today;
- let rows=salesOf(d);
- let r=totals(d);
- historyBanner.innerHTML=bannerHtml(toROCDate(d),expoForSale(rows[0]||{date:d}));
- historyReport.innerHTML=buildExpoGroupsHtml(rows);
- renderSummaryBlock('historySummary','history',r,expoForSale(rows[0]||{date:d})+'・'+toROCDate(d));
- historyTransfer.innerHTML='';
-}
 function quickRange(type){
  let end=new Date();
  let start=new Date();
@@ -1009,7 +1006,7 @@ function renderRange(){
  let title=s===e?toROCDate(s):(toROCDate(s)+'～'+toROCDate(e));
  rangeBanner.innerHTML=bannerHtml(title,'依旅展分類');
  rangeReport.innerHTML='<h3>旅展分類</h3>'+buildExpoGroupsHtml(rows);
- renderSummaryBlock('rangeSummary','range',r,title);
+ renderExpoSummaryBlock('rangeSummary','range',rows,title);
  rangeTransfer.innerHTML='';
  renderRangeChart(rows,s,e);
 }
@@ -1040,8 +1037,8 @@ function renderRangeChart(rows,s,e){
 function renderDateList(){
  let dates=Array.from(new Set(db.sales.map(x=>x.date))).sort().reverse();
  if(!dates.length){dateList.innerHTML='<p class="muted">尚無銷售紀錄</p>';return}
- dateList.innerHTML=`<table><thead><tr><th>日期</th><th>營業額</th><th>筆數</th></tr></thead><tbody>`+
- dates.map(d=>{let r=totals(d);return `<tr><td>${d}</td><td>$${money(r.total)}</td><td>${r.count}</td></tr>`}).join('')+`</tbody></table>`;
+ dateList.innerHTML=`<table><thead><tr><th>旅展</th><th>日期</th><th>營業額</th><th>筆數</th></tr></thead><tbody>`+
+ dates.map(d=>{let r=totals(d),first=salesOf(d)[0];return `<tr><td>${esc(expoForSale(first||{date:d}))}</td><td>${d}</td><td>$${money(r.total)}</td><td>${r.count}</td></tr>`}).join('')+`</tbody></table>`;
 }
 
 /* ---------- Excel 匯出 ---------- */
@@ -1269,7 +1266,6 @@ function refreshAll(){
  }catch(e){}
  try{renderCash()}catch(e){}
  try{renderReport()}catch(e){}
- try{renderHistory()}catch(e){}
  try{renderDateList()}catch(e){}
  try{renderRange()}catch(e){}
 }
