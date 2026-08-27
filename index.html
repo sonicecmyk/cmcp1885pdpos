@@ -39,6 +39,8 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 .prefixGroup{display:flex;border:1px solid #ccd5dc;border-radius:9px;overflow:hidden}
 .prefixGroup .ptag{background:#eef2f5;padding:0 8px;display:flex;align-items:center;font-size:12px;color:#33424d;font-weight:800;white-space:nowrap}
 .prefixGroup input{border:0;border-radius:0;flex:1;padding:8px;min-height:38px}
+.expoGroup{border:1px solid #d8e2ea;border-left:5px solid #17324d;border-radius:12px;padding:12px;margin:10px 0;background:#fbfdff}
+.expoGroup h3{margin:0 0 8px;color:#17324d}
 @media (max-width:380px){.cashDual{flex-direction:column}.summary{grid-template-columns:1fr 1fr}}
 @media (hover:hover) and (pointer:fine){.secondary:hover{background:#dde3e8}.primary:hover{background:#1e3d5c}.paybtn:hover{border-color:#17324d}}
 @media (min-width:900px){
@@ -64,8 +66,8 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <details class="card" id="appSettings">
 <summary>⚙️ 展會設定</summary>
 <div class="inner">
-<h3>📍 展會城市</h3>
-<p class="muted">設定一次即可，之後所有報表、Excel、文字摘要會自動帶入「OO旅展」。</p>
+<h3>📍 本場展會城市</h3>
+<p class="muted">每次收款會記錄當下選擇的旅展；之後切換到下一場，舊交易與報表不會被覆寫。</p>
 <select id="citySelect" onchange="onCityChange()"></select>
 <input id="cityCustom" placeholder="輸入自訂展會名稱" style="display:none;margin-top:8px">
 <button class="primary" style="margin-top:10px" onclick="saveCity()">儲存城市設定</button>
@@ -352,7 +354,7 @@ function loadDb(){
   });
   if(typeof safe.city!=='string')safe.city='';
   safe.products=safe.products.filter(p=>p&&typeof p==='object');
-  safe.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix='';p.serialPrefix=(p.serialPrefix||'').toUpperCase()});
+ safe.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix='';p.serialPrefix=(p.serialPrefix||'').toUpperCase()});
   return safe;
  }
  let db=normalizeDb(loadDb());
@@ -418,6 +420,16 @@ function cityDisplay(){
  let short=db.city.replace(/[市縣]$/,'');
  return short+'旅展';
 }
+/* 每筆交易都保存展會名稱；以下檔期也會自動回補舊資料。 */
+const EXPO_SCHEDULE=[
+ {start:'2026-02-27',end:'2026-03-02',name:'高雄旅展'},
+ {start:'2026-04-10',end:'2026-04-13',name:'台北旅展'},
+ {start:'2026-06-26',end:'2026-06-29',name:'台中旅展'},
+ {start:'2026-08-21',end:'2026-08-24',name:'台北旅展'}
+];
+function expoForDate(d){let m=EXPO_SCHEDULE.find(x=>d>=x.start&&d<=x.end);return m?m.name:''}
+function expoForSale(s){return s.expo||expoForDate(s.date)||'未設定展會'}
+function expoGroups(rows){let g={};rows.forEach(s=>{let n=expoForSale(s);(g[n]||(g[n]=[])).push(s)});return g}
 function onCityChange(){cityCustom.style.display=citySelect.value==='其他'?'block':'none'}
 function saveCity(){
  let v=citySelect.value;
@@ -606,7 +618,9 @@ function addSale(){
   let transferLast5=selectedPay==='匯款'?transferLast5Input().value.trim():'';
   if(selectedPay==='匯款'&&!/^\d{5}$/.test(transferLast5)){alert('匯款請輸入 5 碼數字帳號末碼');return}
   let note=document.getElementById('saleNote')?saleNote.value.trim():'';
-  let sale={id:uid('s'),date:d,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})};
+  let expo=cityDisplay()||expoForDate(d);
+  if(!expo){alert('請先在「展會設定」選擇本場展會城市，再完成收款。');return}
+  let sale={id:uid('s'),date:d,expo,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})};
   db.sales.push(sale);
   db.nextSerial=db.nextSerial||{};
   serialAdvances.forEach(a=>{db.nextSerial[d+'_'+a.pid]=a.newNext});
@@ -642,6 +656,11 @@ function aggregateRows(rows){
  return r;
 }
 function totals(d){return aggregateRows(salesOf(d))}
+function buildExpoGroupsHtml(rows){
+ let groups=expoGroups(rows),names=Object.keys(groups);
+ if(!names.length)return '<p class="muted">此範圍尚無交易</p>';
+ return names.map(name=>{let part=groups[name],r=aggregateRows(part);return `<div class="expoGroup"><h3>🏷️ ${esc(name)}</h3>${buildStatsHtml(r)}<h3 style="margin-top:12px">🔖 票號彙總</h3>${buildSerialHtml(part)}<h3>🏦 匯款紀錄</h3>${buildTransferHtml(part)}</div>`}).join('');
+}
 function buildStatsHtml(r){
  let itemsHtml=Object.keys(r.itemQty).map(id=>`<div class="stat"><span>${esc(r.itemNames[id])}</span><b>${r.itemQty[id]}</b></div>`).join('');
  return `<div class="summary">
@@ -825,8 +844,9 @@ function flashCopied(btn){
  btn.textContent='✅ 已複製';
  setTimeout(()=>{btn.textContent=orig},1500);
 }
-function bannerHtml(title){
- return `<div class="banner"><div class="sub">展場收銀報表${db.city?'．'+esc(cityDisplay()):''}</div><div class="main">${esc(title)}</div></div>`;
+function bannerHtml(title,expo){
+ let name=expo===undefined?(cityDisplay()||''):expo;
+ return `<div class="banner"><div class="sub">展場收銀報表${name?'．'+esc(name):''}</div><div class="main">${esc(title)}</div></div>`;
 }
 
 /* ---------- 今日營收（可調整） ---------- */
@@ -838,13 +858,13 @@ function buildTransferHtml(rows){
 function renderReport(){
  let d=reportEditDate.value||today;
  let r=totals(d),rows=salesOf(d);
- reportBanner.innerHTML=bannerHtml(toROCDate(d));
+ reportBanner.innerHTML=bannerHtml(toROCDate(d),expoForSale(rows[0]||{date:d}));
  todayReport.innerHTML=buildStatsHtml(r);
  todayCash.innerHTML=buildCashCheckHtml(d,r);
  serialList.innerHTML=buildSerialHtml(rows);
  saleEdit.innerHTML=rows.length?rows.map(renderSaleEditRow).join(''):'<p class="muted">此日期尚無交易</p>';
  transferList.innerHTML=buildTransferHtml(rows);
- renderSummaryBlock('reportSummary','report',r,toROCDate(d));
+ renderSummaryBlock('reportSummary','report',r,expoForSale(rows[0]||{date:d})+'・'+toROCDate(d));
 }
 function renderReportStatsOnly(){
  let d=reportEditDate.value||today;
@@ -964,10 +984,10 @@ function renderHistory(){
  let d=reportDate.value||today;
  let rows=salesOf(d);
  let r=totals(d);
- historyBanner.innerHTML=bannerHtml(toROCDate(d));
- historyReport.innerHTML=buildStatsHtml(r)+'<h3 style="margin-top:14px">🔖 票號彙總</h3>'+buildSerialHtml(rows);
- renderSummaryBlock('historySummary','history',r,toROCDate(d));
- historyTransfer.innerHTML='<h3>🏦 匯款紀錄</h3>'+buildTransferHtml(rows);
+ historyBanner.innerHTML=bannerHtml(toROCDate(d),expoForSale(rows[0]||{date:d}));
+ historyReport.innerHTML=buildExpoGroupsHtml(rows);
+ renderSummaryBlock('historySummary','history',r,expoForSale(rows[0]||{date:d})+'・'+toROCDate(d));
+ historyTransfer.innerHTML='';
 }
 function quickRange(type){
  let end=new Date();
@@ -987,10 +1007,10 @@ function renderRange(){
  let rows=db.sales.filter(x=>x.date>=s&&x.date<=e);
  let r=aggregateRows(rows);
  let title=s===e?toROCDate(s):(toROCDate(s)+'～'+toROCDate(e));
- rangeBanner.innerHTML=bannerHtml(title);
- rangeReport.innerHTML=buildStatsHtml(r)+'<h3 style="margin-top:14px">🔖 票號彙總</h3>'+buildSerialHtml(rows);
+ rangeBanner.innerHTML=bannerHtml(title,'依旅展分類');
+ rangeReport.innerHTML='<h3>旅展分類</h3>'+buildExpoGroupsHtml(rows);
  renderSummaryBlock('rangeSummary','range',r,title);
- rangeTransfer.innerHTML='<h3>🏦 匯款紀錄</h3>'+buildTransferHtml(rows);
+ rangeTransfer.innerHTML='';
  renderRangeChart(rows,s,e);
 }
 function renderRangeChart(rows,s,e){
@@ -1031,7 +1051,7 @@ function exportExcel(rows,label,cashDate,dailyBreakdown){
  let r=aggregateRows(rows);
  let aoa=[];
  aoa.push(['展場收銀　營業報表']);
- aoa.push(['城市/展會',cityDisplay()||'（未設定）']);
+ aoa.push(['旅展分類',Object.keys(expoGroups(rows)).join('／')||'（未設定）']);
  aoa.push(['報表範圍',label]);
  aoa.push(['產生時間',new Date().toLocaleString('zh-TW')]);
  aoa.push([]);
@@ -1067,13 +1087,23 @@ function exportExcel(rows,label,cashDate,dailyBreakdown){
  ws['!cols']=[{wch:20},{wch:16},{wch:14},{wch:14}];
  XLSX.utils.book_append_sheet(wb,ws,'營業報表總覽');
 
- let detailAOA=[['交易編號','日期','時間','付款方式','匯款末5碼','項目','數量','單價','金額','票號','折扣(整筆)','應收(整筆)','備註']];
+ let detailAOA=[['交易編號','旅展','日期','時間','付款方式','匯款末5碼','項目','數量','單價','金額','票號','折扣(整筆)','應收(整筆)','備註']];
  rows.forEach((x,idx)=>{
-  (x.items||[]).forEach(it=>{detailAOA.push(['T'+(idx+1),x.date,x.time||'',x.pay,x.transferLast5||'',it.name,it.qty,it.price,it.qty*it.price,it.serial||'',x.discount||0,x.total,x.note||''])});
+  (x.items||[]).forEach(it=>{detailAOA.push(['T'+(idx+1),expoForSale(x),x.date,x.time||'',x.pay,x.transferLast5||'',it.name,it.qty,it.price,it.qty*it.price,it.serial||'',x.discount||0,x.total,x.note||''])});
  });
  let ws2=XLSX.utils.aoa_to_sheet(detailAOA);
- ws2['!cols']=[{wch:6},{wch:11},{wch:8},{wch:8},{wch:10},{wch:10},{wch:6},{wch:8},{wch:9},{wch:16},{wch:8},{wch:9},{wch:20}];
+ ws2['!cols']=[{wch:6},{wch:12},{wch:11},{wch:8},{wch:8},{wch:10},{wch:10},{wch:6},{wch:8},{wch:9},{wch:16},{wch:8},{wch:9},{wch:20}];
  XLSX.utils.book_append_sheet(wb,ws2,'交易明細');
+
+ /* 每場旅展另建工作表，避免跨展期交易混在同一份明細中。 */
+ Object.entries(expoGroups(rows)).forEach(([expo,expoRows],n)=>{
+  let er=aggregateRows(expoRows);
+  let eaoa=[['旅展',expo],['營業額',er.total],['交易筆數',er.count],[],['日期','時間','付款方式','項目','數量','金額','票號','備註']];
+  expoRows.forEach(x=>(x.items||[]).forEach(it=>eaoa.push([x.date,x.time||'',x.pay,it.name,it.qty,it.qty*it.price,it.serial||'',x.note||''])));
+  let ews=XLSX.utils.aoa_to_sheet(eaoa);
+  ews['!cols']=[{wch:12},{wch:10},{wch:10},{wch:12},{wch:8},{wch:10},{wch:18},{wch:20}];
+  XLSX.utils.book_append_sheet(wb,ews,('旅展'+(n+1)+'_'+expo).slice(0,31));
+ });
 
  let serialAOA=[['項目','票號彙總','總張數']];
  let smap={};
@@ -1177,7 +1207,8 @@ function importExcelFile(input){
      let p=db.products.find(pp=>pp.name===it.name);
      return {id:p?p.id:uid('imp'),name:it.name,price:it.price,qty:it.qty,serial:it.serial};
     });
-    return {id:uid('s'),date:g.date||today,time:g.time||'',items,discount,subtotal,total,pay:g.pay||'現金',transferLast5:g.transferLast5,note:g.note};
+    let date=g.date||today;
+    return {id:uid('s'),date,time:g.time||'',expo:expoForDate(date)||cityDisplay()||'未設定展會',items,discount,subtotal,total,pay:g.pay||'現金',transferLast5:g.transferLast5,note:g.note};
    }).filter(s=>s.items.length);
    if(!newSales.length){alert('沒有可匯入的交易資料，請確認欄位格式');return}
    if(!confirm(`即將匯入 ${newSales.length} 筆交易紀錄，確定要繼續嗎？（附加匯入，不會覆蓋既有資料）`))return;
