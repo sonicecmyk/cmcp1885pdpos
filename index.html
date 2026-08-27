@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#17324d">
-<title>1885展場收銀 APP</title>
+<title>展場收銀 APP</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#1d2730;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif}
 header{background:#17324d;color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:5}header h1{font-size:22px;margin:0 0 4px}.datebar{font-size:14px;opacity:.85}
@@ -127,7 +127,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <div class="card">
 <h2>💵 原零用金</h2>
 <p class="muted">輸入今天開店準備的零用金總額。</p>
-<input type="number" id="floatAmount" min="0" placeholder="例如 8,000">
+<input type="number" id="floatAmount" min="0" placeholder="例如 8000">
 <button class="primary" style="margin-top:10px" onclick="saveFloat()">儲存原零用金</button>
 </div>
 <div class="card">
@@ -200,7 +200,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <div id="rangeCapture">
 <div id="rangeBanner"></div>
 <div id="rangeReport" style="margin-top:10px"></div>
-<div class="chartWrap"><canvas id="rangeChartCanvas" height="160"></canvas></div>
+<div class="chartWrap"><h3 style="margin:16px 0 4px">📊 各旅展營業額比較</h3><p class="muted" style="margin:0 0 4px">每根長條代表一場旅展，方便快速比較表現。</p><canvas id="rangeChartCanvas" height="160"></canvas></div>
 </div>
 <div class="row" style="margin:10px 0">
 <button class="secondary" onclick="downloadImage('rangeCapture','區間報表_'+(rangeStart.value||'')+'_'+(rangeEnd.value||''))">⬇️ 圖片報表</button>
@@ -260,7 +260,7 @@ try{
 }catch(e){console.error('Firebase init failed',e)}
 let deviceId=localStorage.getItem(DEVICE_KEY);
 if(!deviceId){deviceId='dev_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem(DEVICE_KEY,deviceId)}
-const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣'];
+const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣','澎湖縣','金門縣','連江縣'];
 let selectedPay='現金';
 const dateStr=()=>new Date().toLocaleDateString('sv-SE');
 const fmtDate=d=>d.toLocaleDateString('sv-SE');
@@ -271,7 +271,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','
 function money(n){return Number(n||0).toLocaleString('zh-TW')}
 
 /* ---------- 通關密語（僅前端阻擋，非真正安全機制） ---------- */
-const ACCESS_CODE='cm18852026';
+const ACCESS_CODE='cm1885';
 const UNLOCK_KEY='expoCashierUnlocked';
 function checkAccess(){return localStorage.getItem(UNLOCK_KEY)==='1'}
 function showLock(){
@@ -1023,24 +1023,14 @@ function renderRangeChart(rows,s,e){
  let canvas=document.getElementById('rangeChartCanvas');
  if(!canvas||typeof Chart==='undefined')return;
  if(window._rangeChart){window._rangeChart.destroy()}
- let startD=new Date(s),endD=new Date(e);
- let spanDays=Math.round((endD-startD)/86400000)+1;
- let mode=spanDays<=31?'day':spanDays<=180?'week':'month';
- let buckets={};
- rows.forEach(x=>{
-  let key;
-  if(mode==='day')key=x.date;
-  else if(mode==='week'){let dt=new Date(x.date);let day=dt.getDay();let diff=(day+6)%7;dt.setDate(dt.getDate()-diff);key=fmtDate(dt)}
-  else key=x.date.slice(0,7);
-  buckets[key]=(buckets[key]||0)+x.total;
- });
- let labels=Object.keys(buckets).sort();
- if(!labels.length){labels=[s];buckets[s]=0}
+ let ranked=Object.entries(expoGroups(rows)).map(([name,part])=>({name,total:aggregateRows(part).total})).sort((a,b)=>b.total-a.total);
+ if(!ranked.length)ranked=[{name:'尚無交易',total:0}];
+ let labels=ranked.map(x=>x.name),values=ranked.map(x=>x.total);
  let ctx=canvas.getContext('2d');
  window._rangeChart=new Chart(ctx,{
   type:'bar',
-  data:{labels,datasets:[{label:'營業額',data:labels.map(k=>buckets[k]),backgroundColor:'#17324d'}]},
-  options:{animation:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+  data:{labels,datasets:[{label:'營業額',data:values,backgroundColor:ranked.map((x,i)=>i===0?'#d39b13':'#17324d'),borderRadius:7}]},
+  options:{animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'營業額：$'+money(c.raw)}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+money(v)}},x:{ticks:{maxRotation:0,minRotation:0,autoSkip:false,font:{size:11}}}}}
  });
 }
 function renderDateList(){
@@ -1060,6 +1050,7 @@ function excelSheetName(name,used){
 function exportExcel(rows,label,cashDate,dailyBreakdown){
  if(typeof XLSX==='undefined'){alert('Excel功能載入失敗，請確認網路連線後重試');return}
  let wb=XLSX.utils.book_new();
+ let sheetNames=new Set(['營業報表總覽','旅展總表','交易明細','票號彙總','每日明細']);
  let r=aggregateRows(rows);
  let aoa=[];
  aoa.push(['展場收銀　營業報表']);
@@ -1099,6 +1090,18 @@ function exportExcel(rows,label,cashDate,dailyBreakdown){
  ws['!cols']=[{wch:20},{wch:16},{wch:14},{wch:14}];
  XLSX.utils.book_append_sheet(wb,ws,'營業報表總覽');
 
+ /* 一頁看完各展營運數字，方便比較與交接。 */
+ let rankedExpos=Object.entries(expoGroups(rows)).map(([expo,expoRows])=>{
+  let er=aggregateRows(expoRows),dates=expoRows.map(x=>x.date).sort();
+  return {expo,er,period:dates.length?(dates[0]+'～'+dates[dates.length-1]):''};
+ }).sort((a,b)=>b.er.total-a.er.total);
+ let totalAOA=[['展場收銀　旅展總表'],['報表範圍',label],['產生時間',new Date().toLocaleString('zh-TW')],[],['排名','旅展','日期區間','營業額','現金','匯款','刷卡','折扣','交易筆數','每筆平均']];
+ rankedExpos.forEach((x,i)=>totalAOA.push([i===0?'🏆 1':i+1,x.expo,x.period,x.er.total,x.er.現金||0,x.er.匯款||0,x.er.刷卡||0,x.er.discount||0,x.er.count,x.er.count?Math.round(x.er.total/x.er.count):0]));
+ totalAOA.push(['總計','','',r.total,r.現金||0,r.匯款||0,r.刷卡||0,r.discount||0,r.count,r.count?Math.round(r.total/r.count):0]);
+ let totalWs=XLSX.utils.aoa_to_sheet(totalAOA);
+ totalWs['!cols']=[{wch:9},{wch:26},{wch:24},{wch:14},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:14}];
+ XLSX.utils.book_append_sheet(wb,totalWs,'旅展總表');
+
  let detailAOA=[['交易編號','旅展','日期','時間','付款方式','匯款末5碼','項目','數量','單價','金額','票號','折扣(整筆)','應收(整筆)','備註']];
  rows.forEach((x,idx)=>{
   (x.items||[]).forEach(it=>{detailAOA.push(['T'+(idx+1),expoForSale(x),x.date,x.time||'',x.pay,x.transferLast5||'',it.name,it.qty,it.price,it.qty*it.price,it.serial||'',x.discount||0,x.total,x.note||''])});
@@ -1108,7 +1111,6 @@ function exportExcel(rows,label,cashDate,dailyBreakdown){
  XLSX.utils.book_append_sheet(wb,ws2,'交易明細');
 
  /* 每場旅展另建工作表，避免跨展期交易混在同一份明細中。 */
- let sheetNames=new Set(['營業報表總覽','交易明細']);
  Object.entries(expoGroups(rows)).forEach(([expo,expoRows],n)=>{
   let er=aggregateRows(expoRows);
   let eaoa=[['旅展',expo],['營業額',er.total],['交易筆數',er.count],[],['日期','時間','付款方式','項目','數量','金額','票號','備註']];
