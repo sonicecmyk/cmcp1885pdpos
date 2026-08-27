@@ -41,6 +41,10 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 .prefixGroup input{border:0;border-radius:0;flex:1;padding:8px;min-height:38px}
 .expoGroup{border:1px solid #d8e2ea;border-left:5px solid #17324d;border-radius:12px;padding:12px;margin:10px 0;background:#fbfdff}
 .expoGroup h3{margin:0 0 8px;color:#17324d}
+.expoRank{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #dfe7ed;background:#fff}
+.expoRank:first-child{border-radius:11px 11px 0 0}.expoRank:last-child{border-bottom:0;border-radius:0 0 11px 11px}
+.expoRank.champion{background:#fff5d7;border:2px solid #e4b43d;border-radius:11px;margin-bottom:6px}
+.expoRank .place{font-size:22px;font-weight:800;min-width:30px;color:#17324d}.expoRank .expoName{flex:1;font-weight:800}.expoRank .expoMoney{text-align:right;font-size:19px;font-weight:800;color:#17324d}.expoRank small{display:block;color:#697781;font-weight:400;font-size:12px}
 @media (max-width:380px){.cashDual{flex-direction:column}.summary{grid-template-columns:1fr 1fr}}
 @media (hover:hover) and (pointer:fine){.secondary:hover{background:#dde3e8}.primary:hover{background:#1e3d5c}.paybtn:hover{border-color:#17324d}}
 @media (min-width:900px){
@@ -658,6 +662,11 @@ function buildExpoGroupsHtml(rows){
  if(!names.length)return '<p class="muted">此範圍尚無交易</p>';
  return names.map(name=>{let part=groups[name],r=aggregateRows(part);return `<div class="expoGroup"><h3>🏷️ ${esc(name)}</h3>${buildStatsHtml(r)}<h3 style="margin-top:12px">🔖 票號彙總</h3>${buildSerialHtml(part)}<h3>🏦 匯款紀錄</h3>${buildTransferHtml(part)}</div>`}).join('');
 }
+function buildExpoPerformanceHtml(rows){
+ let ranked=Object.entries(expoGroups(rows)).map(([name,part])=>({name,r:aggregateRows(part)})).sort((a,b)=>b.r.total-a.r.total);
+ if(!ranked.length)return '';
+ return `<div class="expoGroup"><h3>🏆 本區間旅展表現排名</h3>`+ranked.map((x,i)=>`<div class="expoRank ${i===0?'champion':''}"><div class="place">${i===0?'🏆':i+1}</div><div class="expoName">${esc(x.name)}<small>${x.r.count} 筆交易</small></div><div class="expoMoney">$${money(x.r.total)}<small>${i===0?'本區間最高營業額':'營業額'}</small></div></div>`).join('')+`</div>`;
+}
 function buildStatsHtml(r){
  let itemsHtml=Object.keys(r.itemQty).map(id=>`<div class="stat"><span>${esc(r.itemNames[id])}</span><b>${r.itemQty[id]}</b></div>`).join('');
  return `<div class="summary">
@@ -1005,7 +1014,7 @@ function renderRange(){
  let r=aggregateRows(rows);
  let title=s===e?toROCDate(s):(toROCDate(s)+'～'+toROCDate(e));
  rangeBanner.innerHTML=bannerHtml(title,'依旅展分類');
- rangeReport.innerHTML='<h3>旅展分類</h3>'+buildExpoGroupsHtml(rows);
+ rangeReport.innerHTML=buildExpoPerformanceHtml(rows)+'<h3>旅展分類</h3>'+buildExpoGroupsHtml(rows);
  renderExpoSummaryBlock('rangeSummary','range',rows,title);
  rangeTransfer.innerHTML='';
  renderRangeChart(rows,s,e);
@@ -1042,6 +1051,12 @@ function renderDateList(){
 }
 
 /* ---------- Excel 匯出 ---------- */
+function excelSheetName(name,used){
+ let base=String(name||'旅展');['\\\\','/','?', '*', ':','[',']'].forEach(ch=>base=base.split(ch).join('-'));
+ base=base.slice(0,31)||'旅展';let candidate=base,n=2;
+ while(used.has(candidate)){candidate=(base.slice(0,28)+'_'+n).slice(0,31);n++}
+ used.add(candidate);return candidate;
+}
 function exportExcel(rows,label,cashDate,dailyBreakdown){
  if(typeof XLSX==='undefined'){alert('Excel功能載入失敗，請確認網路連線後重試');return}
  let wb=XLSX.utils.book_new();
@@ -1093,13 +1108,14 @@ function exportExcel(rows,label,cashDate,dailyBreakdown){
  XLSX.utils.book_append_sheet(wb,ws2,'交易明細');
 
  /* 每場旅展另建工作表，避免跨展期交易混在同一份明細中。 */
+ let sheetNames=new Set(['營業報表總覽','交易明細']);
  Object.entries(expoGroups(rows)).forEach(([expo,expoRows],n)=>{
   let er=aggregateRows(expoRows);
   let eaoa=[['旅展',expo],['營業額',er.total],['交易筆數',er.count],[],['日期','時間','付款方式','項目','數量','金額','票號','備註']];
   expoRows.forEach(x=>(x.items||[]).forEach(it=>eaoa.push([x.date,x.time||'',x.pay,it.name,it.qty,it.qty*it.price,it.serial||'',x.note||''])));
   let ews=XLSX.utils.aoa_to_sheet(eaoa);
   ews['!cols']=[{wch:12},{wch:10},{wch:10},{wch:12},{wch:8},{wch:10},{wch:18},{wch:20}];
-  XLSX.utils.book_append_sheet(wb,ews,('旅展'+(n+1)+'_'+expo).slice(0,31));
+  XLSX.utils.book_append_sheet(wb,ews,excelSheetName('旅展'+(n+1)+'_'+expo,sheetNames));
  });
 
  let serialAOA=[['項目','票號彙總','總張數']];
