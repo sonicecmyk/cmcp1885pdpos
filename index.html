@@ -261,7 +261,7 @@ try{
 }catch(e){console.error('Firebase init failed',e)}
 let deviceId=localStorage.getItem(DEVICE_KEY);
 if(!deviceId){deviceId='dev_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem(DEVICE_KEY,deviceId)}
-const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣','澎湖縣','金門縣','連江縣'];
+const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣'];
 let selectedPay='現金';
 const dateStr=()=>new Date().toLocaleDateString('sv-SE');
 const fmtDate=d=>d.toLocaleDateString('sv-SE');
@@ -417,7 +417,7 @@ const EXPO_SCHEDULE=[
  {start:'2026-08-21',end:'2026-08-24',label:'台北旅展（8/21–8/24）'}
 ];
 function expoForDate(d){let m=EXPO_SCHEDULE.find(x=>d>=x.start&&d<=x.end);return m?m.label:''}
-function expoForSale(s){return expoForDate(s.date)||s.expo||'未設定展會'}
+function expoForSale(s){return expoForDate(s.date)||s.expo||'未設定展場'}
 function expoGroups(rows){
  let byExpo={};rows.forEach(s=>{let n=expoForSale(s);(byExpo[n]||(byExpo[n]=[])).push(s)});
  let groups={};
@@ -437,7 +437,7 @@ function saveCity(){
  let v=citySelect.value;
  let city=v==='其他'?cityCustom.value.trim():v;
  db.city=city;save();updateHeaderCity();
- alert('已儲存展會城市：'+(city?cityDisplay():'（未設定）'));
+ alert('已儲存展場城市：'+(city?cityDisplay():'（未設定）'));
 }
 function updateHeaderCity(){headerCity.textContent=db.city?('📍 '+cityDisplay()):''}
 function initCitySettings(){
@@ -540,7 +540,7 @@ function deleteProduct(id){
 function calcStock(){
  let a=stockStart.value.trim(),b=stockEnd.value.trim();
  let ma=a.match(/^([A-Za-z]*)(\d+)$/),mb=b.match(/^([A-Za-z]*)(\d+)$/);
- if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 000000 或 BC442786）';return}
+ if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 000000 或 000315），共316張';return}
  let start=parseInt(ma[2],10),end=parseInt(mb[2],10);
  if(end<start){let t=start;start=end;end=t}
  let count=end-start+1;
@@ -621,7 +621,7 @@ function addSale(){
   if(selectedPay==='匯款'&&!/^\d{5}$/.test(transferLast5)){alert('匯款請輸入 5 碼數字帳號末碼');return}
   let note=document.getElementById('saleNote')?saleNote.value.trim():'';
   let expo=expoForDate(d)||cityDisplay();
-  if(!expo){alert('請先在「展會設定」選擇本場展會城市，再完成收款。');return}
+  if(!expo){alert('請先在「展場設定」選擇本場展場城市，再完成收款。');return}
   let sale={id:uid('s'),date:d,expo,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})};
   db.sales.push(sale);
   db.nextSerial=db.nextSerial||{};
@@ -1170,7 +1170,7 @@ function exportExcelRange(){
 function resetTransactionData(){
  let input=prompt('此動作將清空所有交易紀錄、現金清點與票號起始資料（不含商品設定與城市設定）！\n若有連線雲端同步，會影響所有使用同一組班次代碼的人，且無法復原。\n\n若確定要清空，請輸入「清空資料」四個字：');
  if(input===null)return;
- if(input.trim()!=='清空資料'){alert('輸入不符，已取消，未清空任何資料。');return}
+ if(input.trim()!=='清空資料會爆炸⚠️'){alert('輸入不符，已取消，未清空任何資料。');return}
  db.sales=[];
  db.float={};
  db.closeFloat={};
