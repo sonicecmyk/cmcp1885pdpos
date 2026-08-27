@@ -64,7 +64,12 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <details class="card" id="appSettings">
 <summary>⚙️ 展會設定</summary>
 <div class="inner">
-<h3>📍 展會城市</h3>
+<h3 style="margin-top:18px">☁️ 雲端同步（班次代碼）</h3>
+<p class="muted">輸入一組代碼（例如：台北0827），使用相同代碼的裝置會即時同步同一份資料。留空並清除代碼＝僅使用本機儲存。</p>
+<input id="roomCodeInput" placeholder="例如 台北0827">
+<button class="primary" style="margin-top:10px" onclick="saveRoomCode()">儲存並連線</button>
+<div class="muted" id="syncStatus" style="margin-top:8px"></div>
+<h3 style="margin-top:18px">📍 展會城市</h3>
 <p class="muted">設定一次即可，之後所有報表、Excel、文字摘要會自動帶入「OO旅展」。</p>
 <select id="citySelect" onchange="onCityChange()"></select>
 <input id="cityCustom" placeholder="輸入自訂展會名稱" style="display:none;margin-top:8px">
@@ -233,6 +238,8 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 </main>
 <button id="guideFab" onclick="showGuide()" title="操作說明" style="position:fixed;right:16px;bottom:16px;width:50px;height:50px;border-radius:50%;background:#17324d;color:#fff;border:0;font-size:22px;box-shadow:0 4px 14px rgba(0,0,0,0.35);z-index:40;cursor:pointer">❓</button>
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
@@ -241,6 +248,26 @@ const DEN=[1,5,10,50,100,500,1000];
 const KEY='expoCashierV3';
 const KEY_OLD='expoCashierV2';
 const GUIDE_KEY='expoCashierGuideSeen';
+const ROOMCODE_KEY='expoCashierRoomCode';
+const DEVICE_KEY='expoCashierDeviceId';
+const firebaseConfig={
+ apiKey:"AIzaSyDLmeRFQoIlQz8S5JAAffZJ0KzjY5iMNUo",
+ authDomain:"cmcp1885posapp.firebaseapp.com",
+ databaseURL:"https://cmcp1885posapp-default-rtdb.asia-southeast1.firebasedatabase.app",
+ projectId:"cmcp1885posapp",
+ storageBucket:"cmcp1885posapp.firebasestorage.app",
+ messagingSenderId:"852544410115",
+ appId:"1:852544410115:web:684711cec2fc193418f436"
+};
+let fbApp=null,rtdb=null,currentRoomRef=null,roomCode='';
+try{
+ if(typeof firebase!=='undefined'){
+  fbApp=firebase.initializeApp(firebaseConfig);
+  rtdb=firebase.database();
+ }
+}catch(e){console.error('Firebase init failed',e)}
+let deviceId=localStorage.getItem(DEVICE_KEY);
+if(!deviceId){deviceId='dev_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem(DEVICE_KEY,deviceId)}
 const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣','澎湖縣','金門縣','連江縣'];
 let selectedPay='現金';
 const dateStr=()=>new Date().toLocaleDateString('sv-SE');
@@ -283,7 +310,15 @@ db.nextSerial=db.nextSerial||{};
 if(db.city===undefined)db.city='';
 db.products=db.products||[];
 db.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix='';p.serialPrefix=(p.serialPrefix||'').toUpperCase()});
-function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function save(){
+ localStorage.setItem(KEY,JSON.stringify(db));
+ pushToCloud();
+}
+function pushToCloud(){
+ if(!roomCode||!currentRoomRef)return;
+ let payload=Object.assign({},db,{_updatedBy:deviceId,_updatedAt:Date.now()});
+ currentRoomRef.set(payload).catch(err=>{console.error('sync failed',err);let el=document.getElementById('syncStatus');if(el)el.textContent='⚠️ 同步失敗：'+err.message});
+}
 
 document.getElementById('headerDate').textContent=today;
 document.getElementById('reportDate').value=today;
@@ -1090,6 +1125,72 @@ function showImagePreview(canvas,filename){
  document.body.appendChild(overlay);
 }
 
+/* ---------- 雲端同步 ---------- */
+function refreshAll(){
+ try{renderProductGrid()}catch(e){}
+ try{renderProductManage()}catch(e){}
+ try{calcSale()}catch(e){}
+ try{renderQuick()}catch(e){}
+ try{updateHeaderCity()}catch(e){}
+ try{
+  if(citySelect){
+   if(db.city){
+    if(TW_CITIES.includes(db.city)){citySelect.value=db.city;cityCustom.style.display='none'}
+    else{citySelect.value='其他';cityCustom.value=db.city;cityCustom.style.display='block'}
+   } else {citySelect.value='';cityCustom.style.display='none'}
+  }
+ }catch(e){}
+ try{renderCash()}catch(e){}
+ try{renderReport()}catch(e){}
+ try{renderHistory()}catch(e){}
+ try{renderDateList()}catch(e){}
+ try{renderRange()}catch(e){}
+}
+function connectRoom(code){
+ if(!rtdb){let el=document.getElementById('syncStatus');if(el)el.textContent='⚠️ 雲端功能載入失敗，請確認網路連線';return}
+ if(currentRoomRef){currentRoomRef.off()}
+ let ref=rtdb.ref('rooms/'+code);
+ currentRoomRef=ref;
+ let statusEl=document.getElementById('syncStatus');
+ if(statusEl)statusEl.textContent='⏳ 連線中...';
+ ref.once('value').then(snap=>{
+  let val=snap.val();
+  if(val){
+   if(db.sales&&db.sales.length>0){
+    let useCloud=confirm('偵測到雲端代碼「'+code+'」已有資料。\n按「確定」＝改用雲端資料（此裝置目前本機資料將被取代）\n按「取消」＝改用本機資料覆蓋雲端');
+    if(useCloud){db=val;localStorage.setItem(KEY,JSON.stringify(db));refreshAll()}
+    else{pushToCloud()}
+   } else {
+    db=val;localStorage.setItem(KEY,JSON.stringify(db));refreshAll();
+   }
+  } else {
+   pushToCloud();
+  }
+  ref.on('value',snap2=>{
+   let v2=snap2.val();
+   if(!v2)return;
+   if(v2._updatedBy===deviceId)return;
+   db=v2;localStorage.setItem(KEY,JSON.stringify(db));refreshAll();
+  });
+  if(statusEl)statusEl.textContent='☁️ 已連線同步（代碼：'+esc(code)+'）';
+ }).catch(err=>{
+  if(statusEl)statusEl.textContent='⚠️ 連線失敗：'+err.message;
+ });
+}
+function saveRoomCode(){
+ let code=roomCodeInput.value.trim();
+ let statusEl=document.getElementById('syncStatus');
+ if(!code){
+  if(currentRoomRef){currentRoomRef.off();currentRoomRef=null}
+  roomCode='';localStorage.removeItem(ROOMCODE_KEY);
+  if(statusEl)statusEl.textContent='🔌 尚未設定同步（僅本機儲存）';
+  return;
+ }
+ roomCode=code;
+ localStorage.setItem(ROOMCODE_KEY,code);
+ connectRoom(code);
+}
+
 /* ---------- 操作說明 ---------- */
 function buildGuideHtml(){
  return `
@@ -1133,6 +1234,10 @@ renderProductManage();
 calcSale();
 renderQuick();
 initCitySettings();
+roomCode=localStorage.getItem(ROOMCODE_KEY)||'';
+if(document.getElementById('roomCodeInput'))roomCodeInput.value=roomCode;
+if(roomCode){connectRoom(roomCode)}
+else{let se=document.getElementById('syncStatus');if(se)se.textContent='🔌 尚未設定同步（僅本機儲存）'}
 if(!localStorage.getItem(GUIDE_KEY)){showGuide()}
 </script>
 </body></html>
