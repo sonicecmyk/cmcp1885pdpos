@@ -234,6 +234,12 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <input type="file" accept=".xlsx,.xls" id="importFile" style="margin-top:8px" onchange="importExcelFile(this)">
 </div>
 </details>
+
+<div class="card" style="border:1px solid #f3c8c8">
+<h2>⚠️ 清空交易資料</h2>
+<p class="muted">會清空所有「交易紀錄」與「現金清點」資料（不含商品設定、城市設定）。因為資料會透過雲端同步，清空後會影響所有使用同一組班次代碼的人，此動作無法復原，請先確認已備份需要的資料。</p>
+<button class="secondary danger" style="width:100%" onclick="resetTransactionData()">🗑️ 清空所有交易與清點資料</button>
+</div>
 </section>
 </main>
 <button id="guideFab" onclick="showGuide()" title="操作說明" style="position:fixed;right:16px;bottom:16px;width:50px;height:50px;border-radius:50%;background:#17324d;color:#fff;border:0;font-size:22px;box-shadow:0 4px 14px rgba(0,0,0,0.35);z-index:40;cursor:pointer">❓</button>
@@ -1056,6 +1062,22 @@ function exportExcelRange(){
  if(!s||!e){alert('請先選擇並統計區間');return}
  let rows=db.sales.filter(x=>x.date>=s&&x.date<=e);
  exportExcel(rows,'區間報表_'+s+'_'+e,null,true);
+}
+
+/* ---------- 清空交易資料 ---------- */
+function resetTransactionData(){
+ let input=prompt('此動作將清空所有交易紀錄、現金清點與票號起始資料（不含商品設定與城市設定）！\n若有連線雲端同步，會影響所有使用同一組班次代碼的人，且無法復原。\n\n若確定要清空，請輸入「清空資料」四個字：');
+ if(input===null)return;
+ if(input.trim()!=='清空資料'){alert('輸入不符，已取消，未清空任何資料。');return}
+ db.sales=[];
+ db.float={};
+ db.closeFloat={};
+ db.floatAmount={};
+ db.count={};
+ db.nextSerial={};
+ save();
+ refreshAll();
+ alert('已清空所有交易與清點資料。');
 }
 
 /* ---------- Excel 匯入 ---------- */
