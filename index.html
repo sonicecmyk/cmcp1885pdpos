@@ -352,12 +352,19 @@ db.products=db.products||[];
 db.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix='';p.serialPrefix=(p.serialPrefix||'').toUpperCase()});
 function save(){
  localStorage.setItem(KEY,JSON.stringify(db));
- pushToCloud();
+ try{pushToCloud()}catch(e){console.error('pushToCloud outer failure',e)}
 }
 function pushToCloud(){
  if(!roomCode||!currentRoomRef)return;
- let payload=Object.assign({},db,{_updatedBy:deviceId,_updatedAt:Date.now()});
- currentRoomRef.set(payload).catch(err=>{console.error('sync failed',err);let el=document.getElementById('syncStatus');if(el)el.textContent='⚠️ 同步失敗：'+err.message});
+ let payload;
+ try{
+  payload=JSON.parse(JSON.stringify(Object.assign({},db,{_updatedBy:deviceId,_updatedAt:Date.now()})));
+ }catch(e){console.error('sync payload build failed',e);return}
+ try{
+  currentRoomRef.set(payload).catch(err=>{console.error('sync failed',err);let el=document.getElementById('syncStatus');if(el)el.textContent='⚠️ 同步失敗：'+err.message});
+ }catch(err){
+  console.error('sync failed (sync throw)',err);
+ }
 }
 
 document.getElementById('headerDate').textContent=today;
@@ -547,6 +554,7 @@ function markManualSerial(pid){
  else serialInput.dataset.manual='1';
 }
 function addSale(){
+ try{
  let items=[];
  let serialAdvances=[];
  document.querySelectorAll('.saleQty').forEach(inp=>{
@@ -583,6 +591,10 @@ function addSale(){
  renderProductGrid();
  calcSale();renderQuick();
  alert('收款完成！');
+ }catch(err){
+  console.error('addSale failed',err);
+  alert('發生錯誤，收款可能未完全處理：'+err.message+'\n請截圖回報，並確認一下「今日營收」是否已有這筆紀錄。');
+ }
 }
 function transferLast5Input(){return document.getElementById('transferLast5')}
 function salesOf(d){return db.sales.filter(x=>x.date===d)}
