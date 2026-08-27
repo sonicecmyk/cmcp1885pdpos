@@ -278,6 +278,44 @@ function uid(prefix){return prefix+'_'+Date.now().toString(36)+Math.random().toS
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function money(n){return Number(n||0).toLocaleString('zh-TW')}
 
+/* ---------- 通關密語（僅前端阻擋，非真正安全機制） ---------- */
+const ACCESS_CODE='cm1885';
+const UNLOCK_KEY='expoCashierUnlocked';
+function checkAccess(){return localStorage.getItem(UNLOCK_KEY)==='1'}
+function showLock(){
+ if(document.getElementById('lockOverlay'))return;
+ let overlay=document.createElement('div');
+ overlay.id='lockOverlay';
+ overlay.style.cssText='position:fixed;inset:0;background:#17324d;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px';
+ overlay.innerHTML=`
+  <div style="background:#fff;border-radius:16px;padding:28px 24px;max-width:340px;width:100%;text-align:center">
+   <div style="font-size:40px;margin-bottom:8px">🔒</div>
+   <h2 style="margin:0 0 8px">展場收銀 APP</h2>
+   <p class="muted" style="margin-bottom:16px">請輸入通關密語才能使用</p>
+   <input id="lockInput" type="password" placeholder="請輸入密語" style="text-align:center;font-size:18px" autocomplete="off">
+   <div id="lockError" style="color:#a52828;font-size:13px;margin-top:8px;display:none">密語錯誤，請再試一次</div>
+   <button class="primary" style="margin-top:14px" onclick="tryUnlock()">進入</button>
+  </div>`;
+ document.body.appendChild(overlay);
+ let inp=document.getElementById('lockInput');
+ inp.addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock()});
+ setTimeout(()=>{inp.focus()},150);
+}
+function tryUnlock(){
+ let inp=document.getElementById('lockInput');
+ let val=inp?inp.value.trim():'';
+ if(val===ACCESS_CODE){
+  localStorage.setItem(UNLOCK_KEY,'1');
+  let ov=document.getElementById('lockOverlay');
+  if(ov)ov.remove();
+ } else {
+  let err=document.getElementById('lockError');
+  if(err)err.style.display='block';
+  if(inp){inp.value='';inp.focus()}
+ }
+}
+if(!checkAccess()){showLock()}
+
 function loadDb(){
  let raw=localStorage.getItem(KEY);
  if(raw){try{return JSON.parse(raw)}catch(e){}}
