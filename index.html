@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#17324d">
-<title>展場收銀 APP</title>
+<title>1885展場收銀</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#1d2730;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif}
 header{background:#17324d;color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:5}header h1{font-size:22px;margin:0 0 4px}.datebar{font-size:14px;opacity:.85}
@@ -68,12 +68,12 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <section id="sale" class="page active">
 
 <details class="card" id="appSettings">
-<summary>⚙️ 展會設定</summary>
+<summary>⚙️ 展場設定</summary>
 <div class="inner">
-<h3>📍 本場展會城市</h3>
+<h3>📍 本場展場城市</h3>
 <p class="muted">每次收款會記錄當下選擇的旅展；之後切換到下一場，舊交易與報表不會被覆寫。</p>
 <select id="citySelect" onchange="onCityChange()"></select>
-<input id="cityCustom" placeholder="輸入自訂展會名稱" style="display:none;margin-top:8px">
+<input id="cityCustom" placeholder="輸入自訂展場名稱" style="display:none;margin-top:8px">
 <button class="primary" style="margin-top:10px" onclick="saveCity()">儲存城市設定</button>
 <h3 style="margin-top:18px">🛠️ 販售項目管理</h3>
 <div id="manageList"></div>
@@ -127,7 +127,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <div class="card">
 <h2>💵 原零用金</h2>
 <p class="muted">輸入今天開店準備的零用金總額。</p>
-<input type="number" id="floatAmount" min="0" placeholder="例如 8000">
+<input type="number" id="floatAmount" min="0" placeholder="例如 8,000">
 <button class="primary" style="margin-top:10px" onclick="saveFloat()">儲存原零用金</button>
 </div>
 <div class="card">
@@ -272,7 +272,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','
 function money(n){return Number(n||0).toLocaleString('zh-TW')}
 
 /* ---------- 通關密語（僅前端阻擋，非真正安全機制） ---------- */
-const ACCESS_CODE='cm1885';
+const ACCESS_CODE='cm18852026';
 const UNLOCK_KEY='expoCashierUnlocked';
 function checkAccess(){return localStorage.getItem(UNLOCK_KEY)==='1'}
 function showLock(){
@@ -397,7 +397,7 @@ function choosePay(btn){
  transferField.style.display=selectedPay==='匯款'?'block':'none';
 }
 
-/* ---------- 展會城市設定 ---------- */
+/* ---------- 展場城市設定 ---------- */
 function buildCitySelect(){
  let opts=['<option value="">請選擇城市</option>']
   .concat(TW_CITIES.map(c=>`<option value="${c}">${c}</option>`))
@@ -1369,7 +1369,7 @@ function showGuide(){
  closeBtn.className='secondary';closeBtn.style.flex='1';closeBtn.textContent='關閉';
  closeBtn.onclick=()=>overlay.remove();
  let dontShowBtn=document.createElement('button');
- dontShowBtn.className='primary';dontShowBtn.style.flex='1';dontShowBtn.textContent='知道了，不再顯示';
+ dontShowBtn.className='primary';dontShowBtn.style.flex='1';dontShowBtn.textContent='不再顯示';
  dontShowBtn.onclick=()=>{localStorage.setItem(GUIDE_KEY,'1');overlay.remove()};
  btnRow.appendChild(closeBtn);btnRow.appendChild(dontShowBtn);
  box.appendChild(btnRow);
