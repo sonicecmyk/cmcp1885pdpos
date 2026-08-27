@@ -9,22 +9,22 @@
 *{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#1d2730;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif}
 header{background:#17324d;color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:5}header h1{font-size:22px;margin:0 0 4px}.datebar{font-size:14px;opacity:.85}
 main{max-width:760px;margin:auto;padding:12px 12px 90px}.tabbar{position:sticky;top:74px;background:#eef2f5;z-index:4;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 0}
-.tabbar button{border:0;background:#dbe2e8;color:#344653;border-radius:10px;padding:10px 4px;font-weight:700}.tabbar button.active{background:#17324d;color:#fff}
+.tabbar button{border:0;background:#dbe2e8;color:#344653;border-radius:10px;padding:12px 4px;font-weight:700;min-height:44px}.tabbar button.active{background:#17324d;color:#fff}
 .page{display:none}.page.active{display:block}.card{background:#fff;border-radius:15px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #0000000b}
 h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:12px 0 8px}.muted{color:#697781;font-size:13px}
-.products{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.product{border:1px solid #d8dee3;border-radius:12px;padding:10px;text-align:center}.product .name{font-weight:700;font-size:14px}.price{font-size:13px;color:#63727d}.qty{width:100%;font-size:21px;text-align:center;margin-top:8px}
-input,select{width:100%;border:1px solid #ccd5dc;border-radius:9px;padding:10px;font-size:16px;background:#fff}.qty{border:1px solid #ccd5dc;border-radius:9px}
-input[type=checkbox]{width:18px;flex:0 0 18px;padding:0;height:18px}
-input[type=file]{padding:8px;font-size:13px}
-.payments{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.paybtn{padding:12px 4px;border:1px solid #ccd5dc;background:#fff;border-radius:10px;font-weight:700}.paybtn.active{background:#e4eef6;border:2px solid #17324d}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:8px}.product{border:1px solid #d8dee3;border-radius:12px;padding:10px;text-align:center}.product .name{font-weight:700;font-size:14px}.price{font-size:13px;color:#63727d}.qty{width:100%;font-size:21px;text-align:center;margin-top:8px}
+input,select{width:100%;border:1px solid #ccd5dc;border-radius:9px;padding:10px;font-size:16px;background:#fff;min-height:42px}.qty{border:1px solid #ccd5dc;border-radius:9px}
+input[type=checkbox]{width:20px;flex:0 0 20px;padding:0;height:20px;min-height:0}
+input[type=file]{padding:8px;font-size:13px;min-height:0}
+.payments{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.paybtn{padding:12px 4px;border:1px solid #ccd5dc;background:#fff;border-radius:10px;font-weight:700;min-height:44px}.paybtn.active{background:#e4eef6;border:2px solid #17324d}
 .bigtotal{text-align:center;background:#f4f7f9;border-radius:12px;padding:12px;margin:12px 0}.bigtotal small{display:block;color:#697781}.bigtotal strong{font-size:30px}
-.primary{width:100%;background:#17324d;color:#fff;border:0;border-radius:11px;padding:13px;font-size:17px;font-weight:700}.secondary{background:#e8edf1;color:#253640;border:0;border-radius:10px;padding:10px 12px;font-weight:700}.danger{background:#b43d3d;color:white}
-.summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:#f5f7f8;border-radius:11px;padding:11px}.stat span{display:block;color:#697781;font-size:13px}.stat b{font-size:20px}
-table{width:100%;border-collapse:collapse}th,td{padding:8px 4px;border-bottom:1px solid #e7ebee}th{text-align:right;font-size:13px;color:#697781}th:first-child,td:first-child{text-align:left}.moneyInput{width:100%;text-align:center;padding:6px 2px;font-size:14px}
+.primary{width:100%;background:#17324d;color:#fff;border:0;border-radius:11px;padding:13px;font-size:17px;font-weight:700;min-height:46px;cursor:pointer}.secondary{background:#e8edf1;color:#253640;border:0;border-radius:10px;padding:10px 12px;font-weight:700;min-height:42px;cursor:pointer}.danger{background:#b43d3d;color:white}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#f5f7f8;border-radius:11px;padding:11px}.stat span{display:block;color:#697781;font-size:13px}.stat b{font-size:20px}
+table{width:100%;border-collapse:collapse}th,td{padding:8px 4px;border-bottom:1px solid #e7ebee}th{text-align:right;font-size:13px;color:#697781}th:first-child,td:first-child{text-align:left}.moneyInput{width:100%;text-align:center;padding:6px 2px;font-size:14px;min-height:36px}
 .cashTotal{font-size:26px;font-weight:800;text-align:right;margin-top:12px}.check{padding:12px;border-radius:11px;margin-top:10px;font-weight:700}.ok{background:#e7f5eb;color:#1e7040}.warn{background:#fff2df;color:#8a5a12}.bad{background:#fde8e8;color:#a52828}
 .row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.listrow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
 details.card{padding:0}details.card summary{list-style:none;cursor:pointer;padding:15px;font-weight:700}details.card summary::-webkit-details-marker{display:none}details.card summary:after{content:"▾";float:right}details.card[open] summary:after{content:"▴"}details.card .inner{padding:0 15px 15px}
-.edititem{display:flex;align-items:center;gap:8px;margin:4px 0}.edititem .lbl{flex:0 0 66px;font-size:13px;color:#454f57}
+.edititem{display:flex;align-items:center;gap:8px;margin:4px 0;flex-wrap:wrap}.edititem .lbl{flex:0 0 66px;font-size:13px;color:#454f57}
 .saleCard{border:1px solid #e3e8eb;border-radius:12px;padding:10px;margin:8px 0}
 .badge{display:inline-block;background:#e4eef6;color:#17324d;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700}
 .cashDual table{font-size:13px}.cashDual th,.cashDual td{padding:6px 3px}
@@ -38,7 +38,15 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 .fieldLabel{font-size:11px;color:#697781;margin-bottom:2px}
 .prefixGroup{display:flex;border:1px solid #ccd5dc;border-radius:9px;overflow:hidden}
 .prefixGroup .ptag{background:#eef2f5;padding:0 8px;display:flex;align-items:center;font-size:12px;color:#33424d;font-weight:800;white-space:nowrap}
-.prefixGroup input{border:0;border-radius:0;flex:1;padding:8px}
+.prefixGroup input{border:0;border-radius:0;flex:1;padding:8px;min-height:38px}
+@media (max-width:380px){.cashDual{flex-direction:column}.summary{grid-template-columns:1fr 1fr}}
+@media (hover:hover) and (pointer:fine){.secondary:hover{background:#dde3e8}.primary:hover{background:#1e3d5c}.paybtn:hover{border-color:#17324d}}
+@media (min-width:900px){
+ main{max-width:960px}
+ .tabbar{grid-template-columns:repeat(4,180px);justify-content:center}
+ body{display:flex;flex-direction:column;align-items:center}
+ header{width:100%}
+}
 </style>
 </head>
 <body>
@@ -63,6 +71,10 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <button class="primary" style="margin-top:10px" onclick="saveCity()">儲存城市設定</button>
 <h3 style="margin-top:18px">🛠️ 販售項目管理</h3>
 <div id="manageList"></div>
+<div class="row" style="margin-top:4px;align-items:center">
+<button class="secondary" onclick="manualSaveAllProducts()">💾 儲存商品設定</button>
+<span class="saveMsg" id="saveMsgProducts"></span>
+</div>
 <div class="row" style="margin-top:8px">
 <input id="newProdName" placeholder="項目名稱">
 <input id="newProdPrice" type="number" min="0" placeholder="金額">
@@ -156,7 +168,12 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <button class="secondary" onclick="exportExcel(salesOf(reportEditDate.value||today),'今日營收_'+(reportEditDate.value||today),reportEditDate.value||today,false)">⬇️ Excel報表</button>
 </div>
 <div class="card"><h2>📋 文字摘要</h2><div id="reportSummary"></div></div>
-<div class="card"><h2>🧾 交易明細（可調整數量／折扣／付款方式／票號／備註）</h2><div id="saleEdit"></div></div>
+<div class="card"><h2>🧾 交易明細（可調整數量／折扣／付款方式／票號／備註）</h2><div id="saleEdit"></div>
+<div class="row" style="margin-top:8px;align-items:center">
+<button class="secondary" onclick="manualSaveAllSales()">💾 儲存交易明細</button>
+<span class="saveMsg" id="saveMsgSales"></span>
+</div>
+</div>
 <div class="card"><h2>🏦 匯款紀錄（末5碼）</h2><div id="transferList"></div></div>
 </section>
 
@@ -214,6 +231,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 </details>
 </section>
 </main>
+<button id="guideFab" onclick="showGuide()" title="操作說明" style="position:fixed;right:16px;bottom:16px;width:50px;height:50px;border-radius:50%;background:#17324d;color:#fff;border:0;font-size:22px;box-shadow:0 4px 14px rgba(0,0,0,0.35);z-index:40;cursor:pointer">❓</button>
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -222,6 +240,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 const DEN=[1,5,10,50,100,500,1000];
 const KEY='expoCashierV3';
 const KEY_OLD='expoCashierV2';
+const GUIDE_KEY='expoCashierGuideSeen';
 const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣','澎湖縣','金門縣','連江縣'];
 let selectedPay='現金';
 const dateStr=()=>new Date().toLocaleDateString('sv-SE');
@@ -294,7 +313,11 @@ function buildCitySelect(){
   .concat(['<option value="其他">其他（自行輸入）</option>']);
  citySelect.innerHTML=opts.join('');
 }
-function cityDisplay(){return db.city?db.city+'旅展':''}
+function cityDisplay(){
+ if(!db.city)return '';
+ let short=db.city.replace(/[市縣]$/,'');
+ return short+'旅展';
+}
 function onCityChange(){cityCustom.style.display=citySelect.value==='其他'?'block':'none'}
 function saveCity(){
  let v=citySelect.value;
@@ -360,16 +383,14 @@ function renderProductManage(){
   <span class="lbl">項目</span><input value="${esc(p.name)}" oninput="updateProductField('${p.id}','name',this.value)">
   <span class="lbl">金額</span><input type="number" min="0" value="${p.price}" oninput="updateProductField('${p.id}','price',this.value)">
  </div>
- <div class="edititem" style="margin-top:-2px">
+ <div class="edititem" style="margin-top:-2px;margin-bottom:10px">
   <label class="muted" style="flex:0 0 92px;display:flex;align-items:center;gap:6px"><input type="checkbox" ${p.needSerial?'checked':''} onchange="updateProductField('${p.id}','needSerial',this.checked)">需要票號</label>
   <input value="${esc(p.serialPrefix||'')}" placeholder="前綴 例如BC" oninput="updateProductField('${p.id}','serialPrefix',this.value)">
-  <button class="secondary" style="flex:0 0 46px" onclick="manualSaveProduct('${p.id}')">💾</button>
   <button class="secondary danger" style="flex:0 0 40px" onclick="deleteProduct('${p.id}')">✕</button>
  </div>
- <div class="row" style="justify-content:flex-end"><span class="saveMsg" id="saveMsgP-${p.id}"></span></div>
  `).join(''):'<p class="muted">尚無販售項目</p>';
 }
-function manualSaveProduct(id){save();flashSaved('saveMsgP-'+id)}
+function manualSaveAllProducts(){save();flashSaved('saveMsgProducts')}
 function flashSaved(elId){
  let el=document.getElementById(elId);
  if(!el)return;
@@ -730,9 +751,10 @@ function renderSaleEditRow(sale){
   return `<div class="edititem"><span class="lbl">${esc(p.name)}</span><input id="qty-${sale.id}-${p.id}" type="number" min="0" value="${qty}" oninput="updateSaleItem('${sale.id}','${p.id}')" style="flex:0 0 56px">${serialField}</div>`;
  }).join('');
  return `<div class="saleCard" id="saleRow-${sale.id}">
- <div class="row">
-  <span class="badge">${esc(sale.time||'')}</span>
-  <select onchange="updateSalePay('${sale.id}',this.value)">
+ <div class="row" style="flex-wrap:wrap">
+  <input type="date" id="date-${sale.id}" value="${sale.date}" onchange="updateSaleDate('${sale.id}',this.value)" style="flex:1 1 130px">
+  <span class="badge" style="flex:0 0 auto">${esc(sale.time||'')}</span>
+  <select onchange="updateSalePay('${sale.id}',this.value)" style="flex:1 1 90px">
    <option ${sale.pay==='現金'?'selected':''}>現金</option>
    <option ${sale.pay==='匯款'?'selected':''}>匯款</option>
    <option ${sale.pay==='刷卡'?'selected':''}>刷卡</option>
@@ -745,10 +767,6 @@ function renderSaleEditRow(sale){
  ${itemsHtml}
  <div class="edititem"><span class="lbl">折扣</span><input type="number" min="0" value="${sale.discount||0}" oninput="updateSaleDiscount('${sale.id}',this.value)"></div>
  <div class="edititem"><span class="lbl">備註</span><input type="text" value="${esc(sale.note||'')}" placeholder="備註" oninput="updateSaleNote('${sale.id}',this.value)"></div>
- <div class="row" style="margin-top:8px;align-items:center">
-  <button class="secondary" style="flex:0 0 90px" onclick="manualSaveSale('${sale.id}')">💾 儲存</button>
-  <span class="saveMsg" id="saveMsg-${sale.id}"></span>
- </div>
  <div style="text-align:right;font-weight:700;margin-top:6px">小計 $<span id="saleSub-${sale.id}">${money(sale.subtotal!=null?sale.subtotal:sale.total)}</span>　應收 $<span id="saleFinal-${sale.id}">${money(sale.total)}</span></div>
  </div>`;
 }
@@ -763,7 +781,7 @@ function refreshSaleRowTotals(sale){
  if(subEl)subEl.textContent=money(sale.subtotal);
  if(finEl)finEl.textContent=money(sale.total);
 }
-function manualSaveSale(saleId){save();flashSaved('saveMsg-'+saleId)}
+function manualSaveAllSales(){save();flashSaved('saveMsgSales')}
 function updateSaleItem(saleId,pid){
  let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
  let qtyInput=document.getElementById('qty-'+saleId+'-'+pid);
@@ -794,6 +812,17 @@ function updateSaleDiscount(saleId,val){
 function updateSaleNote(saleId,val){
  let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
  sale.note=val;save();
+}
+function updateSaleDate(saleId,val){
+ let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
+ if(!val)return;
+ let viewDate=reportEditDate.value||today;
+ sale.date=val;
+ save();
+ renderReport();
+ if(val!==viewDate){
+  alert('已將這筆交易的日期改為 '+val+'，可切換到該日期查看。');
+ }
 }
 function updateSalePay(saleId,val){
  let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
@@ -1061,11 +1090,49 @@ function showImagePreview(canvas,filename){
  document.body.appendChild(overlay);
 }
 
+/* ---------- 操作說明 ---------- */
+function buildGuideHtml(){
+ return `
+ <h2 style="margin-top:0">📖 操作說明</h2>
+ <h3>1️⃣ 收銀</h3>
+ <p class="muted">選擇銷售日期 → 輸入各項目數量（有設定票號的項目會自動帶入起始票號）→ 選付款方式 → 完成收款。「⚙️ 展會設定」可設定城市與管理販售項目（含是否需要票號、票號前綴）。</p>
+ <h3>2️⃣ 清點</h3>
+ <p class="muted">記錄開店零用金、收班時的結算零用金與今日營收現金，系統會自動核對差額。頁面下方也有票券／發票清點小工具，輸入起訖票號即可算張數。</p>
+ <h3>3️⃣ 今日營收</h3>
+ <p class="muted">可切換日期查看／修改當天每一筆交易，包含日期、數量、付款方式、票號、備註都能調整，也能下載圖片或Excel報表、複製文字摘要。</p>
+ <h3>4️⃣ 日期報表</h3>
+ <p class="muted">查詢單日或區間報表，可用快捷鈕篩選近7天／1個月／6個月／1年，也能匯出Excel、匯入Excel交易資料（附加不覆蓋）。</p>
+ <p class="muted" style="margin-top:14px">💡 所有資料都存在這台裝置的瀏覽器裡，記得定期用「日期報表→Excel報表」備份。右下角 ❓ 按鈕可隨時再打開這份說明。</p>
+ `;
+}
+function showGuide(){
+ if(document.getElementById('guideOverlay'))return;
+ let overlay=document.createElement('div');
+ overlay.id='guideOverlay';
+ overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px';
+ let box=document.createElement('div');
+ box.style.cssText='background:#fff;border-radius:16px;max-width:480px;width:100%;max-height:85vh;overflow:auto;padding:20px';
+ box.innerHTML=buildGuideHtml();
+ let btnRow=document.createElement('div');
+ btnRow.style.cssText='display:flex;gap:8px;margin-top:16px';
+ let closeBtn=document.createElement('button');
+ closeBtn.className='secondary';closeBtn.style.flex='1';closeBtn.textContent='關閉';
+ closeBtn.onclick=()=>overlay.remove();
+ let dontShowBtn=document.createElement('button');
+ dontShowBtn.className='primary';dontShowBtn.style.flex='1';dontShowBtn.textContent='知道了，不再顯示';
+ dontShowBtn.onclick=()=>{localStorage.setItem(GUIDE_KEY,'1');overlay.remove()};
+ btnRow.appendChild(closeBtn);btnRow.appendChild(dontShowBtn);
+ box.appendChild(btnRow);
+ overlay.appendChild(box);
+ document.body.appendChild(overlay);
+}
+
 /* ---------- 初始化 ---------- */
 renderProductGrid();
 renderProductManage();
 calcSale();
 renderQuick();
 initCitySettings();
+if(!localStorage.getItem(GUIDE_KEY)){showGuide()}
 </script>
 </body></html>
