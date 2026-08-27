@@ -64,12 +64,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <details class="card" id="appSettings">
 <summary>⚙️ 展會設定</summary>
 <div class="inner">
-<h3 style="margin-top:18px">☁️ 雲端同步（班次代碼）</h3>
-<p class="muted">輸入一組代碼（例如：台北0827），使用相同代碼的裝置會即時同步同一份資料。留空並清除代碼＝僅使用本機儲存。</p>
-<input id="roomCodeInput" placeholder="例如 台北0827" value="cmcp1885">
-<button class="primary" style="margin-top:10px" onclick="saveRoomCode()">儲存並連線</button>
-<div class="muted" id="syncStatus" style="margin-top:8px"></div>
-<h3 style="margin-top:18px">📍 展會城市</h3>
+<h3>📍 展會城市</h3>
 <p class="muted">設定一次即可，之後所有報表、Excel、文字摘要會自動帶入「OO旅展」。</p>
 <select id="citySelect" onchange="onCityChange()"></select>
 <input id="cityCustom" placeholder="輸入自訂展會名稱" style="display:none;margin-top:8px">
@@ -314,6 +309,7 @@ function tryUnlock(){
   localStorage.setItem(UNLOCK_KEY,'1');
   let ov=document.getElementById('lockOverlay');
   if(ov)ov.remove();
+  if(!currentRoomRef&&roomCode){connectRoom(roomCode)}
  } else {
   let err=document.getElementById('lockError');
   if(err)err.style.display='block';
@@ -1237,19 +1233,6 @@ function connectRoom(code){
   if(statusEl)statusEl.textContent='⚠️ 連線失敗：'+err.message;
  });
 }
-function saveRoomCode(){
- let code=roomCodeInput.value.trim();
- let statusEl=document.getElementById('syncStatus');
- if(!code){
-  if(currentRoomRef){currentRoomRef.off();currentRoomRef=null}
-  roomCode='';localStorage.removeItem(ROOMCODE_KEY);
-  if(statusEl)statusEl.textContent='🔌 尚未設定同步（僅本機儲存）';
-  return;
- }
- roomCode=code;
- localStorage.setItem(ROOMCODE_KEY,code);
- connectRoom(code);
-}
 
 /* ---------- 操作說明 ---------- */
 function buildGuideHtml(){
@@ -1295,8 +1278,7 @@ calcSale();
 renderQuick();
 initCitySettings();
 roomCode=localStorage.getItem(ROOMCODE_KEY);
-if(roomCode===null){roomCode='cmcp1885';localStorage.setItem(ROOMCODE_KEY,roomCode)}
-if(document.getElementById('roomCodeInput'))roomCodeInput.value=roomCode;
+if(!roomCode){roomCode='cmcp1885';localStorage.setItem(ROOMCODE_KEY,roomCode)}
 if(roomCode){connectRoom(roomCode)}
 else{let se=document.getElementById('syncStatus');if(se)se.textContent='🔌 尚未設定同步（僅本機儲存）'}
 if(!localStorage.getItem(GUIDE_KEY)){showGuide()}
