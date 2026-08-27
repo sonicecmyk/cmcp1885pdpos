@@ -343,16 +343,22 @@ function loadDb(){
  }
  return base;
 }
-let db=loadDb();
-db.closeFloat=db.closeFloat||{};
-db.floatAmount=db.floatAmount||{};
-db.nextSerial=db.nextSerial||{};
-if(db.city===undefined)db.city='';
-db.products=db.products||[];
-db.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix='';p.serialPrefix=(p.serialPrefix||'').toUpperCase()});
-function save(){
- localStorage.setItem(KEY,JSON.stringify(db));
- try{pushToCloud()}catch(e){console.error('pushToCloud outer failure',e)}
+ function normalizeDb(data){
+  let safe=data&&typeof data==='object'&&!Array.isArray(data)?data:{};
+  safe.products=Array.isArray(safe.products)?safe.products:[];
+  safe.sales=Array.isArray(safe.sales)?safe.sales:[];
+  ['float','closeFloat','floatAmount','count','nextSerial'].forEach(key=>{
+   if(!safe[key]||typeof safe[key]!=='object'||Array.isArray(safe[key]))safe[key]={};
+  });
+  if(typeof safe.city!=='string')safe.city='';
+  safe.products=safe.products.filter(p=>p&&typeof p==='object');
+  safe.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix='';p.serialPrefix=(p.serialPrefix||'').toUpperCase()});
+  return safe;
+ }
+ let db=normalizeDb(loadDb());
+ function save(options={}){
+  localStorage.setItem(KEY,JSON.stringify(db));
+  if(options.cloud!==false)try{pushToCloud()}catch(e){console.error('pushToCloud outer failure',e)}
 }
 function pushToCloud(){
  if(!roomCode||!currentRoomRef)return;
@@ -366,6 +372,18 @@ function pushToCloud(){
   console.error('sync failed (sync throw)',err);
  }
 }
+ function pushSaleToCloud(sale,date,serialAdvances){
+  if(!roomCode||!currentRoomRef)return;
+  let updates={};
+  serialAdvances.forEach(a=>{updates['nextSerial/'+date+'_'+a.pid]=a.newNext});
+  try{
+   currentRoomRef.child('sales').transaction(rows=>{
+    let current=Array.isArray(rows)?rows:Object.values(rows||{}).filter(row=>row&&typeof row==='object');
+    return current.some(row=>row&&row.id===sale.id)?current:current.concat([sale]);
+   }).catch(err=>{console.error('sale sync failed',err)});
+   if(Object.keys(updates).length)currentRoomRef.update(updates).catch(err=>{console.error('serial sync failed',err)});
+  }catch(err){console.error('sale sync failed (sync throw)',err)}
+ }
 
 document.getElementById('headerDate').textContent=today;
 document.getElementById('reportDate').value=today;
@@ -445,7 +463,7 @@ function renderProductGrid(){
      <div class="fieldLabel">起始票號</div>
      <div class="prefixGroup">
       <span class="ptag">${esc(p.serialPrefix||'')}</span>
-      <input class="startSerial" data-id="${p.id}" type="number" placeholder="000000" value="${nextVal!=null?nextVal:''}" oninput="calcSale()">
+       <input class="startSerial" data-id="${p.id}" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="000000" value="${nextVal!=null?nextVal:''}" oninput="calcSale()">
      </div>
     </div>
     <div style="margin-top:6px">
@@ -528,9 +546,10 @@ function calcSale(){
    let startInput=document.querySelector(`.startSerial[data-id="${pid}"]`);
    let serialInput=document.querySelector(`.saleSerial[data-id="${pid}"]`);
    if(startInput&&serialInput&&!serialInput.dataset.manual){
-    let startVal=+startInput.value;
-    if(startVal&&qty>0){
-     let width=String(startVal).length;
+     let startRaw=startInput.value.trim();
+     if(/^\d+$/.test(startRaw)&&qty>0){
+      let startVal=Number(startRaw);
+      let width=startRaw.length;
      let endVal=startVal+qty-1;
      let pad=n=>String(n).padStart(width,'0');
      serialInput.value=qty===1?pad(startVal):(pad(startVal)+'~'+pad(endVal));
@@ -555,11 +574,13 @@ function markManualSerial(pid){
 }
 function addSale(){
  try{
- let items=[];
- let serialAdvances=[];
- document.querySelectorAll('.saleQty').forEach(inp=>{
-  let pid=inp.dataset.id,qty=+inp.value||0;
-  if(qty<=0)return;
+  let items=[];
+  let serialAdvances=[];
+  let invalidQty=false;
+  document.querySelectorAll('.saleQty').forEach(inp=>{
+   let pid=inp.dataset.id,qty=+inp.value||0;
+   if(qty<=0)return;
+   if(!Number.isInteger(qty)){invalidQty=true;return}
   let p=db.products.find(x=>x.id===pid);
   if(!p)return;
   let serial='';
@@ -568,22 +589,29 @@ function addSale(){
    let rawSerial=serialInput?serialInput.value.trim():'';
    serial=composeSerial(p,rawSerial);
    let startInput=document.querySelector(`.startSerial[data-id="${pid}"]`);
-   let startVal=startInput?+startInput.value:0;
-   if(startVal){serialAdvances.push({pid,newNext:startVal+qty})}
+    let startRaw=startInput?startInput.value.trim():'';
+    if(/^\d+$/.test(startRaw)){
+     let startVal=Number(startRaw);
+     serialAdvances.push({pid,newNext:String(startVal+qty).padStart(startRaw.length,'0')});
+    }
   }
   items.push({id:p.id,name:p.name,price:p.price,qty,serial});
- });
- if(!items.length){alert('請先輸入販售數量');return}
+  });
+  if(invalidQty){alert('販售數量必須是整數');return}
+  if(!items.length){alert('請先輸入販售數量');return}
  let subtotal=items.reduce((s,i)=>s+i.qty*i.price,0);
  let discount=+saleDiscount.value||0;if(discount<0)discount=0;if(discount>subtotal)discount=subtotal;
  let total=subtotal-discount;
- let d=saleDate.value||today;
- let transferLast5=selectedPay==='匯款'?transferLast5Input().value.trim():'';
- let note=document.getElementById('saleNote')?saleNote.value.trim():'';
- db.sales.push({id:uid('s'),date:d,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})});
- db.nextSerial=db.nextSerial||{};
- serialAdvances.forEach(a=>{db.nextSerial[d+'_'+a.pid]=a.newNext});
- save();
+  let d=saleDate.value||today;
+  let transferLast5=selectedPay==='匯款'?transferLast5Input().value.trim():'';
+  if(selectedPay==='匯款'&&!/^\d{5}$/.test(transferLast5)){alert('匯款請輸入 5 碼數字帳號末碼');return}
+  let note=document.getElementById('saleNote')?saleNote.value.trim():'';
+  let sale={id:uid('s'),date:d,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})};
+  db.sales.push(sale);
+  db.nextSerial=db.nextSerial||{};
+  serialAdvances.forEach(a=>{db.nextSerial[d+'_'+a.pid]=a.newNext});
+  save({cloud:false});
+  pushSaleToCloud(sale,d,serialAdvances);
  document.querySelectorAll('.saleQty').forEach(i=>i.value=0);
  saleDiscount.value=0;
  if(document.getElementById('saleNote'))saleNote.value='';
@@ -1226,10 +1254,10 @@ function connectRoom(code){
   if(val){
    if(db.sales&&db.sales.length>0){
     let useCloud=confirm('偵測到雲端代碼「'+code+'」已有資料。\n按「確定」＝改用雲端資料（此裝置目前本機資料將被取代）\n按「取消」＝改用本機資料覆蓋雲端');
-    if(useCloud){db=val;localStorage.setItem(KEY,JSON.stringify(db));refreshAll()}
+    if(useCloud){db=normalizeDb(val);localStorage.setItem(KEY,JSON.stringify(db));refreshAll()}
     else{pushToCloud()}
    } else {
-    db=val;localStorage.setItem(KEY,JSON.stringify(db));refreshAll();
+    db=normalizeDb(val);localStorage.setItem(KEY,JSON.stringify(db));refreshAll();
    }
   } else {
    pushToCloud();
@@ -1238,7 +1266,7 @@ function connectRoom(code){
    let v2=snap2.val();
    if(!v2)return;
    if(v2._updatedBy===deviceId)return;
-   db=v2;localStorage.setItem(KEY,JSON.stringify(db));refreshAll();
+   db=normalizeDb(v2);localStorage.setItem(KEY,JSON.stringify(db));refreshAll();
   });
   if(statusEl)statusEl.textContent='☁️ 已連線同步（代碼：'+esc(code)+'）';
  }).catch(err=>{
