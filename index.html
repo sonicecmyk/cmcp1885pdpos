@@ -66,7 +66,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <div class="inner">
 <h3 style="margin-top:18px">☁️ 雲端同步（班次代碼）</h3>
 <p class="muted">輸入一組代碼（例如：台北0827），使用相同代碼的裝置會即時同步同一份資料。留空並清除代碼＝僅使用本機儲存。</p>
-<input id="roomCodeInput" placeholder="例如 台北0827">
+<input id="roomCodeInput" placeholder="例如 台北0827" value="cmcp1885">
 <button class="primary" style="margin-top:10px" onclick="saveRoomCode()">儲存並連線</button>
 <div class="muted" id="syncStatus" style="margin-top:8px"></div>
 <h3 style="margin-top:18px">📍 展會城市</h3>
@@ -1234,7 +1234,8 @@ renderProductManage();
 calcSale();
 renderQuick();
 initCitySettings();
-roomCode=localStorage.getItem(ROOMCODE_KEY)||'';
+roomCode=localStorage.getItem(ROOMCODE_KEY);
+if(roomCode===null){roomCode='cmcp1885';localStorage.setItem(ROOMCODE_KEY,roomCode)}
 if(document.getElementById('roomCodeInput'))roomCodeInput.value=roomCode;
 if(roomCode){connectRoom(roomCode)}
 else{let se=document.getElementById('syncStatus');if(se)se.textContent='🔌 尚未設定同步（僅本機儲存）'}
