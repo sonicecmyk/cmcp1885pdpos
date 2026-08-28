@@ -45,11 +45,12 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 .expoRank:first-child{border-radius:11px 11px 0 0}.expoRank:last-child{border-bottom:0;border-radius:0 0 11px 11px}
 .expoRank.champion{background:#fff5d7;border:2px solid #e4b43d;border-radius:11px;margin-bottom:6px}
 .expoRank .place{font-size:22px;font-weight:800;min-width:30px;color:#17324d}.expoRank .expoName{flex:1;font-weight:800}.expoRank .expoMoney{text-align:right;font-size:19px;font-weight:800;color:#17324d}.expoRank small{display:block;color:#697781;font-weight:400;font-size:12px}
+.reportTable{overflow-x:auto}.reportTable table{min-width:420px}.reportTotal{border-left-color:#317a5a}
  .productActions{display:flex;gap:5px;flex:0 0 auto}.productActions button{min-width:38px;padding:8px 6px}
 @media (max-width:600px){
  header{padding:14px 12px 11px}header h1{font-size:20px}main{padding:8px 8px 88px}.tabbar{top:66px;gap:4px}.tabbar button{font-size:12px;padding:10px 2px}
  .card{padding:12px;margin:8px 0}.row{flex-wrap:wrap}.row>*{min-width:0}.row input{min-width:130px}.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.product{padding:8px}.product .name{font-size:13px}
- .summary{grid-template-columns:repeat(2,1fr)}.summary .stat:last-child{grid-column:span 2}.edititem{gap:5px}.edititem .lbl{flex:0 0 42px}.edititem input{min-width:0}.expoRank{padding:9px}.expoRank .expoMoney{font-size:16px}.expoRank .expoName{font-size:13px}
+ .summary{grid-template-columns:repeat(2,1fr)}.summary .stat:last-child{grid-column:span 2}#quick .summary .stat{grid-column:auto}.edititem{gap:5px}.edititem .lbl{flex:0 0 42px}.edititem input{min-width:0}.expoRank{padding:9px}.expoRank .expoMoney{font-size:16px}.expoRank .expoName{font-size:13px}
  table{font-size:12px}.cashDual{overflow-x:auto}.chartWrap{overflow-x:auto}.chartWrap canvas{min-width:440px}
 }
 @media (max-width:380px){.cashDual{flex-direction:column}.summary{grid-template-columns:1fr 1fr}}
@@ -681,6 +682,12 @@ function buildExpoPerformanceHtml(rows){
  if(!ranked.length)return '';
  return `<div class="expoGroup"><h3>🏆 本區間旅展表現排名</h3>`+ranked.map((x,i)=>`<div class="expoRank ${i===0?'champion':''}"><div class="place">${i===0?'🏆':i+1}</div><div class="expoName">${esc(x.name)}<small>${x.r.count} 筆交易</small></div><div class="expoMoney">$${money(x.r.total)}<small>${i===0?'本區間最高營業額':'營業額'}</small></div></div>`).join('')+`</div>`;
 }
+function buildRangeOverallHtml(r){
+ let itemCount=Object.values(r.itemQty).reduce((sum,qty)=>sum+qty,0);
+ let products=Object.keys(r.itemQty);
+ let rows=products.map(id=>{let amount=r.itemRevenue[id]||0,pct=r.subtotal?(amount/r.subtotal*100).toFixed(1):'0.0';return `<tr><td>${esc(r.itemNames[id])}</td><td>${r.itemQty[id]}</td><td>$${money(amount)}</td><td>${pct}%</td></tr>`}).join('')||'<tr><td colspan="4" class="muted">此區間尚無商品銷售</td></tr>';
+ return `<div class="expoGroup reportTotal"><h3>📋 區間總報表</h3><div class="summary"><div class="stat"><span>合計營業額</span><b>$${money(r.total)}</b></div><div class="stat"><span>交易筆數</span><b>${r.count}</b></div><div class="stat"><span>販售商品數</span><b>${itemCount}</b></div><div class="stat"><span>折扣總額</span><b>$${money(r.discount||0)}</b></div><div class="stat"><span>現金</span><b>$${money(r.現金||0)}</b></div><div class="stat"><span>匯款／刷卡</span><b>$${money(r.匯款||0)}／$${money(r.刷卡||0)}</b></div></div><h3 style="margin-top:14px">商品銷售總計</h3><div class="reportTable"><table><thead><tr><th>商品</th><th>數量</th><th>商品小計</th><th>佔商品總額</th></tr></thead><tbody>${rows}</tbody></table></div><p class="muted" style="margin:8px 0 0">商品小計為折扣前金額；合計營業額已扣除折扣。</p></div>`;
+}
 function buildStatsHtml(r){
  let itemsHtml=Object.keys(r.itemQty).map(id=>`<div class="stat"><span>${esc(r.itemNames[id])}</span><b>${r.itemQty[id]}</b></div>`).join('');
  return `<div class="summary">
@@ -1028,7 +1035,7 @@ function renderRange(){
  let r=aggregateRows(rows);
  let title=s===e?toROCDate(s):(toROCDate(s)+'～'+toROCDate(e));
  rangeBanner.innerHTML=bannerHtml(title,'依旅展分類');
- rangeReport.innerHTML=buildExpoPerformanceHtml(rows)+'<h3>旅展分類</h3>'+buildExpoGroupsHtml(rows);
+ rangeReport.innerHTML=buildRangeOverallHtml(r)+buildExpoPerformanceHtml(rows)+'<h3>旅展分類</h3>'+buildExpoGroupsHtml(rows);
  renderExpoSummaryBlock('rangeSummary','range',rows,title);
  rangeTransfer.innerHTML='';
  renderRangeChart(rows,s,e);
