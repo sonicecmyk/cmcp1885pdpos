@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#17324d">
-<title>展場收銀 APP</title>
+<title>1885展場收銀</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#1d2730;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif}
 header{background:#17324d;color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:5}header h1{font-size:22px;margin:0 0 4px}.datebar{font-size:14px;opacity:.85}
@@ -75,12 +75,12 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <section id="sale" class="page active">
 
 <details class="card" id="appSettings">
-<summary>⚙️ 展會設定</summary>
+<summary>⚙️ 展場設定</summary>
 <div class="inner">
-<h3>📍 本場展會城市</h3>
+<h3>📍 本場展場城市</h3>
 <p class="muted">每次收款會記錄當下選擇的旅展；之後切換到下一場，舊交易與報表不會被覆寫。</p>
 <select id="citySelect" onchange="onCityChange()"></select>
-<input id="cityCustom" placeholder="輸入自訂展會名稱" style="display:none;margin-top:8px">
+<input id="cityCustom" placeholder="輸入自訂展場名稱" style="display:none;margin-top:8px">
 <button class="primary" style="margin-top:10px" onclick="saveCity()">儲存城市設定</button>
 <h3 style="margin-top:18px">🛠️ 販售項目管理</h3>
 <div id="manageList"></div>
@@ -134,7 +134,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <div class="card">
 <h2>💵 原零用金</h2>
 <p class="muted">輸入今天開店準備的零用金總額。</p>
-<input type="number" id="floatAmount" min="0" placeholder="例如 8000">
+<input type="number" id="floatAmount" min="0" placeholder="例如 8,000">
 <button class="primary" style="margin-top:10px" onclick="saveFloat()">儲存原零用金</button>
 </div>
 <div class="card">
@@ -268,7 +268,7 @@ try{
 }catch(e){console.error('Firebase init failed',e)}
 let deviceId=localStorage.getItem(DEVICE_KEY);
 if(!deviceId){deviceId='dev_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem(DEVICE_KEY,deviceId)}
-const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣','澎湖縣','金門縣','連江縣'];
+const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣'];
 let selectedPay='現金';
 const dateStr=()=>new Date().toLocaleDateString('sv-SE');
 const fmtDate=d=>d.toLocaleDateString('sv-SE');
@@ -279,7 +279,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','
 function money(n){return Number(n||0).toLocaleString('zh-TW')}
 
 /* ---------- 通關密語（僅前端阻擋，非真正安全機制） ---------- */
-const ACCESS_CODE='cm1885';
+const ACCESS_CODE='cm18852026';
 const UNLOCK_KEY='expoCashierUnlocked';
 function checkAccess(){return localStorage.getItem(UNLOCK_KEY)==='1'}
 function showLock(){
@@ -290,7 +290,7 @@ function showLock(){
  overlay.innerHTML=`
   <div style="background:#fff;border-radius:16px;padding:28px 24px;max-width:340px;width:100%;text-align:center">
    <div style="font-size:40px;margin-bottom:8px">🔒</div>
-   <h2 style="margin:0 0 8px">展場收銀 APP</h2>
+   <h2 style="margin:0 0 8px">1885展場收銀</h2>
    <p class="muted" style="margin-bottom:16px">請輸入通關密語才能使用</p>
    <input id="lockInput" type="password" placeholder="請輸入密語" style="text-align:center;font-size:18px" autocomplete="off">
    <div id="lockError" style="color:#a52828;font-size:13px;margin-top:8px;display:none">密語錯誤，請再試一次</div>
@@ -404,7 +404,7 @@ function choosePay(btn){
  transferField.style.display=selectedPay==='匯款'?'block':'none';
 }
 
-/* ---------- 展會城市設定 ---------- */
+/* ---------- 展場城市設定 ---------- */
 function buildCitySelect(){
  let opts=['<option value="">請選擇城市</option>']
   .concat(TW_CITIES.map(c=>`<option value="${c}">${c}</option>`))
@@ -416,7 +416,7 @@ function cityDisplay(){
  let short=db.city.replace(/[市縣]$/,'');
  return short+'旅展';
 }
-/* 每筆交易都保存展會名稱；以下檔期也會自動回補舊資料。 */
+/* 每筆交易都保存展場名稱；以下檔期也會自動回補舊資料。 */
 const EXPO_SCHEDULE=[
  {start:'2026-02-27',end:'2026-03-02',label:'高雄旅展（2/27–3/2）'},
  {start:'2026-04-10',end:'2026-04-13',label:'台北旅展（4/10–4/13）'},
@@ -424,7 +424,7 @@ const EXPO_SCHEDULE=[
  {start:'2026-08-21',end:'2026-08-24',label:'台北旅展（8/21–8/24）'}
 ];
 function expoForDate(d){let m=EXPO_SCHEDULE.find(x=>d>=x.start&&d<=x.end);return m?m.label:''}
-function expoForSale(s){return expoForDate(s.date)||s.expo||'未設定展會'}
+function expoForSale(s){return expoForDate(s.date)||s.expo||'未設定展場'}
 function expoGroups(rows){
  let byExpo={};rows.forEach(s=>{let n=expoForSale(s);(byExpo[n]||(byExpo[n]=[])).push(s)});
  let groups={};
@@ -444,7 +444,7 @@ function saveCity(){
  let v=citySelect.value;
  let city=v==='其他'?cityCustom.value.trim():v;
  db.city=city;save();updateHeaderCity();
- alert('已儲存展會城市：'+(city?cityDisplay():'（未設定）'));
+ alert('已儲存展場城市：'+(city?cityDisplay():'（未設定）'));
 }
 function updateHeaderCity(){headerCity.textContent=db.city?('📍 '+cityDisplay()):''}
 function initCitySettings(){
@@ -553,7 +553,7 @@ function deleteProduct(id){
 function calcStock(){
  let a=stockStart.value.trim(),b=stockEnd.value.trim();
  let ma=a.match(/^([A-Za-z]*)(\d+)$/),mb=b.match(/^([A-Za-z]*)(\d+)$/);
- if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 000000 或 BC442786）';return}
+ if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 000000 或 000315）';return}
  let start=parseInt(ma[2],10),end=parseInt(mb[2],10);
  if(end<start){let t=start;start=end;end=t}
  let count=end-start+1;
@@ -634,7 +634,7 @@ function addSale(){
   if(selectedPay==='匯款'&&!/^\d{5}$/.test(transferLast5)){alert('匯款請輸入 5 碼數字帳號末碼');return}
   let note=document.getElementById('saleNote')?saleNote.value.trim():'';
   let expo=expoForDate(d)||cityDisplay();
-  if(!expo){alert('請先在「展會設定」選擇本場展會城市，再完成收款。');return}
+  if(!expo){alert('請先在「展場設定」選擇本場展場城市，再完成收款。');return}
   let sale={id:uid('s'),date:d,expo,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})};
   db.sales.push(sale);
   db.nextSerial=db.nextSerial||{};
@@ -1180,9 +1180,9 @@ function exportExcelRange(){
 
 /* ---------- 清空交易資料 ---------- */
 function resetTransactionData(){
- let input=prompt('此動作將清空所有交易紀錄、現金清點與票號起始資料（不含商品設定與城市設定）！\n若有連線雲端同步，會影響所有使用同一組班次代碼的人，且無法復原。\n\n若確定要清空，請輸入「清空資料」四個字：');
+ let input=prompt('此動作將清空所有交易紀錄、現金清點與票號起始資料（不含商品設定與城市設定）！\n若有連線雲端同步，會影響所有使用同一組班次代碼的人，且無法復原。\n\n若確定要清空，請輸入「清空資料會爆炸」七個字：');
  if(input===null)return;
- if(input.trim()!=='清空資料'){alert('輸入不符，已取消，未清空任何資料。');return}
+ if(input.trim()!=='清空資料會爆炸'){alert('輸入不符，已取消，未清空任何資料。');return}
  db.sales=[];
  db.float={};
  db.closeFloat={};
@@ -1381,7 +1381,7 @@ function showGuide(){
  closeBtn.className='secondary';closeBtn.style.flex='1';closeBtn.textContent='關閉';
  closeBtn.onclick=()=>overlay.remove();
  let dontShowBtn=document.createElement('button');
- dontShowBtn.className='primary';dontShowBtn.style.flex='1';dontShowBtn.textContent='知道了，不再顯示';
+ dontShowBtn.className='primary';dontShowBtn.style.flex='1';dontShowBtn.textContent='不再顯示';
  dontShowBtn.onclick=()=>{localStorage.setItem(GUIDE_KEY,'1');overlay.remove()};
  btnRow.appendChild(closeBtn);btnRow.appendChild(dontShowBtn);
  box.appendChild(btnRow);
