@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#17324d">
-<title>1885展場收銀</title>
+<title>展場收銀 APP</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#1d2730;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif}
 header{background:#17324d;color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:5}header h1{font-size:22px;margin:0 0 4px}.datebar{font-size:14px;opacity:.85}
@@ -45,6 +45,13 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 .expoRank:first-child{border-radius:11px 11px 0 0}.expoRank:last-child{border-bottom:0;border-radius:0 0 11px 11px}
 .expoRank.champion{background:#fff5d7;border:2px solid #e4b43d;border-radius:11px;margin-bottom:6px}
 .expoRank .place{font-size:22px;font-weight:800;min-width:30px;color:#17324d}.expoRank .expoName{flex:1;font-weight:800}.expoRank .expoMoney{text-align:right;font-size:19px;font-weight:800;color:#17324d}.expoRank small{display:block;color:#697781;font-weight:400;font-size:12px}
+ .productActions{display:flex;gap:5px;flex:0 0 auto}.productActions button{min-width:38px;padding:8px 6px}
+@media (max-width:600px){
+ header{padding:14px 12px 11px}header h1{font-size:20px}main{padding:8px 8px 88px}.tabbar{top:66px;gap:4px}.tabbar button{font-size:12px;padding:10px 2px}
+ .card{padding:12px;margin:8px 0}.row{flex-wrap:wrap}.row>*{min-width:0}.row input{min-width:130px}.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.product{padding:8px}.product .name{font-size:13px}
+ .summary{grid-template-columns:repeat(2,1fr)}.summary .stat:last-child{grid-column:span 2}.edititem{gap:5px}.edititem .lbl{flex:0 0 42px}.edititem input{min-width:0}.expoRank{padding:9px}.expoRank .expoMoney{font-size:16px}.expoRank .expoName{font-size:13px}
+ table{font-size:12px}.cashDual{overflow-x:auto}.chartWrap{overflow-x:auto}.chartWrap canvas{min-width:440px}
+}
 @media (max-width:380px){.cashDual{flex-direction:column}.summary{grid-template-columns:1fr 1fr}}
 @media (hover:hover) and (pointer:fine){.secondary:hover{background:#dde3e8}.primary:hover{background:#1e3d5c}.paybtn:hover{border-color:#17324d}}
 @media (min-width:900px){
@@ -68,12 +75,12 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <section id="sale" class="page active">
 
 <details class="card" id="appSettings">
-<summary>⚙️ 展場設定</summary>
+<summary>⚙️ 展會設定</summary>
 <div class="inner">
-<h3>📍 本場展場城市</h3>
+<h3>📍 本場展會城市</h3>
 <p class="muted">每次收款會記錄當下選擇的旅展；之後切換到下一場，舊交易與報表不會被覆寫。</p>
 <select id="citySelect" onchange="onCityChange()"></select>
-<input id="cityCustom" placeholder="輸入自訂展場名稱" style="display:none;margin-top:8px">
+<input id="cityCustom" placeholder="輸入自訂展會名稱" style="display:none;margin-top:8px">
 <button class="primary" style="margin-top:10px" onclick="saveCity()">儲存城市設定</button>
 <h3 style="margin-top:18px">🛠️ 販售項目管理</h3>
 <div id="manageList"></div>
@@ -127,7 +134,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <div class="card">
 <h2>💵 原零用金</h2>
 <p class="muted">輸入今天開店準備的零用金總額。</p>
-<input type="number" id="floatAmount" min="0" placeholder="例如 8,000">
+<input type="number" id="floatAmount" min="0" placeholder="例如 8000">
 <button class="primary" style="margin-top:10px" onclick="saveFloat()">儲存原零用金</button>
 </div>
 <div class="card">
@@ -211,7 +218,7 @@ details.card{padding:0}details.card summary{list-style:none;cursor:pointer;paddi
 <div id="rangeTransfer" style="margin-top:10px"></div>
 </div>
 
-<div class="card"><h2>🗓️ 每日營收列表</h2><div id="dateList"></div></div>
+<details class="card" id="dailyRevenueDetails"><summary>🗓️ 每日營收列表（需要時展開）</summary><div class="inner"><div id="dateList"></div></div></details>
 
 <details class="card">
 <summary>📥 匯入交易資料（Excel）</summary>
@@ -261,7 +268,7 @@ try{
 }catch(e){console.error('Firebase init failed',e)}
 let deviceId=localStorage.getItem(DEVICE_KEY);
 if(!deviceId){deviceId='dev_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem(DEVICE_KEY,deviceId)}
-const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣'];
+const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣','澎湖縣','金門縣','連江縣'];
 let selectedPay='現金';
 const dateStr=()=>new Date().toLocaleDateString('sv-SE');
 const fmtDate=d=>d.toLocaleDateString('sv-SE');
@@ -272,7 +279,7 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','
 function money(n){return Number(n||0).toLocaleString('zh-TW')}
 
 /* ---------- 通關密語（僅前端阻擋，非真正安全機制） ---------- */
-const ACCESS_CODE='cm18852026';
+const ACCESS_CODE='cm1885';
 const UNLOCK_KEY='expoCashierUnlocked';
 function checkAccess(){return localStorage.getItem(UNLOCK_KEY)==='1'}
 function showLock(){
@@ -397,7 +404,7 @@ function choosePay(btn){
  transferField.style.display=selectedPay==='匯款'?'block':'none';
 }
 
-/* ---------- 展場城市設定 ---------- */
+/* ---------- 展會城市設定 ---------- */
 function buildCitySelect(){
  let opts=['<option value="">請選擇城市</option>']
   .concat(TW_CITIES.map(c=>`<option value="${c}">${c}</option>`))
@@ -417,7 +424,7 @@ const EXPO_SCHEDULE=[
  {start:'2026-08-21',end:'2026-08-24',label:'台北旅展（8/21–8/24）'}
 ];
 function expoForDate(d){let m=EXPO_SCHEDULE.find(x=>d>=x.start&&d<=x.end);return m?m.label:''}
-function expoForSale(s){return expoForDate(s.date)||s.expo||'未設定展場'}
+function expoForSale(s){return expoForDate(s.date)||s.expo||'未設定展會'}
 function expoGroups(rows){
  let byExpo={};rows.forEach(s=>{let n=expoForSale(s);(byExpo[n]||(byExpo[n]=[])).push(s)});
  let groups={};
@@ -437,7 +444,7 @@ function saveCity(){
  let v=citySelect.value;
  let city=v==='其他'?cityCustom.value.trim():v;
  db.city=city;save();updateHeaderCity();
- alert('已儲存展場城市：'+(city?cityDisplay():'（未設定）'));
+ alert('已儲存展會城市：'+(city?cityDisplay():'（未設定）'));
 }
 function updateHeaderCity(){headerCity.textContent=db.city?('📍 '+cityDisplay()):''}
 function initCitySettings(){
@@ -500,7 +507,7 @@ function renderProductManage(){
  <div class="edititem" style="margin-top:-2px;margin-bottom:10px">
   <label class="muted" style="flex:0 0 92px;display:flex;align-items:center;gap:6px"><input type="checkbox" ${p.needSerial?'checked':''} onchange="updateProductField('${p.id}','needSerial',this.checked)">需要票號</label>
   <input value="${esc(p.serialPrefix||'')}" placeholder="前綴 例如BC" oninput="updateProductField('${p.id}','serialPrefix',this.value)">
-  <button class="secondary danger" style="flex:0 0 40px" onclick="deleteProduct('${p.id}')">✕</button>
+  <div class="productActions"><button class="secondary" title="上移" onclick="moveProduct('${p.id}',-1)">↑</button><button class="secondary" title="下移" onclick="moveProduct('${p.id}',1)">↓</button><button class="secondary danger" title="刪除" onclick="deleteProduct('${p.id}')">✕</button></div>
  </div>
  `).join(''):'<p class="muted">尚無販售項目</p>';
 }
@@ -529,6 +536,12 @@ function updateProductField(id,field,val){
  save();
  if(field==='price'||field==='needSerial'||field==='serialPrefix'){renderProductGrid();calcSale()}
 }
+function moveProduct(id,direction){
+ let index=db.products.findIndex(p=>p.id===id),target=index+direction;
+ if(index<0||target<0||target>=db.products.length)return;
+ [db.products[index],db.products[target]]=[db.products[target],db.products[index]];
+ save();renderProductGrid();renderProductManage();calcSale();
+}
 function deleteProduct(id){
  let p=db.products.find(x=>x.id===id);
  if(!confirm(`確定要刪除「${p?p.name:''}」這個項目嗎？\n此動作無法復原（已產生的銷售紀錄不會受影響）。`))return;
@@ -540,7 +553,7 @@ function deleteProduct(id){
 function calcStock(){
  let a=stockStart.value.trim(),b=stockEnd.value.trim();
  let ma=a.match(/^([A-Za-z]*)(\d+)$/),mb=b.match(/^([A-Za-z]*)(\d+)$/);
- if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 000000 或 000315），共316張';return}
+ if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 000000 或 BC442786）';return}
  let start=parseInt(ma[2],10),end=parseInt(mb[2],10);
  if(end<start){let t=start;start=end;end=t}
  let count=end-start+1;
@@ -621,7 +634,7 @@ function addSale(){
   if(selectedPay==='匯款'&&!/^\d{5}$/.test(transferLast5)){alert('匯款請輸入 5 碼數字帳號末碼');return}
   let note=document.getElementById('saleNote')?saleNote.value.trim():'';
   let expo=expoForDate(d)||cityDisplay();
-  if(!expo){alert('請先在「展場設定」選擇本場展場城市，再完成收款。');return}
+  if(!expo){alert('請先在「展會設定」選擇本場展會城市，再完成收款。');return}
   let sale={id:uid('s'),date:d,expo,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})};
   db.sales.push(sale);
   db.nextSerial=db.nextSerial||{};
@@ -666,9 +679,7 @@ function buildExpoGroupsHtml(rows){
 function buildExpoPerformanceHtml(rows){
  let ranked=Object.entries(expoGroups(rows)).map(([name,part])=>({name,r:aggregateRows(part)})).sort((a,b)=>b.r.total-a.r.total);
  if(!ranked.length)return '';
- let best=null;Object.entries(expoGroups(rows)).forEach(([expo,part])=>{let byDate={};part.forEach(x=>(byDate[x.date]||(byDate[x.date]=[])).push(x));Object.entries(byDate).forEach(([date,dayRows])=>{let total=aggregateRows(dayRows).total;if(!best||total>best.total)best={expo,date,total}})});
- let bestHtml=best?`<div class="expoRank champion"><div class="place">🏅</div><div class="expoName">最高單日：${esc(best.expo)}<small>${best.date.replaceAll('-','/')} 的營業額最高</small></div><div class="expoMoney">$${money(best.total)}<small>最高單日業績</small></div></div>`:'';
- return `<div class="expoGroup"><h3>🏆 本區間旅展表現排名</h3>${bestHtml}`+ranked.map((x,i)=>`<div class="expoRank ${i===0?'champion':''}"><div class="place">${i===0?'🏆':i+1}</div><div class="expoName">${esc(x.name)}<small>${x.r.count} 筆交易</small></div><div class="expoMoney">$${money(x.r.total)}<small>${i===0?'本區間最高營業額':'營業額'}</small></div></div>`).join('')+`</div>`;
+ return `<div class="expoGroup"><h3>🏆 本區間旅展表現排名</h3>`+ranked.map((x,i)=>`<div class="expoRank ${i===0?'champion':''}"><div class="place">${i===0?'🏆':i+1}</div><div class="expoName">${esc(x.name)}<small>${x.r.count} 筆交易</small></div><div class="expoMoney">$${money(x.r.total)}<small>${i===0?'本區間最高營業額':'營業額'}</small></div></div>`).join('')+`</div>`;
 }
 function buildStatsHtml(r){
  let itemsHtml=Object.keys(r.itemQty).map(id=>`<div class="stat"><span>${esc(r.itemNames[id])}</span><b>${r.itemQty[id]}</b></div>`).join('');
@@ -1056,6 +1067,7 @@ function renderDailyExpoChart(rows){
 }
 function renderDateList(){
  let dates=Array.from(new Set(db.sales.map(x=>x.date))).sort().reverse();
+ let dailyListPanel=document.getElementById('dailyRevenueDetails');if(dailyListPanel)dailyListPanel.style.display=dates.length?'block':'none';
  if(!dates.length){dateList.innerHTML='<p class="muted">尚無銷售紀錄</p>';return}
  dateList.innerHTML=`<table><thead><tr><th>旅展</th><th>日期</th><th>營業額</th><th>筆數</th></tr></thead><tbody>`+
  dates.map(d=>{let r=totals(d),first=salesOf(d)[0];return `<tr><td>${esc(expoForSale(first||{date:d}))}</td><td>${d}</td><td>$${money(r.total)}</td><td>${r.count}</td></tr>`}).join('')+`</tbody></table>`;
@@ -1170,7 +1182,7 @@ function exportExcelRange(){
 function resetTransactionData(){
  let input=prompt('此動作將清空所有交易紀錄、現金清點與票號起始資料（不含商品設定與城市設定）！\n若有連線雲端同步，會影響所有使用同一組班次代碼的人，且無法復原。\n\n若確定要清空，請輸入「清空資料」四個字：');
  if(input===null)return;
- if(input.trim()!=='清空資料會爆炸⚠️'){alert('輸入不符，已取消，未清空任何資料。');return}
+ if(input.trim()!=='清空資料'){alert('輸入不符，已取消，未清空任何資料。');return}
  db.sales=[];
  db.float={};
  db.closeFloat={};
@@ -1369,7 +1381,7 @@ function showGuide(){
  closeBtn.className='secondary';closeBtn.style.flex='1';closeBtn.textContent='關閉';
  closeBtn.onclick=()=>overlay.remove();
  let dontShowBtn=document.createElement('button');
- dontShowBtn.className='primary';dontShowBtn.style.flex='1';dontShowBtn.textContent='不再顯示';
+ dontShowBtn.className='primary';dontShowBtn.style.flex='1';dontShowBtn.textContent='知道了，不再顯示';
  dontShowBtn.onclick=()=>{localStorage.setItem(GUIDE_KEY,'1');overlay.remove()};
  btnRow.appendChild(closeBtn);btnRow.appendChild(dontShowBtn);
  box.appendChild(btnRow);
