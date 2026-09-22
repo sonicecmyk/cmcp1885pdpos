@@ -2,1410 +2,715 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta name="theme-color" content="#17324d">
-<title>1885展場收銀</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>我的收藏櫃</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="收藏櫃">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAGkElEQVR4nO3dW29UVRjG8bXJ/gIUMG2JhnNnoKWljYF+BUNMBKPRKFSNRjBBjFfGE57PEUm8MRoRo954pX4HJQZtmWmh3kObIOUj6MW2tZ3umc4+rnmf/f8lO5IA05W1H5+8XbM7BM6zzf1D//heA/JzZ3E+8Pn1S//iBLhayg54KV9sc3+NEMPdWbxeeN4K/QIEGXGKDHYhL7y5v06QsaE7i9dyz1+uL0iQkUaewc7lhfr69xNkZLa0OJc5j5uyvgBhRl7yyFKm/yP6+g8QZuRuaXE2dS5T/cW+AYKM4i0tJA924r/QNzBMmFGapYVmoowmmqEJM8qWNHNdp3/LwAhhhje3FxpdZbWrhibM8K3bDIbdvZzXB6iArm3Y0FsGDtLO6AndZLFj9W4ZGCXM6Dm3F2ba5rbtb2wdJMzoXX/fjA91hxmauRn2xM7QWwfHaGf0tHYZbdPQtDNsWtfQWwcP0c4wIS6rMQ1NO8OuNendNjhOO8OcWzf/WMlxS0PTzrBtJcHbtk/QzjDr1o0rgXNrGpp2hn2Zf6YQ6CWBc85t234v4wbMu3Xj9yB0jmEDOv6boYk0NDBDQ0pw1/bDzM+QETJtQEkYkGgIYYaGlJATDiihoSGFhoYUGhpSOOWAFM6hIYUZGlKYoSGFhoaUkDhDCQ0NKczQkEJDQwoNDSmhC2ho6OCUA1KYoSGFGRpSaGhIoaEhhYaGFE45IIVzaEhhhoYUZmhIoaEhhZ/6hhQaGlKYoSGFhoYUzqEhhYaGFE45IIWGhhSZU47py7/4XoJ5Y4eP+l5CZsHdO+4z/c+6EeT8WQ72pqihbV6EuRjRvvq/v2kuszP09OWffS9BmtX9De7ZedTcyPHnbz/5XkJlHDpyv+8lJGK2oYE45mZo2rlc0X77v+/yMzQQR+YcGkWykxF+6hsbspQRGhpdsJMRczP0+JEHfC+hUqztN89DozNj+TDX0M45Nz55zPcSKsHiPps7h16+xiePF7IhiET76/8+Jz6H9r+E9NcEoS7ExORx7/c29bVj1zFzz3LEufLrj76XYN7E5IO+l5CZTKAB5ziHhhiTpxxAO2Fg7JwR6ISGhhRmaEihoSFFvqG/vfCD7yX0tMfPPOJ7CbkKdu5+SPIcmiAnoxLsYNfuh+UCfenC976XYNKJM4/6XkJmcjM0YU5PYe/MPm0XdyncEN+iPfR/L9Neofj3hEjDcCZkGvrSZ9/lvjlVFe2l/3ua5pKboVFtfII/YlnNBQ0NKfLvFCItm7mQaeiTz5/wvQQZlveShkYMu5kI9ux9TOqt74vnv/G9BNOmzp70vYRMZM6hl6+ps1P57lCFRHvn/x5yDt2CUCensmfBnr0npEaOVhfPf+17CT1t6uwTvpeQK/lAo1o45YAUPsEfUmhoSOF5aEihoSFF8hwa1VXZhv5r/ivfS/Bm39BTvpdQmGDfvicrdQ49X+EgtxoSDLbcsxydLsK8VrQf/u8Lz3KkMD//pe8l9CS1falEQ6vdtLxF++P/PuVxcQ6NiEgOgqGhp6W/Kbx+/QvfSzCjVnvG9xIyq8wMjWqo7Dk04tjPAg0NKTQ0VrGfBfmGrtWe9b0EE1T2ic+2g3POOZUcbOqBs/DCr3r9VH47JqheP+X9HuV1VeKdQucCV6+fbnc/Ky3aF//3J69LfoZejVCvpbgfQa12WvqdwnauXfvc9xK8qdef872EwgT1igYamjiHhpRKzdDQR0NDCg0NKaELaGjo4LPtIIUZGlKYoSGFhoYUGhpSaGhI4ZQDUgLnnDuw/wUeUIJ5s3OfBszQkBJG/2HwgAYaGlJWqnl4/4vM0TCrOfdJ4BwNDTHh/79kjoZ9Kw3dnPuYRMOk1dkN1/wOz0bDuDUzdHP2IxINU1ozG7b+AZXPOEM1rTvlaMx+SKJhQlxW1zV0hEzDpthz6MbsByQaPa1dRts0tHO0NCxq+05hY/Z9Eo2e1CmbG4b24PBLPOOBnnG1+V7HzG74LMdGLwCUpZssdpihVyPTsKGrp+2uNt8l0fCq2wwmCurB4ZeZp1G6q813us5p4uYdJdQo0UyCMDuXcjgeHX6FUKNwM823E+cz02xMsFGENEFelvmbvdGRVwk1cjPTeCtTJjP/TGHWBQDL8shSrmEcHXmNtkZiM403c8thIe06RrDRhekcg7ys0HFhbOR1go11phtvFJa7UuZfgg3nig3ystK/oRsbOUe4K2S6ca7UjHk/oSDgWsoOcKt/AdvaKM64NjBjAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAGkElEQVR4nO3dW29UVRjG8bXJ/gIUMG2JhnNnoKWljYF+BUNMBKPRKFSNRjBBjFfGE57PEUm8MRoRo954pX4HJQZtmWmh3kObIOUj6MW2tZ3umc4+rnmf/f8lO5IA05W1H5+8XbM7BM6zzf1D//heA/JzZ3E+8Pn1S//iBLhayg54KV9sc3+NEMPdWbxeeN4K/QIEGXGKDHYhL7y5v06QsaE7i9dyz1+uL0iQkUaewc7lhfr69xNkZLa0OJc5j5uyvgBhRl7yyFKm/yP6+g8QZuRuaXE2dS5T/cW+AYKM4i0tJA924r/QNzBMmFGapYVmoowmmqEJM8qWNHNdp3/LwAhhhje3FxpdZbWrhibM8K3bDIbdvZzXB6iArm3Y0FsGDtLO6AndZLFj9W4ZGCXM6Dm3F2ba5rbtb2wdJMzoXX/fjA91hxmauRn2xM7QWwfHaGf0tHYZbdPQtDNsWtfQWwcP0c4wIS6rMQ1NO8OuNendNjhOO8OcWzf/WMlxS0PTzrBtJcHbtk/QzjDr1o0rgXNrGpp2hn2Zf6YQ6CWBc85t234v4wbMu3Xj9yB0jmEDOv6boYk0NDBDQ0pw1/bDzM+QETJtQEkYkGgIYYaGlJATDiihoSGFhoYUGhpSOOWAFM6hIYUZGlKYoSGFhoaUkDhDCQ0NKczQkEJDQwoNDSmhC2ho6OCUA1KYoSGFGRpSaGhIoaEhhYaGFE45IIVzaEhhhoYUZmhIoaEhhZ/6hhQaGlKYoSGFhoYUzqEhhYaGFE45IIWGhhSZU47py7/4XoJ5Y4eP+l5CZsHdO+4z/c+6EeT8WQ72pqihbV6EuRjRvvq/v2kuszP09OWffS9BmtX9De7ZedTcyPHnbz/5XkJlHDpyv+8lJGK2oYE45mZo2rlc0X77v+/yMzQQR+YcGkWykxF+6hsbspQRGhpdsJMRczP0+JEHfC+hUqztN89DozNj+TDX0M45Nz55zPcSKsHiPps7h16+xiePF7IhiET76/8+Jz6H9r+E9NcEoS7ExORx7/c29bVj1zFzz3LEufLrj76XYN7E5IO+l5CZTKAB5ziHhhiTpxxAO2Fg7JwR6ISGhhRmaEihoSFFvqG/vfCD7yX0tMfPPOJ7CbkKdu5+SPIcmiAnoxLsYNfuh+UCfenC976XYNKJM4/6XkJmcjM0YU5PYe/MPm0XdyncEN+iPfR/L9Neofj3hEjDcCZkGvrSZ9/lvjlVFe2l/3ua5pKboVFtfII/YlnNBQ0NKfLvFCItm7mQaeiTz5/wvQQZlveShkYMu5kI9ux9TOqt74vnv/G9BNOmzp70vYRMZM6hl6+ps1P57lCFRHvn/x5yDt2CUCensmfBnr0npEaOVhfPf+17CT1t6uwTvpeQK/lAo1o45YAUPsEfUmhoSOF5aEihoSFF8hwa1VXZhv5r/ivfS/Bm39BTvpdQmGDfvicrdQ49X+EgtxoSDLbcsxydLsK8VrQf/u8Lz3KkMD//pe8l9CS1falEQ6vdtLxF++P/PuVxcQ6NiEgOgqGhp6W/Kbx+/QvfSzCjVnvG9xIyq8wMjWqo7Dk04tjPAg0NKTQ0VrGfBfmGrtWe9b0EE1T2ic+2g3POOZUcbOqBs/DCr3r9VH47JqheP+X9HuV1VeKdQucCV6+fbnc/Ky3aF//3J69LfoZejVCvpbgfQa12WvqdwnauXfvc9xK8qdef872EwgT1igYamjiHhpRKzdDQR0NDCg0NKaELaGjo4LPtIIUZGlKYoSGFhoYUGhpSaGhI4ZQDUgLnnDuw/wUeUIJ5s3OfBszQkBJG/2HwgAYaGlJWqnl4/4vM0TCrOfdJ4BwNDTHh/79kjoZ9Kw3dnPuYRMOk1dkN1/wOz0bDuDUzdHP2IxINU1ozG7b+AZXPOEM1rTvlaMx+SKJhQlxW1zV0hEzDpthz6MbsByQaPa1dRts0tHO0NCxq+05hY/Z9Eo2e1CmbG4b24PBLPOOBnnG1+V7HzG74LMdGLwCUpZssdpihVyPTsKGrp+2uNt8l0fCq2wwmCurB4ZeZp1G6q813us5p4uYdJdQo0UyCMDuXcjgeHX6FUKNwM823E+cz02xMsFGENEFelvmbvdGRVwk1cjPTeCtTJjP/TGHWBQDL8shSrmEcHXmNtkZiM403c8thIe06RrDRhekcg7ys0HFhbOR1go11phtvFJa7UuZfgg3nig3ystK/oRsbOUe4K2S6ca7UjHk/oSDgWsoOcKt/AdvaKM64NjBjAAAAAElFTkSuQmCC">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIuaIkeeahOaUtuiXj+argyIsICJzaG9ydF9uYW1lIjogIuaUtuiXj+argyIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjVmN2ZiIiwgInRoZW1lX2NvbG9yIjogIiMxMTE4MjciLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFMUUFBQUMwQ0FZQUFBQTl6UVl5QUFBR2tFbEVRVlI0bk8zZFcyOVVWUmpHOGJYSi9nSVVNRzJKaG5Obm9LV2xqWUYrQlVOTUJLUFJLRlNOUmpCQmpGZkdFNTdQRVVtOE1Sb1JvOTU0cFg0SEpRWnRtV21oM2tPYklPVWo2TVcydFozdW1jNCtybm1mL2Y4bE81SUEwNVcxSDUrOFhiTTdCTTZ6emYxRC8vaGVBL0p6WjNFKzhQbjFTLy9pQkxoYXlnNTRLVjlzYzMrTkVNUGRXYnhlZU40Sy9RSUVHWEdLREhZaEw3eTV2MDZRc2FFN2k5ZHl6MSt1TDBpUWtVYWV3YzdsaGZyNjl4TmtaTGEwT0pjNWo1dXl2Z0JoUmw3eXlGS20veVA2K2c4UVp1UnVhWEUyZFM1VC9jVytBWUtNNGkwdEpBOTI0ci9RTnpCTW1GR2FwWVZtb293bW1xRUpNOHFXTkhOZHAzL0x3QWhoaGplM0Z4cGRaYldyaGliTThLM2JESWJkdlp6WEI2aUFybTNZMEZzR0R0TE82QW5kWkxGajlXNFpHQ1hNNkRtM0YyYmE1cmJ0YjJ3ZEpNem9YWC9makE5MWh4bWF1Um4yeE03UVd3ZkhhR2YwdEhZWmJkUFF0RE5zV3RmUVd3Y1AwYzR3SVM2ck1RMU5POE91TmVuZE5qaE9POE9jV3pmL1dNbHhTMFBUenJCdEpjSGJ0ay9RempEcjFvMHJnWE5yR3BwMmhuMlpmNllRNkNXQmM4NXQyMzR2NHdiTXUzWGo5eUIwam1FRE92NmJvWWswTkRCRFEwcHcxL2JEek0rUUVUSnRRRWtZa0dnSVlZYUdsSkFURGlpaG9TR0Zob1lVR2hwU09PV0FGTTZoSVlVWkdsS1lvU0dGaG9hVWtEaERDUTBOS2N6UWtFSkRRd29ORFNtaEMyaG82T0NVQTFLWW9TR0ZHUnBTYUdoSW9hRWhoWWFHRkU0NUlJVnphRWhoaG9ZVVptaElvYUVoaFovNmhoUWFHbEtZb1NHRmhvWVV6cUVoaFlhR0ZFNDVJSVdHaGhTWlU0N3B5Ny80WG9KNVk0ZVArbDVDWnNIZE8rNHovYys2RWVUOFdRNzJwcWloYlY2RXVSalJ2dnEvdjJrdXN6UDA5T1dmZlM5Qm10WDlEZTdaZWRUY3lQSG5iei81WGtKbEhEcHl2KzhsSkdLMm9ZRTQ1bVpvMnJsYzBYNzd2Ky95TXpRUVIrWWNHa1d5a3hGKzZoc2JzcFFSR2hwZHNKTVJjelAwK0pFSGZDK2hVcXp0Tjg5RG96TmorVERYME00NU56NTV6UGNTS3NIaVBwczdoMTYreGllUEY3SWhpRVQ3Ni84K0p6Nkg5citFOU5jRW9TN0V4T1J4Ny9jMjliVmoxekZ6ejNMRXVmTHJqNzZYWU43RTVJTytsNUNaVEtBQjV6aUhoaGlUcHh4QU8yRmc3SndSNklTR2hoUm1hRWlob1NGRnZxRy92ZkNEN3lYMHRNZlBQT0o3Q2JrS2R1NStTUEljbWlBbm94THNZTmZ1aCtVQ2ZlbkM5NzZYWU5LSk00LzZYa0ptY2pNMFlVNVBZZS9NUG0wWGR5bmNFTitpUGZSL0w5TmVvZmozaEVqRGNDWmtHdnJTWjkvbHZqbFZGZTJsLzN1YTVwS2JvVkZ0ZklJL1lsbk5CUTBOS2ZMdkZDSXRtN21RYWVpVHo1L3d2UVFabHZlU2hrWU11NWtJOXV4OVRPcXQ3NHZudi9HOUJOT216cDcwdllSTVpNNmhsNitwczFQNTdsQ0ZSSHZuL3g1eUR0MkNVQ2Vuc21mQm5yMG5wRWFPVmhmUGYrMTdDVDF0NnV3VHZwZVFLL2xBbzFvNDVZQVVQc0VmVW1ob1NPRjVhRWlob1NGRjhod2ExVlhaaHY1ci9pdmZTL0JtMzlCVHZwZFFtR0RmdmljcmRRNDlYK0VndHhvU0RMYmNzeHlkTHNLOFZyUWYvdThMejNLa01ELy9wZThsOUNTMWZhbEVRNnZkdEx4RisrUC9QdVZ4Y1E2TmlFZ09ncUdocDZXL0tieCsvUXZmU3pDalZudkc5eEl5cTh3TWpXcW83RGswNHRqUEFnME5LVFEwVnJHZkJmbUdydFdlOWIwRUUxVDJpYysyZzNQT09aVWNiT3FCcy9EQ3IzcjlWSDQ3SnFoZVArWDlIdVYxVmVLZFF1Y0NWNitmYm5jL0t5M2FGLy8zSjY5TGZvWmVqVkN2cGJnZlFhMTJXdnFkd25hdVhmdmM5eEs4cWRlZjg3MkV3Z1QxaWdZYW1qaUhocFJLemREUVIwTkRDZzBOS2FFTGFHam80TFB0SUlVWkdsS1lvU0dGaG9ZVUdocFNhR2hJNFpRRFVnTG5uRHV3L3dVZVVJSjVzM09mQnN6UWtCSkcvMkh3Z0FZYUdsSldxbmw0LzR2TTBUQ3JPZmRKNEJ3TkRUSGgvNzlram9aOUt3M2RuUHVZUk1PazFka04xL3dPejBiRHVEVXpkSFAySXhJTlUxb3pHN2IrQVpYUE9FTTFyVHZsYU14K1NLSmhRbHhXMXpWMGhFekRwdGh6Nk1ic0J5UWFQYTFkUnRzMHRITzBOQ3hxKzA1aFkvWjlFbzJlMUNtYkc0YjI0UEJMUE9PQm5uRzErVjdIekc3NExNZEdMd0NVcFpzc2RwaWhWeVBUc0tHcnArMnVOdDhsMGZDcTJ3d21DdXJCNFplWnAxRzZxODEzdXM1cDR1WWRKZFFvMFV5Q01EdVhjamdlSFg2RlVLTndNODIzRStjejAyeE1zRkdFTkVGZWx2bWJ2ZEdSVndrMWNqUFRlQ3RUSmpQL1RHSFdCUURMOHNoU3JtRWNIWG1OdGtaaU00MDNjOHRoSWUwNlJyRFJoZWtjZzd5czBIRmhiT1IxZ28xMXBodHZGSmE3VXVaZmdnM25pZzN5c3RLL29Sc2JPVWU0SzJTNmNhN1VqSGsvb1NEZ1dzb09jS3QvQWR2YUtNNjROakJqQUFBQUFFbEZUa1N1UW1DQyIsICJzaXplcyI6ICIxODB4MTgwIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn1dfQ==">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#1d2730;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif}
-header{background:#17324d;color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:5}header h1{font-size:22px;margin:0 0 4px}.datebar{font-size:14px;opacity:.85}
-main{max-width:760px;margin:auto;padding:12px 12px 90px}.tabbar{position:sticky;top:74px;background:#eef2f5;z-index:4;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 0}
-.tabbar button{border:0;background:#dbe2e8;color:#344653;border-radius:10px;padding:12px 4px;font-weight:700;min-height:44px}.tabbar button.active{background:#17324d;color:#fff}
-.page{display:none}.page.active{display:block}.card{background:#fff;border-radius:15px;padding:15px;margin:10px 0;box-shadow:0 2px 8px #0000000b}
-h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:12px 0 8px}.muted{color:#697781;font-size:13px}
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:8px}.product{border:1px solid #d8dee3;border-radius:12px;padding:10px;text-align:center}.product .name{font-weight:700;font-size:14px}.price{font-size:13px;color:#63727d}.qty{width:100%;font-size:21px;text-align:center;margin-top:8px}
-input,select{width:100%;border:1px solid #ccd5dc;border-radius:9px;padding:10px;font-size:16px;background:#fff;min-height:42px}.qty{border:1px solid #ccd5dc;border-radius:9px}
-input[type=checkbox]{width:20px;flex:0 0 20px;padding:0;height:20px;min-height:0}
-input[type=file]{padding:8px;font-size:13px;min-height:0}
-.payments{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.paybtn{padding:12px 4px;border:1px solid #ccd5dc;background:#fff;border-radius:10px;font-weight:700;min-height:44px}.paybtn.active{background:#e4eef6;border:2px solid #17324d}
-.bigtotal{text-align:center;background:#f4f7f9;border-radius:12px;padding:12px;margin:12px 0}.bigtotal small{display:block;color:#697781}.bigtotal strong{font-size:30px}
-.primary{width:100%;background:#17324d;color:#fff;border:0;border-radius:11px;padding:13px;font-size:17px;font-weight:700;min-height:46px;cursor:pointer}.secondary{background:#e8edf1;color:#253640;border:0;border-radius:10px;padding:10px 12px;font-weight:700;min-height:42px;cursor:pointer}.danger{background:#b43d3d;color:white}
-.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#f5f7f8;border-radius:11px;padding:11px}.stat span{display:block;color:#697781;font-size:13px}.stat b{font-size:20px}
-table{width:100%;border-collapse:collapse}th,td{padding:8px 4px;border-bottom:1px solid #e7ebee}th{text-align:right;font-size:13px;color:#697781}th:first-child,td:first-child{text-align:left}.moneyInput{width:100%;text-align:center;padding:6px 2px;font-size:14px;min-height:36px}
-.cashTotal{font-size:26px;font-weight:800;text-align:right;margin-top:12px}.check{padding:12px;border-radius:11px;margin-top:10px;font-weight:700}.ok{background:#e7f5eb;color:#1e7040}.warn{background:#fff2df;color:#8a5a12}.bad{background:#fde8e8;color:#a52828}
-.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.listrow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
-details.card{padding:0}details.card summary{list-style:none;cursor:pointer;padding:15px;font-weight:700}details.card summary::-webkit-details-marker{display:none}details.card summary:after{content:"▾";float:right}details.card[open] summary:after{content:"▴"}details.card .inner{padding:0 15px 15px}
-.edititem{display:flex;align-items:center;gap:8px;margin:4px 0;flex-wrap:wrap}.edititem .lbl{flex:0 0 66px;font-size:13px;color:#454f57}
-.saleCard{border:1px solid #e3e8eb;border-radius:12px;padding:10px;margin:8px 0}
-.badge{display:inline-block;background:#e4eef6;color:#17324d;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700}
-.cashDual table{font-size:13px}.cashDual th,.cashDual td{padding:6px 3px}
-.summaryBox{background:#f5f7f8;border-radius:10px;padding:12px;font-size:13px;line-height:1.7;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap}
-.banner{background:linear-gradient(135deg,#17324d,#1f4a73);color:#fff;border-radius:14px;padding:16px;margin-bottom:10px;text-align:center}
-.banner .sub{font-size:12px;opacity:.85;margin-bottom:4px}
-.banner .main{font-size:20px;font-weight:800}
-.quickRangeBtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.quickRangeBtns button{flex:1;min-width:70px;padding:8px 4px;font-size:13px}
-.saveMsg{font-size:12px;color:#1e7040;font-weight:700}
-.chartWrap{padding:6px 0 0}
-.fieldLabel{font-size:11px;color:#697781;margin-bottom:2px}
-.prefixGroup{display:flex;border:1px solid #ccd5dc;border-radius:9px;overflow:hidden}
-.prefixGroup .ptag{background:#eef2f5;padding:0 8px;display:flex;align-items:center;font-size:12px;color:#33424d;font-weight:800;white-space:nowrap}
-.prefixGroup input{border:0;border-radius:0;flex:1;padding:8px;min-height:38px}
-.expoGroup{border:1px solid #d8e2ea;border-left:5px solid #17324d;border-radius:12px;padding:12px;margin:10px 0;background:#fbfdff}
-.expoGroup h3{margin:0 0 8px;color:#17324d}
-.expoRank{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #dfe7ed;background:#fff}
-.expoRank:first-child{border-radius:11px 11px 0 0}.expoRank:last-child{border-bottom:0;border-radius:0 0 11px 11px}
-.expoRank.champion{background:#fff5d7;border:2px solid #e4b43d;border-radius:11px;margin-bottom:6px}
-.expoRank .place{font-size:22px;font-weight:800;min-width:30px;color:#17324d}.expoRank .expoName{flex:1;font-weight:800}.expoRank .expoMoney{text-align:right;font-size:19px;font-weight:800;color:#17324d}.expoRank small{display:block;color:#697781;font-weight:400;font-size:12px}
-.reportTable{overflow-x:auto}.reportTable table{min-width:420px}.reportTotal{border-left-color:#317a5a}
- .productActions{display:flex;gap:5px;flex:0 0 auto}.productActions button{min-width:38px;padding:8px 6px}
-@media (max-width:600px){
- header{padding:14px 12px 11px}header h1{font-size:20px}main{padding:8px 8px 88px}.tabbar{top:66px;gap:4px}.tabbar button{font-size:12px;padding:10px 2px}
- .card{padding:12px;margin:8px 0}.row{flex-wrap:wrap}.row>*{min-width:0}.row input{min-width:130px}.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.product{padding:8px}.product .name{font-size:13px}
- .summary{grid-template-columns:repeat(2,1fr)}.summary .stat:last-child{grid-column:span 2}#quick .summary .stat{grid-column:auto}.edititem{gap:5px}.edititem .lbl{flex:0 0 42px}.edititem input{min-width:0}.expoRank{padding:9px}.expoRank .expoMoney{font-size:16px}.expoRank .expoName{font-size:13px}
- table{font-size:12px}.cashDual{overflow-x:auto}.chartWrap{overflow-x:auto}.chartWrap canvas{min-width:440px}
+:root{
+  --bg:#f6f1e9;--card:#fffaf3;--text:#3b332c;--muted:#8a7f6f;--line:#e6dcc8;
+  --primary:#3b332c;--accent:#b3623c;--accent2:#f3e3d3;--green:#6b7d4f;--red:#b3462f;
+  --greenbg:#e3ead9;--greentext:#4b5d38;--heroFrom:#3b332c;--heroTo:#b3623c;
+  --shadow:0 12px 32px rgba(59,51,44,.10);--radius:22px;
 }
-@media (max-width:380px){.cashDual{flex-direction:column}.summary{grid-template-columns:1fr 1fr}}
-@media (hover:hover) and (pointer:fine){.secondary:hover{background:#dde3e8}.primary:hover{background:#1e3d5c}.paybtn:hover{border-color:#17324d}}
-@media (min-width:900px){
- main{max-width:960px}
- .tabbar{grid-template-columns:repeat(4,180px);justify-content:center}
- body{display:flex;flex-direction:column;align-items:center}
- header{width:100%}
-}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
+button,input,select,textarea{font:inherit} button{cursor:pointer;border:0}
+.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:96px}
+header{position:sticky;top:0;z-index:20;background:rgba(245,247,251,.92);backdrop-filter:blur(18px);padding:16px 18px 12px;border-bottom:1px solid rgba(229,231,235,.7)}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;font-size:22px}.sub{font-size:12px;color:var(--muted);margin-top:3px}
+.iconbtn{width:42px;height:42px;border-radius:14px;background:#fff;box-shadow:var(--shadow);font-size:20px}
+main{padding:18px}
+.page{display:none}.page.active{display:block}
+.hero{background:linear-gradient(135deg,var(--heroFrom,#3b332c),var(--heroTo,#b3623c));color:#fff;border-radius:28px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px}
+.hero h1{margin:0 0 6px;font-size:26px}.hero p{margin:0;color:rgba(255,255,255,.85);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}.stat b{font-size:25px;display:block}.stat span{font-size:12px;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:0 6px 20px rgba(15,23,42,.04)}
+.card h2,.card h3{margin:0 0 12px}.row{display:flex;gap:10px;align-items:center}.between{justify-content:space-between}.wrap{flex-wrap:wrap}
+.btn{padding:11px 15px;border-radius:14px;background:#eef2f7;color:var(--text);font-weight:700}.btn.primary{background:var(--primary);color:#fff}.btn.purple{background:var(--accent);color:#fff}.btn.green{background:var(--greenbg);color:var(--greentext)}.btn.red{background:#fee2e2;color:#991b1b}.btn.small{padding:8px 11px;font-size:12px}
+input,select,textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 13px;outline:none}input:focus,select:focus,textarea:focus{border-color:#a78bfa;box-shadow:0 0 0 3px #ede9fe}
+label{font-size:12px;font-weight:800;color:#475569;display:block;margin:10px 0 6px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}
+.searchbar{display:flex;gap:8px}.searchbar input{flex:1}.searchbar .btn{white-space:nowrap}
+.result{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.result:last-child{border-bottom:0}
+.cover{width:62px;height:86px;object-fit:cover;border-radius:9px;background:#e5e7eb;flex:none}.cover.big{width:90px;height:126px}
+.meta{min-width:0;flex:1}.title{font-weight:900;line-height:1.35}.muted{color:var(--muted);font-size:12px;line-height:1.5}.tag{display:inline-block;background:#f1f5f9;border-radius:999px;padding:4px 8px;font-size:11px;margin:3px 3px 0 0}.tag.purple{background:var(--accent2);color:#5b21b6}.tag.green{background:var(--greenbg);color:var(--greentext)}
+.volgrid{display:flex;flex-wrap:wrap;gap:8px}
+.voltile{position:relative;min-width:46px;height:46px;padding:0 6px;border-radius:12px;background:#f1f5f9;color:#475569;font-weight:800;font-size:13px}
+.voltile.owned{background:var(--greenbg);color:var(--greentext)}
+.voltile.sell::after{content:'';position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--red)}
+.voltile.selected{outline:3px solid var(--accent);outline-offset:1px}
+.ed-badge{position:absolute;bottom:2px;left:3px;font-size:9px;font-weight:800;background:#111827;color:#fff;border-radius:5px;padding:0 3px;line-height:1.4}
+.op-badge{position:absolute;top:2px;left:3px;font-size:9px;font-weight:800;background:#57534e;color:#fff;border-radius:5px;padding:0 3px;line-height:1.4}
+.shelfgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:12px}
+.shelfcard{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer}
+.shelfcard .cwrap{position:relative;width:100%;aspect-ratio:3/4;background:var(--accent2)}
+.shelfcard .cwrap img{width:100%;height:100%;object-fit:cover;display:block}
+.shelfcard .pctdot{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:800;padding:2px 7px;border-radius:999px}
+.shelfcard .info{padding:8px 9px 10px}
+.shelfcard .title{font-size:12.5px;font-weight:800;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+.suggest-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.suggest-chip{background:var(--accent2);color:var(--text);border-radius:999px;padding:5px 10px;font-size:11.5px;font-weight:700}
+.empty{text-align:center;color:var(--muted);padding:28px 10px}.list{display:flex;flex-direction:column;gap:10px}
+.bookrow{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);padding:10px 12px;border-radius:16px}.bookrow .cover{width:44px;height:62px}.bookrow .title{font-size:14px}
+.progress{height:8px;background:#eef2f7;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.bottom{position:fixed;z-index:30;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);height:76px;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;align-items:center;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.nav{background:transparent;color:#64748b;font-size:11px;font-weight:800;height:60px}.nav span{display:block;font-size:21px;margin-bottom:3px}.nav.active{color:#111827}
+.addnav{position:relative}.addnav .plus{position:absolute;left:50%;top:-30px;transform:translateX(-50%);width:62px;height:62px;border-radius:22px;background:var(--accent);color:#fff;font-size:30px;box-shadow:0 14px 30px rgba(0,0,0,.28);border:5px solid var(--bg)}
+.addnav em{font-style:normal;position:relative;top:27px}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.48);z-index:50;display:none;align-items:flex-end}.modal.show{display:flex}.sheet{background:#fff;width:100%;max-width:760px;margin:auto;border-radius:28px 28px 0 0;max-height:92vh;overflow:auto;padding:18px 18px 30px}
+.handle{width:42px;height:5px;background:#d1d5db;border-radius:9px;margin:0 auto 15px}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111827;color:#fff;padding:11px 15px;border-radius:999px;font-size:13px;z-index:100;display:none}.toast.show{display:block}
+.switch{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}.switch input{width:auto}
+.camera{border:2px dashed #c4b5fd;background:#faf5ff;border-radius:18px;padding:18px;text-align:center}
+.notice{font-size:12px;background:#f8fafc;border-radius:15px;padding:12px;color:#475569;line-height:1.6}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}.sheet{border-radius:28px;margin-bottom:20px}.modal{align-items:center}.formgrid.three{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
-<header><h1>🧾 展場收銀</h1><div class="datebar" id="headerDate"></div><div class="datebar" id="headerCity" style="margin-top:2px;font-weight:700"></div></header>
+<div class="app">
+<header>
+  <div class="top">
+    <div><div class="brand">我的收藏櫃</div></div>
+    <button class="iconbtn" onclick="openShare()">⚙</button>
+  </div>
+</header>
+
 <main>
-<div class="tabbar">
-<button id="t-sale" class="active" onclick="tab('sale')">收銀</button>
-<button id="t-cash" onclick="tab('cash')">清點</button>
-<button id="t-report" onclick="tab('report')">今日營收</button>
-<button id="t-history" onclick="tab('history')">日期報表</button>
-</div>
-
-<section id="sale" class="page active">
-
-<details class="card" id="appSettings">
-<summary>⚙️ 展場設定</summary>
-<div class="inner">
-<h3>📍 本場展場城市</h3>
-<p class="muted">每次收款會記錄當下選擇的旅展；之後切換到下一場，舊交易與報表不會被覆寫。</p>
-<select id="citySelect" onchange="onCityChange()"></select>
-<input id="cityCustom" placeholder="輸入自訂展場名稱" style="display:none;margin-top:8px">
-<button class="primary" style="margin-top:10px" onclick="saveCity()">儲存城市設定</button>
-<h3 style="margin-top:18px">🛠️ 販售項目管理</h3>
-<div id="manageList"></div>
-<div class="row" style="margin-top:4px;align-items:center">
-<button class="secondary" onclick="manualSaveAllProducts()">💾 儲存商品設定</button>
-<span class="saveMsg" id="saveMsgProducts"></span>
-</div>
-<div class="row" style="margin-top:8px">
-<input id="newProdName" placeholder="項目名稱">
-<input id="newProdPrice" type="number" min="0" placeholder="金額">
-</div>
-<div class="row" style="margin-top:6px">
-<label class="muted" style="flex:0 0 92px;display:flex;align-items:center;gap:6px"><input type="checkbox" id="newProdNeedSerial">需要票號</label>
-<input id="newProdPrefix" placeholder="票號前綴 例如BC">
-<button class="secondary" style="flex:0 0 60px" onclick="addProduct()">新增</button>
-</div>
-</div>
-</details>
-
-<div class="card">
-<h2>新增銷售</h2>
-<h3>銷售日期</h3>
-<input type="date" id="saleDate" onchange="renderProductGrid();renderQuick()">
-<h3>販售項目</h3>
-<div class="products" id="productsGrid"></div>
-<h3>備註（選填）</h3>
-<input id="saleNote" type="text" placeholder="例如：客人現場改數量、贈品等突發狀況">
-<h3>折扣（選填）</h3>
-<input id="saleDiscount" type="number" min="0" value="0" placeholder="折扣金額" oninput="calcSale()">
-<div class="bigtotal">
-<small>本筆金額</small>
-<div id="discountRow" class="muted" style="display:none">小計 $<span id="saleSubtotal">0</span>　折扣 -$<span id="saleDiscountShow">0</span></div>
-<strong id="saleTotal">$0</strong>
-</div>
-<h3>付款方式</h3>
-<div class="payments">
-<button class="paybtn active" data-pay="現金" onclick="choosePay(this)">現金</button>
-<button class="paybtn" data-pay="匯款" onclick="choosePay(this)">匯款</button>
-<button class="paybtn" data-pay="刷卡" onclick="choosePay(this)">刷卡</button>
-</div>
-<div id="transferField" style="display:none;margin-top:8px">
-<input type="text" id="transferLast5" placeholder="匯款帳號末5碼" maxlength="5" inputmode="numeric">
-</div>
-<br><button class="primary" onclick="addSale()">＋ 完成收款</button>
-</div>
-
-<div class="card"><h2 id="quickTitle">快速統計</h2><div id="quick"></div></div>
+<section id="home" class="page active">
+  <div class="hero"><h1>記錄你每一個收藏</h1><p>搜尋書名／作者、掃 ISBN、記錄每一集的價格與收藏狀態。</p></div>
+  <div class="grid">
+    <div class="stat"><b id="sBooks">0</b><span>已收藏本數</span></div>
+    <div class="stat"><b id="sSeries">0</b><span>收藏系列</span></div>
+    <div class="stat"><b id="sSpend">$0</b><span>實際花費</span></div>
+    <div class="stat"><b id="sWant">0</b><span>待購入</span></div>
+  </div>
+  <div class="card">
+    <div class="row between"><h2>快速開始</h2><button class="btn purple" onclick="openEditor()">＋ 新增作品</button></div>
+    <div class="row wrap">
+      <button class="btn" onclick="go('want')">想買清單</button>
+      <button class="btn" onclick="go('stats')">看作者統計</button>
+    </div>
+  </div>
+  <div class="card"><h2>收藏進度</h2><div id="homeSeries" class="list"></div></div>
 </section>
 
-<section id="cash" class="page">
-<div class="card">
-<h2>💵 原零用金</h2>
-<p class="muted">輸入今天開店準備的零用金總額。</p>
-<input type="number" id="floatAmount" min="0" placeholder="例如 8,000">
-<button class="primary" style="margin-top:10px" onclick="saveFloat()">儲存原零用金</button>
-</div>
-<div class="card">
-<h2>🔄 今日結算零用金</h2>
-<p class="muted">收班時，先把要留下當零用金的各面額數量點出來（正常應與「原零用金」相同）。</p>
-<div id="closeFloatTable"></div>
-<div class="cashTotal">結算零用金：$<span id="closeFloatTotal">0</span></div>
-<button class="primary" onclick="saveCloseFloat()">儲存結算零用金</button>
-</div>
-<div class="card">
-<h2>🧮 今日營收現金</h2>
-<p class="muted">扣除零用金之後，屬於今天營收的現金，請點清各面額數量，系統會自動比對差額。</p>
-<div id="countTable"></div>
-<div class="cashTotal">今日營收現金：$<span id="countTotal">0</span></div>
-<div id="cashCheck"></div>
-<button class="primary" onclick="saveCount()">儲存今日營收現金</button>
-</div>
-<details class="card">
-<summary>🎫 票券／發票清點</summary>
-<div class="inner">
-<p class="muted">輸入起訖票號，快速計算張數（例如盤點剩餘票券／發票）。</p>
-<div class="row">
-<input id="stockStart" type="text" placeholder="起始票號 例如 000000">
-<input id="stockEnd" type="text" placeholder="結束票號 例如 000015">
-</div>
-<button class="secondary" style="width:100%;margin-top:8px" onclick="calcStock()">計算張數</button>
-<div id="stockResult" class="muted" style="margin-top:8px;font-size:15px;font-weight:700"></div>
-</div>
-</details>
+<section id="books" class="page">
+  <div class="row between"><div><h2>我的收藏</h2><div class="muted">依作品分組顯示，點一下看每一項的價格與狀態。</div></div></div>
+  <div class="card">
+    <div class="searchbar"><input id="localSearch" placeholder="搜尋：書名／作者品牌／ISBN" oninput="renderBooks()"><button class="btn" onclick="renderBooks()">搜尋</button></div>
+    <div class="formgrid" style="margin-top:10px">
+      <div><label>類型</label><select id="bookType" onchange="renderBooks()"><option value="all">全部類型</option><option value="書籍">書籍</option><option value="專輯與周邊">專輯與周邊</option><option value="IP公仔／娃娃">IP公仔／娃娃</option><option value="其他收藏">其他收藏</option></select></div>
+      <div><label>篩選</label><select id="bookFilter" onchange="renderBooks()"><option value="all">全部</option><option value="owned">已收藏</option><option value="unowned">待購入</option><option value="sell">待出售</option><option value="ongoing">連載中（要追新集）</option><option value="oop">已絕版</option></select></div>
+      <div><label>排序</label><select id="bookSort" onchange="renderBooks()"><option value="default">新增順序</option><option value="dateDesc">購入日期：新到舊</option><option value="dateAsc">購入日期：舊到新</option><option value="priceDesc">價格：高到低</option><option value="priceAsc">價格：低到高</option><option value="unownedFirst">未收藏優先</option></select></div>
+    </div>
+  </div>
+  <div id="bookList" class="shelfgrid"></div>
 </section>
 
-<section id="report" class="page">
-<div class="card">
-<div class="row"><span class="muted" style="flex:0 0 60px">日期</span><input type="date" id="reportEditDate" onchange="renderReport()"></div>
-</div>
-<div id="reportCapture">
-<div id="reportBanner"></div>
-<div class="card"><h2>📊 營收統計</h2><div id="todayReport"></div></div>
-<div class="card"><h2>💰 現金驗算</h2><div id="todayCash"></div></div>
-<div class="card"><h2>🔖 票號彙總</h2><div id="serialList"></div></div>
-</div>
-<div class="row" style="margin:10px 0">
-<button class="secondary" onclick="downloadImage('reportCapture','今日營收_'+(reportEditDate.value||today))">⬇️ 圖片報表</button>
-<button class="secondary" onclick="exportExcel(salesOf(reportEditDate.value||today),'今日營收_'+(reportEditDate.value||today),reportEditDate.value||today,false)">⬇️ Excel報表</button>
-</div>
-<div class="card"><h2>📋 文字摘要</h2><div id="reportSummary"></div></div>
-<div class="card"><h2>🧾 交易明細（可調整數量／折扣／付款方式／票號／備註）</h2><div id="saleEdit"></div>
-<div class="row" style="margin-top:8px;align-items:center">
-<button class="secondary" onclick="manualSaveAllSales()">💾 儲存交易明細</button>
-<span class="saveMsg" id="saveMsgSales"></span>
-</div>
-</div>
-<div class="card"><h2>🏦 匯款紀錄（末5碼）</h2><div id="transferList"></div></div>
+<section id="want" class="page">
+  <div class="card"><h2>想買／待補集數</h2><div class="muted">可以把缺的單集留在這裡，之後一鍵轉成已購入。</div><div id="wantBudget" class="muted" style="margin-top:6px;font-weight:800"></div></div>
+  <div id="wantList" class="list"></div>
 </section>
 
-<section id="history" class="page">
-<div class="card">
-<h2>📆 區間報表</h2>
-<div class="row">
-<input type="date" id="rangeStart">
-<input type="date" id="rangeEnd">
-</div>
-<div class="quickRangeBtns">
-<button class="secondary" onclick="quickRange('7d')">近7天</button>
-<button class="secondary" onclick="quickRange('1m')">近1個月</button>
-<button class="secondary" onclick="quickRange('6m')">近6個月</button>
-<button class="secondary" onclick="quickRange('1y')">近1年</button>
-</div>
-<button class="secondary" style="width:100%;margin-top:8px" onclick="renderRange()">統計區間</button>
-<div id="rangeCapture">
-<div id="rangeBanner"></div>
-<div id="rangeReport" style="margin-top:10px"></div>
-<div class="chartWrap"><h3 style="margin:16px 0 4px">📊 各旅展營業額比較</h3><p class="muted" style="margin:0 0 4px">每根長條代表一場旅展，方便快速比較表現。</p><canvas id="rangeChartCanvas" height="160"></canvas></div>
-<div class="chartWrap"><h3 style="margin:18px 0 4px">📅 各旅展每日營業額</h3><p class="muted" style="margin:0 0 4px">可看出各場的高峰日；不同顏色代表不同旅展。</p><canvas id="dailyExpoChartCanvas" height="210"></canvas></div>
-</div>
-<div class="row" style="margin:10px 0">
-<button class="secondary" onclick="downloadImage('rangeCapture','區間報表_'+(rangeStart.value||'')+'_'+(rangeEnd.value||''))">⬇️ 圖片報表</button>
-<button class="secondary" onclick="exportExcelRange()">⬇️ Excel報表</button>
-</div>
-<div id="rangeSummary"></div>
-<div id="rangeTransfer" style="margin-top:10px"></div>
-</div>
-
-<details class="card" id="dailyRevenueDetails"><summary>🗓️ 每日營收列表（需要時展開）</summary><div class="inner"><div id="dateList"></div></div></details>
-
-<details class="card">
-<summary>📥 匯入交易資料（Excel）</summary>
-<div class="inner">
-<p class="muted">請先下載範例檔，依格式填寫後上傳。匯入為「附加」，不會覆蓋或刪除既有資料。</p>
-<button class="secondary" style="width:100%" onclick="downloadImportTemplate()">⬇️ 下載範例檔</button>
-<input type="file" accept=".xlsx,.xls" id="importFile" style="margin-top:8px" onchange="importExcelFile(this)">
-</div>
-</details>
-
-<div class="card" style="border:1px solid #f3c8c8">
-<h2>⚠️ 清空交易資料</h2>
-<p class="muted">會清空所有「交易紀錄」與「現金清點」資料（不含商品設定、城市設定）。因為資料會透過雲端同步，清空後會影響所有使用同一組班次代碼的人，此動作無法復原，請先確認已備份需要的資料。</p>
-<button class="secondary danger" style="width:100%" onclick="resetTransactionData()">🗑️ 清空所有交易與清點資料</button>
-</div>
+<section id="stats" class="page">
+  <div class="card"><h2>收藏統計</h2><div id="statsSummary"></div></div>
+  <div class="card"><h3>作者</h3><div id="authorStats"></div></div>
+  <div class="card"><h3>分類／類型</h3><div id="catStats"></div></div>
 </section>
 </main>
-<button id="guideFab" onclick="showGuide()" title="操作說明" style="position:fixed;right:16px;bottom:16px;width:50px;height:50px;border-radius:50%;background:#17324d;color:#fff;border:0;font-size:22px;box-shadow:0 4px 14px rgba(0,0,0,0.35);z-index:40;cursor:pointer">❔</button>
 
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<nav class="bottom">
+  <button class="nav active" data-page="home" onclick="go('home')"><span>⌂</span>首頁</button>
+  <button class="nav" data-page="books" onclick="go('books')"><span>▣</span>收藏櫃</button>
+  <button class="nav addnav" onclick="openEditor()"><div class="plus">＋</div><em>新增</em></button>
+  <button class="nav" data-page="want" onclick="go('want')"><span>♡</span>想買</button>
+  <button class="nav" data-page="stats" onclick="go('stats')"><span>◔</span>統計</button>
+</nav>
+</div>
+
+<div id="modal" class="modal"><div class="sheet" style="position:relative">
+  <button class="iconbtn" style="position:absolute;top:14px;right:14px;width:34px;height:34px;font-size:15px;z-index:5" onclick="confirmCloseModal()">✕</button>
+  <div class="handle"></div><div id="modalBody"></div>
+</div></div>
+<div id="toast" class="toast"></div>
+<input type="file" id="importFile" accept="application/json" style="display:none" onchange="importData(this)">
+
 <script>
-const DEN=[1,5,10,50,100,500,1000];
-const KEY='expoCashierV3';
-const KEY_OLD='expoCashierV2';
-const GUIDE_KEY='expoCashierGuideSeen';
-const ROOMCODE_KEY='expoCashierRoomCode';
-const DEVICE_KEY='expoCashierDeviceId';
-const firebaseConfig={
- apiKey:"AIzaSyDLmeRFQoIlQz8S5JAAffZJ0KzjY5iMNUo",
- authDomain:"cmcp1885posapp.firebaseapp.com",
- databaseURL:"https://cmcp1885posapp-default-rtdb.asia-southeast1.firebasedatabase.app",
- projectId:"cmcp1885posapp",
- storageBucket:"cmcp1885posapp.firebasestorage.app",
- messagingSenderId:"852544410115",
- appId:"1:852544410115:web:684711cec2fc193418f436"
+const KEY='paperBooksV2';
+function uid(){return (crypto.randomUUID?crypto.randomUUID():'id-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2))}
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{
+  series:[]
 };
-let fbApp=null,rtdb=null,currentRoomRef=null,roomCode='';
-try{
- if(typeof firebase!=='undefined'){
-  fbApp=firebase.initializeApp(firebaseConfig);
-  rtdb=firebase.database();
+db.settings=db.settings||{theme:'侘寂日系'};
+db.suggest=db.suggest||{};
+const THEMES={
+ '侘寂日系':{bg:'#f6f1e9',card:'#fffaf3',text:'#3b332c',muted:'#8a7f6f',line:'#e6dcc8',primary:'#3b332c',accent:'#b3623c',accent2:'#f3e3d3',green:'#6b7d4f',red:'#b3462f',greenbg:'#e3ead9',greentext:'#4b5d38',heroFrom:'#3b332c',heroTo:'#b3623c'},
+ '薄荷清新':{bg:'#f1f8f6',card:'#ffffff',text:'#1f2d28',muted:'#6b8079',line:'#dcece6',primary:'#1f2d28',accent:'#2f9e78',accent2:'#dff3ea',green:'#2f9e78',red:'#d15b4f',greenbg:'#dff3ea',greentext:'#1f6b4f',heroFrom:'#1f2d28',heroTo:'#2f9e78'},
+ '櫻花粉':{bg:'#fdf3f6',card:'#ffffff',text:'#3d2b30',muted:'#9c7f88',line:'#f5dee5',primary:'#3d2b30',accent:'#e37fa0',accent2:'#fbe4ec',green:'#7a9b6b',red:'#d1495b',greenbg:'#eaf1e3',greentext:'#4f6b43',heroFrom:'#3d2b30',heroTo:'#e37fa0'},
+ '深夜藍':{bg:'#12141c',card:'#1b1f2c',text:'#eef1f8',muted:'#8891a8',line:'#2a2f42',primary:'#eef1f8',accent:'#7c9bff',accent2:'#26304d',green:'#4ade80',red:'#f87171',greenbg:'#1c3326',greentext:'#7fe3ab',heroFrom:'#1b1f2c',heroTo:'#3c4a8f'},
+ '經典紫':{bg:'#f5f7fb',card:'#ffffff',text:'#172033',muted:'#6b7280',line:'#e5e7eb',primary:'#111827',accent:'#7c3aed',accent2:'#ede9fe',green:'#15803d',red:'#dc2626',greenbg:'#dcfce7',greentext:'#166534',heroFrom:'#111827',heroTo:'#312e81'}
+};
+function applyTheme(name){
+ let t=THEMES[name]||THEMES['侘寂日系'];
+ let root=document.documentElement.style;
+ Object.entries(t).forEach(([k,v])=>root.setProperty('--'+k,v));
+ let m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t.primary)
+}
+applyTheme(db.settings.theme);
+function save(){localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
+function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function langSelectHtml(id,current){
+ let known=['繁體中文','簡體中文','日文','英文','韓文'];
+ let val=current&&known.includes(current)?current:(current?'其他':'繁體中文');
+ let otherVal=(current&&!known.includes(current))?current:'';
+ return `<select id="${id}" onchange="document.getElementById('${id}Other').style.display=this.value==='其他'?'block':'none'">${[...known,'其他'].map(o=>`<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('')}</select><input id="${id}Other" placeholder="請輸入語言" value="${esc(otherVal)}" style="margin-top:6px;display:${val==='其他'?'block':'none'}">`
+}
+function readLang(id){let sel=document.getElementById(id).value;return sel==='其他'?(document.getElementById(id+'Other').value.trim()||'其他'):sel}
+function editionSelectHtml(id,current){
+ let known=['一般版','特裝版','簽名版','限定版'];
+ let val=current&&known.includes(current)?current:(current?'其他':'一般版');
+ let otherVal=(current&&!known.includes(current))?current:'';
+ return `<select id="${id}" onchange="document.getElementById('${id}Other').style.display=this.value==='其他'?'block':'none'">${[...known,'其他'].map(o=>`<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('')}</select><input id="${id}Other" placeholder="請輸入版本" value="${esc(otherVal)}" style="margin-top:6px;display:${val==='其他'?'block':'none'}">`
+}
+function readEdition(id){let sel=document.getElementById(id).value;return sel==='其他'?(document.getElementById(id+'Other').value.trim()||'其他'):sel}
+const COLLECTION_TYPES=['書籍','專輯與周邊','IP公仔／娃娃','其他收藏'];
+const CATEGORY_PRESETS={
+ '書籍':['漫畫','小說','輕小說','工具書','雜誌','寫真集','畫冊'],
+ '專輯與周邊':['專輯','海報','吊飾','珍藏卡','應援小物','服飾'],
+ 'IP公仔／娃娃':['公仔','黏土人','景品／Scale Figure','絨毛娃娃','吊飾'],
+ '其他收藏':[]
+};
+const TYPE_FORM_CONFIG={
+ '書籍':{authorLabel:'作者',authorField:'author',showItemKind:false,showISBN:true,showPages:true,showStatus:true,publisherLabel:'出版社',dateLabel:'出版日'},
+ '專輯與周邊':{authorLabel:'歌手／團體',authorField:'artist',showItemKind:true,itemKindLabel:'周邊品項',itemKindPlaceholder:'例如：手燈、毛巾、小卡',itemKindField:'merch',showISBN:false,showPages:false,showStatus:false,publisherLabel:'發行／廠商',dateLabel:'發售日'},
+ 'IP公仔／娃娃':{authorLabel:'IP名稱',authorField:'ip',showItemKind:true,itemKindLabel:'系列／波次',itemKindPlaceholder:'例如：麻糬系列、機場限定',itemKindField:'wave',showISBN:false,showPages:false,showStatus:false,publisherLabel:'廠商',dateLabel:'發售日'},
+ '其他收藏':{authorLabel:'作者／品牌',authorField:'other',showItemKind:true,itemKindLabel:'項目類型',itemKindPlaceholder:'',itemKindField:'itemtype',showISBN:false,showPages:false,showStatus:true,publisherLabel:'廠商',dateLabel:'日期'}
+};
+function updateFormForType(prefix,type){
+ let cfg=TYPE_FORM_CONFIG[type]||TYPE_FORM_CONFIG['書籍'];
+ let setLabel=(wrapId,text)=>{let el=document.querySelector(`#${prefix}${wrapId} > label`);if(el)el.textContent=text};
+ let setShow=(wrapId,show)=>{let el=document.getElementById(prefix+wrapId);if(el)el.style.display=show?'':'none'};
+ setLabel('AuthorWrap',cfg.authorLabel);
+ setShow('ItemKindWrap',!!cfg.showItemKind);
+ if(cfg.showItemKind){
+  setLabel('ItemKindWrap',cfg.itemKindLabel);
+  let inp=document.getElementById(prefix+'ItemKind');if(inp)inp.placeholder=cfg.itemKindPlaceholder||'';
+  let sc=document.getElementById(prefix+'ItemKindSuggest');if(sc)sc.innerHTML=suggestChipsHtml(type,cfg.itemKindField,prefix+'ItemKind',false)
  }
-}catch(e){console.error('Firebase init failed',e)}
-let deviceId=localStorage.getItem(DEVICE_KEY);
-if(!deviceId){deviceId='dev_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem(DEVICE_KEY,deviceId)}
-const TW_CITIES=['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','嘉義市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣'];
-let selectedPay='現金';
-const dateStr=()=>new Date().toLocaleDateString('sv-SE');
-const fmtDate=d=>d.toLocaleDateString('sv-SE');
-let today=dateStr();
-
-function uid(prefix){return prefix+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
-function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function money(n){return Number(n||0).toLocaleString('zh-TW')}
-
-/* ---------- 通關密語（僅前端阻擋，非真正安全機制） ---------- */
-const ACCESS_CODE='cm18852026';
-const UNLOCK_KEY='expoCashierUnlocked';
-function checkAccess(){return localStorage.getItem(UNLOCK_KEY)==='1'}
-function showLock(){
- if(document.getElementById('lockOverlay'))return;
- let overlay=document.createElement('div');
- overlay.id='lockOverlay';
- overlay.style.cssText='position:fixed;inset:0;background:#17324d;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px';
- overlay.innerHTML=`
-  <div style="background:#fff;border-radius:16px;padding:28px 24px;max-width:340px;width:100%;text-align:center">
-   <div style="font-size:40px;margin-bottom:8px">🔒</div>
-   <h2 style="margin:0 0 8px">1885展場收銀</h2>
-   <p class="muted" style="margin-bottom:16px">請輸入通關密語才能使用</p>
-   <input id="lockInput" type="password" placeholder="請輸入密語" style="text-align:center;font-size:18px" autocomplete="off">
-   <div id="lockError" style="color:#a52828;font-size:13px;margin-top:8px;display:none">密語錯誤，請再試一次</div>
-   <button class="primary" style="margin-top:14px" onclick="tryUnlock()">進入</button>
-  </div>`;
- document.body.appendChild(overlay);
- let inp=document.getElementById('lockInput');
- inp.addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock()});
- setTimeout(()=>{inp.focus()},150);
+ setShow('ISBN13Wrap',cfg.showISBN);setShow('ISBN10Wrap',cfg.showISBN);
+ setShow('PagesWrap',cfg.showPages);
+ setShow('StatusWrap',cfg.showStatus);
+ setLabel('PublisherWrap',cfg.publisherLabel);
+ setLabel('DateWrap',cfg.dateLabel);
+ let cw=document.getElementById(prefix+'CatWrap');if(cw)cw.innerHTML=categorySelectHtml(prefix+'Cat',type,'');
+ let asug=document.getElementById(prefix+'AuthorSuggest');if(asug)asug.innerHTML=suggestChipsHtml(type,cfg.authorField,prefix+'Author',true)
 }
-function tryUnlock(){
- let inp=document.getElementById('lockInput');
- let val=inp?inp.value.trim():'';
- if(val===ACCESS_CODE){
-  localStorage.setItem(UNLOCK_KEY,'1');
-  let ov=document.getElementById('lockOverlay');
-  if(ov)ov.remove();
-  if(!currentRoomRef&&roomCode){connectRoom(roomCode)}
- } else {
-  let err=document.getElementById('lockError');
-  if(err)err.style.display='block';
-  if(inp){inp.value='';inp.focus()}
- }
+function typeSelectHtml(id,current,onchangeExtra){
+ let val=COLLECTION_TYPES.includes(current)?current:'書籍';
+ return `<select id="${id}" onchange="${onchangeExtra||''}">${COLLECTION_TYPES.map(o=>`<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('')}</select>`
 }
-if(!checkAccess()){showLock()}
-
-function loadDb(){
- let raw=localStorage.getItem(KEY);
- if(raw){try{return JSON.parse(raw)}catch(e){}}
- let base={products:[
-  {id:'ticket',name:'門票',price:100,needSerial:true,serialPrefix:'BC'},
-  {id:'pack',name:'套票',price:1588,needSerial:true,serialPrefix:'BC'},
-  {id:'roll',name:'肉捲',price:280,needSerial:false,serialPrefix:''}
- ],sales:[],float:{},closeFloat:{},floatAmount:{},count:{},nextSerial:{},city:''};
- let old=localStorage.getItem(KEY_OLD);
- if(old){
-  try{
-   let o=JSON.parse(old);
-   base.float=o.float||{};
-   base.count=o.count||{};
-   base.sales=(o.sales||[]).map((s,i)=>{
-    let items=[];
-    if(s.ticket) items.push({id:'ticket',name:'門票',price:100,qty:s.ticket});
-    if(s.pack) items.push({id:'pack',name:'套票',price:1588,qty:s.pack});
-    if(s.roll) items.push({id:'roll',name:'肉捲',price:280,qty:s.roll});
-    return {id:uid('m'),date:s.date,time:s.time||'',items,discount:0,subtotal:s.total,total:s.total,pay:s.pay};
-   });
-  }catch(e){}
- }
- return base;
+function categorySelectHtml(id,type,current){
+ let known=CATEGORY_PRESETS[type]||[];
+ let val=current&&known.includes(current)?current:(current?'其他':(known[0]||'其他'));
+ let otherVal=(current&&!known.includes(current))?current:'';
+ let opts=[...known,'其他'];
+ return `<select id="${id}" onchange="document.getElementById('${id}Other').style.display=this.value==='其他'?'block':'none'">${opts.map(o=>`<option value="${o}" ${val===o?'selected':''}>${o}</option>`).join('')}</select><input id="${id}Other" placeholder="請輸入分類" value="${esc(otherVal)}" style="margin-top:6px;display:${val==='其他'?'block':'none'}">`
 }
- function normalizeDb(data){
-  let safe=data&&typeof data==='object'&&!Array.isArray(data)?data:{};
-  safe.products=Array.isArray(safe.products)?safe.products:[];
-  safe.sales=Array.isArray(safe.sales)?safe.sales:[];
-  ['float','closeFloat','floatAmount','count','nextSerial'].forEach(key=>{
-   if(!safe[key]||typeof safe[key]!=='object'||Array.isArray(safe[key]))safe[key]={};
-  });
-  if(typeof safe.city!=='string')safe.city='';
-  safe.products=safe.products.filter(p=>p&&typeof p==='object');
- safe.products.forEach(p=>{if(p.needSerial===undefined)p.needSerial=true;if(p.serialPrefix===undefined)p.serialPrefix='';p.serialPrefix=(p.serialPrefix||'').toUpperCase()});
-  return safe;
- }
- let db=normalizeDb(loadDb());
- function save(options={}){
-  localStorage.setItem(KEY,JSON.stringify(db));
-  if(options.cloud!==false)try{pushToCloud()}catch(e){console.error('pushToCloud outer failure',e)}
+function readCategory(id){let sel=document.getElementById(id).value;return sel==='其他'?(document.getElementById(id+'Other').value.trim()||'其他'):sel}
+function bumpSuggest(type,field,val){
+ val=(val||'').trim();if(!val)return;
+ db.suggest[type]=db.suggest[type]||{};
+ db.suggest[type][field]=db.suggest[type][field]||{};
+ db.suggest[type][field][val]=(db.suggest[type][field][val]||0)+1
 }
-function pushToCloud(){
- if(!roomCode||!currentRoomRef)return;
- let payload;
- try{
-  payload=JSON.parse(JSON.stringify(Object.assign({},db,{_updatedBy:deviceId,_updatedAt:Date.now()})));
- }catch(e){console.error('sync payload build failed',e);return}
- try{
-  currentRoomRef.set(payload).catch(err=>{console.error('sync failed',err);let el=document.getElementById('syncStatus');if(el)el.textContent='⚠️ 同步失敗：'+err.message});
- }catch(err){
-  console.error('sync failed (sync throw)',err);
- }
+function topSuggest(type,field,n=6){
+ let m=(db.suggest[type]||{})[field]||{};
+ return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,n).map(x=>x[0])
 }
- function pushSaleToCloud(sale,date,serialAdvances){
-  if(!roomCode||!currentRoomRef)return;
-  let updates={};
-  serialAdvances.forEach(a=>{updates['nextSerial/'+date+'_'+a.pid]=a.newNext});
-  try{
-   currentRoomRef.child('sales').transaction(rows=>{
-    let current=Array.isArray(rows)?rows:Object.values(rows||{}).filter(row=>row&&typeof row==='object');
-    return current.some(row=>row&&row.id===sale.id)?current:current.concat([sale]);
-   }).catch(err=>{console.error('sale sync failed',err)});
-   if(Object.keys(updates).length)currentRoomRef.update(updates).catch(err=>{console.error('serial sync failed',err)});
-  }catch(err){console.error('sale sync failed (sync throw)',err)}
- }
-
-document.getElementById('headerDate').textContent=today;
-document.getElementById('reportEditDate').value=today;
-document.getElementById('saleDate').value=today;
-document.getElementById('rangeStart').value=today;
-document.getElementById('rangeEnd').value=today;
-
-function tab(id){
- document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');
- document.querySelectorAll('.tabbar button').forEach(x=>x.classList.remove('active'));document.getElementById('t-'+id).classList.add('active');
- if(id==='cash')renderCash();
- if(id==='report')renderReport();
- if(id==='history'){renderDateList();renderRange()}
+function suggestChipsHtml(type,field,targetInputId,multi){
+ let vals=topSuggest(type,field);
+ if(!vals.length)return '';
+ return `<div class="suggest-chips">${vals.map(v=>`<button type="button" class="suggest-chip" onclick='applySuggest("${targetInputId}",${JSON.stringify(v)},${!!multi})'>${esc(v)}</button>`).join('')}</div>`
 }
-function choosePay(btn){
- selectedPay=btn.dataset.pay;
- document.querySelectorAll('.paybtn').forEach(x=>x.classList.remove('active'));
- btn.classList.add('active');
- transferField.style.display=selectedPay==='匯款'?'block':'none';
+function applySuggest(inputId,val,multi){
+ let el=document.getElementById(inputId);if(!el)return;
+ if(multi){
+  let cur=el.value.split(/[,、]/).map(x=>x.trim()).filter(Boolean);
+  if(!cur.includes(val))cur.push(val);
+  el.value=cur.join('、')
+ } else { el.value=val }
 }
-
-/* ---------- 展場城市設定 ---------- */
-function buildCitySelect(){
- let opts=['<option value="">請選擇城市</option>']
-  .concat(TW_CITIES.map(c=>`<option value="${c}">${c}</option>`))
-  .concat(['<option value="其他">其他（自行輸入）</option>']);
- citySelect.innerHTML=opts.join('');
+function parseVolumeTokens(input){
+ let out=[];
+ (input||'').split(/[,，、]/).map(t=>t.trim()).filter(Boolean).forEach(t=>{
+  let m=t.match(/^(\d+)\s*[-~到至]\s*(\d+)$/);
+  if(m){
+   let a=parseInt(m[1],10),b=parseInt(m[2],10);
+   if(!isNaN(a)&&!isNaN(b)&&a<=b&&(b-a)<=300){for(let i=a;i<=b;i++)out.push(String(i))}
+   else out.push(t)
+  } else out.push(t)
+ });
+ return out.length?out:['']
 }
-function cityDisplay(){
- if(!db.city)return '';
- let short=db.city.replace(/[市縣]$/,'');
- return short+'旅展';
-}
-/* 每筆交易都保存展場名稱；以下檔期也會自動回補舊資料。 */
-const EXPO_SCHEDULE=[
- {start:'2026-02-27',end:'2026-03-02',label:'高雄旅展（2/27–3/2）'},
- {start:'2026-04-10',end:'2026-04-13',label:'台北旅展（4/10–4/13）'},
- {start:'2026-06-26',end:'2026-06-29',label:'台中旅展（6/26–6/29）'},
- {start:'2026-08-21',end:'2026-08-24',label:'台北旅展（8/21–8/24）'}
-];
-function expoForDate(d){let m=EXPO_SCHEDULE.find(x=>d>=x.start&&d<=x.end);return m?m.label:''}
-function expoForSale(s){return expoForDate(s.date)||s.expo||'未設定展場'}
-function expoGroups(rows){
- let byExpo={};rows.forEach(s=>{let n=expoForSale(s);(byExpo[n]||(byExpo[n]=[])).push(s)});
- let groups={};
- Object.entries(byExpo).forEach(([expo,list])=>{
-  list.sort((a,b)=>a.date.localeCompare(b.date));let batch=[],last='';
-  let addBatch=()=>{if(!batch.length)return;let first=batch[0].date,end=batch[batch.length-1].date;
-   let label=expo.includes('（')?expo:`${expo}（${first.replaceAll('-','/')}～${end.replaceAll('-','/')}）`;
-   groups[label]=batch;batch=[];
+function money(v){if(v===null||v===undefined||v==='')return '—';return '$'+Number(v).toLocaleString('zh-TW',{maximumFractionDigits:2})}
+function resizeImageFile(file,maxW=500,quality=0.82){
+ return new Promise((resolve,reject)=>{
+  let reader=new FileReader();
+  reader.onload=e=>{
+   let img=new Image();
+   img.onload=()=>{
+    let scale=Math.min(1,maxW/img.width);
+    let w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));
+    let canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+    canvas.getContext('2d').drawImage(img,0,0,w,h);
+    resolve(canvas.toDataURL('image/jpeg',quality))
+   };
+   img.onerror=()=>reject(new Error('圖片讀取失敗'));
+   img.src=e.target.result
   };
-  list.forEach(s=>{let gap=last?Math.round((new Date(s.date)-new Date(last))/86400000):0;if(last&&gap>7)addBatch();batch.push(s);last=s.date});
-  addBatch();
+  reader.onerror=()=>reject(new Error('圖片讀取失敗'));
+  reader.readAsDataURL(file)
+ })
+}
+async function handleCoverFile(inputEl,targetId){
+ let f=inputEl.files&&inputEl.files[0];if(!f)return;
+ try{let dataUrl=await resizeImageFile(f);document.getElementById(targetId).value=dataUrl;toast('封面已更新（來自相簿）')}
+ catch(e){toast('圖片讀取失敗，請改用網址')}
+ finally{inputEl.value=''}
+}
+function toast(s){let t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+function go(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(p).classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));renderAll()}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function confirmCloseModal(){
+ let body=document.getElementById('modalBody');
+ let hasInput=Array.from(body.querySelectorAll('input[type="text"],input:not([type]),input[type="number"],input[type="date"],textarea')).some(el=>el.value && String(el.value).trim()!=='');
+ if(hasInput && !confirm('要放棄目前輸入的內容嗎？'))return;
+ closeModal()
+}
+function showModal(html){document.getElementById('modalBody').innerHTML=html;document.getElementById('modal').classList.add('show')}
+
+function renderAll(){renderHome();renderBooks();renderWant();renderStats()}
+function renderHome(){
+ let vols=db.series.flatMap(s=>s.volumes||[]), owned=vols.filter(v=>v.owned), spend=owned.reduce((a,v)=>a+Number(v.purchasePrice||0),0);
+ document.getElementById('sBooks').textContent=owned.length;
+ document.getElementById('sSeries').textContent=db.series.length;
+ document.getElementById('sSpend').textContent=money(spend);
+ document.getElementById('sWant').textContent=vols.filter(v=>!v.owned).length;
+ document.getElementById('homeSeries').innerHTML=db.series.length?db.series.map(s=>{
+   let o=(s.volumes||[]).filter(v=>v.owned).length,total=(s.volumes||[]).length,pct=total?Math.round(o/total*100):0;
+   return `<div class="bookrow" onclick="openSeries('${s.id}')"><img class="cover" src="${esc(s.cover||'')}" onerror="this.style.visibility='hidden'"><div class="meta"><div class="title">${esc(s.title)}</div><div class="muted">${esc((s.authors||[]).join('、'))} · ${o}/${total} 本</div><div class="progress"><i style="width:${pct}%"></i></div></div><b>${pct}%</b></div>`
+ }).join(''):'<div class="empty">還沒有收藏。按底部中央「＋ 新增」開始吧。</div>'
+}
+function renderBooks(){
+ let q=(document.getElementById('localSearch')?.value||'').toLowerCase();
+ let typeFilter=document.getElementById('bookType')?.value||'all';
+ let filter=document.getElementById('bookFilter')?.value||'all';
+ let sortBy=document.getElementById('bookSort')?.value||'default';
+ let rows=db.series.filter(s=>{
+  if(typeFilter!=='all' && (s.type||'書籍')!==typeFilter)return false;
+  if(q){
+   let hitSeries=[s.title,...(s.authors||[])].join(' ').toLowerCase().includes(q);
+   let hitVol=(s.volumes||[]).some(v=>[v.title,v.isbn13,v.isbn10].join(' ').toLowerCase().includes(q));
+   if(!hitSeries && !hitVol)return false
+  }
+  if(filter==='owned')return (s.volumes||[]).some(v=>v.owned);
+  if(filter==='unowned')return (s.volumes||[]).some(v=>!v.owned);
+  if(filter==='sell')return (s.volumes||[]).some(v=>v.sell);
+  if(filter==='ongoing')return s.status==='連載中';
+  if(filter==='oop')return (s.volumes||[]).some(v=>v.outOfPrint);
+  return true
  });
- return groups;
+ let spendOf=s=>(s.volumes||[]).reduce((a,v)=>a+Number(v.purchasePrice||v.listPrice||0),0);
+ let lastDateOf=s=>(s.volumes||[]).map(v=>v.purchaseDate||'').sort().slice(-1)[0]||'';
+ let ratioOf=s=>{let t=(s.volumes||[]).length,o=(s.volumes||[]).filter(v=>v.owned).length;return t?o/t:1};
+ if(sortBy==='dateDesc')rows.sort((a,b)=>lastDateOf(b).localeCompare(lastDateOf(a)));
+ else if(sortBy==='dateAsc')rows.sort((a,b)=>lastDateOf(a).localeCompare(lastDateOf(b)));
+ else if(sortBy==='priceDesc')rows.sort((a,b)=>spendOf(b)-spendOf(a));
+ else if(sortBy==='priceAsc')rows.sort((a,b)=>spendOf(a)-spendOf(b));
+ else if(sortBy==='unownedFirst')rows.sort((a,b)=>ratioOf(a)-ratioOf(b));
+ document.getElementById('bookList').innerHTML=rows.length?rows.map(s=>{
+  let total=(s.volumes||[]).length,owned=(s.volumes||[]).filter(v=>v.owned).length,pct=total?Math.round(owned/total*100):0;
+  return `<div class="shelfcard" onclick="openSeries('${s.id}')"><div class="cwrap"><img src="${esc(s.cover||'')}" onerror="this.style.visibility='hidden'"><span class="pctdot">${pct}%</span></div><div class="info"><div class="title">${esc(s.title)}</div></div></div>`
+ }).join(''):'<div class="empty">找不到符合的作品。</div>'
 }
-function onCityChange(){cityCustom.style.display=citySelect.value==='其他'?'block':'none'}
-function saveCity(){
- let v=citySelect.value;
- let city=v==='其他'?cityCustom.value.trim():v;
- db.city=city;save();updateHeaderCity();
- alert('已儲存展場城市：'+(city?cityDisplay():'（未設定）'));
+function renderWant(){
+ let rows=[];db.series.forEach(s=>(s.volumes||[]).filter(v=>!v.owned).forEach(v=>rows.push({s,v})));
+ let order={高:0,中:1,低:2};
+ rows.sort((a,b)=>(order[a.v.priority||'中']??1)-(order[b.v.priority||'中']??1));
+ let budget=rows.reduce((a,{v})=>a+Number(v.listPrice||0),0);
+ document.getElementById('wantBudget').textContent=rows.length?`待購預算合計（依參考價）：${money(budget)}`:'';
+ document.getElementById('wantList').innerHTML=rows.length?rows.map(({s,v})=>`<div class="card"><div class="row"><img class="cover" src="${esc(v.cover||s.cover||'')}" onerror="this.style.visibility='hidden'"><div class="meta"><div class="title">${esc(s.title)} ${v.volumeNo?`· 第 ${esc(v.volumeNo)} 集`:''}</div><div class="muted">${esc((s.authors||[]).join('、'))} · ISBN ${esc(v.isbn13||v.isbn10||'—')}</div><div class="muted">參考價：${money(v.listPrice)}　實際購入價：尚未購入</div>${v.notes?`<div class="muted">備註：${esc(v.notes)}</div>`:''}<span class="tag ${v.priority==='高'?'purple':''}">優先：${esc(v.priority||'中')}</span></div></div><div class="row" style="margin-top:10px"><button class="btn green small" onclick="buyVolume('${s.id}','${v.id}')">標記已購入</button><button class="btn small" onclick="openSeries('${s.id}')">查看系列</button></div></div>`).join(''):'<div class="empty">目前沒有待購入單集。</div>'
 }
-function updateHeaderCity(){headerCity.textContent=db.city?('📍 '+cityDisplay()):''}
-function initCitySettings(){
- buildCitySelect();
- if(db.city){
-  if(TW_CITIES.includes(db.city)){citySelect.value=db.city}
-  else{citySelect.value='其他';cityCustom.value=db.city;cityCustom.style.display='block'}
- } else {
-  appSettings.setAttribute('open','open');
- }
- updateHeaderCity();
+function renderStats(){
+ let vols=db.series.flatMap(s=>s.volumes||[]),owned=vols.filter(v=>v.owned);
+ document.getElementById('statsSummary').innerHTML=`<div class="grid"><div class="stat"><b>${owned.length}</b><span>已收藏本數</span></div><div class="stat"><b>${db.series.length}</b><span>收藏系列</span></div><div class="stat"><b>${new Set(db.series.flatMap(s=>s.authors||[])).size}</b><span>作者</span></div><div class="stat"><b>${money(owned.reduce((a,v)=>a+Number(v.purchasePrice||0),0))}</b><span>實際花費</span></div></div>`;
+ let amap={};db.series.forEach(s=>(s.authors||['未填作者']).forEach(a=>{if(!amap[a])amap[a]={books:0,series:0};amap[a].series++;amap[a].books+=(s.volumes||[]).filter(v=>v.owned).length}));
+ document.getElementById('authorStats').innerHTML=Object.entries(amap).sort((a,b)=>b[1].books-a[1].books).map(([a,x])=>`<div class="bookrow"><div class="meta"><div class="title">${esc(a)}</div><div class="muted">已收藏 ${x.books} 本 · ${x.series} 個系列</div></div><b>${x.books}</b></div>`).join('')||'<div class="empty">還沒有資料。</div>';
+ let cmap={};db.series.forEach(s=>(s.category||'未分類').split(',').forEach(c=>{c=c.trim();cmap[c]=(cmap[c]||0)+(s.volumes||[]).filter(v=>v.owned).length}));
+ document.getElementById('catStats').innerHTML=Object.entries(cmap).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div class="switch"><span>${esc(c)}</span><b>${n} 本</b></div>`).join('')||'<div class="empty">還沒有分類資料。</div>'
 }
 
-/* ---------- 商品管理 ---------- */
-function getNextSerial(d,pid){return db.nextSerial&&db.nextSerial[d+'_'+pid]!=null?db.nextSerial[d+'_'+pid]:null}
-function composeSerial(p,typed){
- typed=(typed||'').trim();
- if(!typed)return '';
- let prefix=p.serialPrefix||'';
- if(prefix&&typed.toUpperCase().startsWith(prefix))return typed;
- return prefix+typed;
-}
-function serialDisplayValue(p,fullSerial){
- if(!fullSerial)return '';
- let prefix=p.serialPrefix||'';
- if(prefix&&fullSerial.toUpperCase().startsWith(prefix))return fullSerial.slice(prefix.length);
- return fullSerial;
-}
-function renderProductGrid(){
- let d=(document.getElementById('saleDate')&&saleDate.value)||today;
- productsGrid.innerHTML=db.products.map(p=>{
-  let serialBlock='';
-  if(p.needSerial){
-   let nextVal=getNextSerial(d,p.id);
-   serialBlock=`
-    <div style="margin-top:6px">
-     <div class="fieldLabel">起始票號</div>
-     <div class="prefixGroup">
-      <span class="ptag">${esc(p.serialPrefix||'')}</span>
-       <input class="startSerial" data-id="${p.id}" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="000000" value="${nextVal!=null?nextVal:''}" oninput="calcSale()">
-     </div>
-    </div>
-    <div style="margin-top:6px">
-     <div class="fieldLabel">票號／區間</div>
-     <div class="prefixGroup">
-      <span class="ptag">${esc(p.serialPrefix||'')}</span>
-      <input class="serial saleSerial" data-id="${p.id}" type="text" placeholder="自動帶入或手動輸入" oninput="markManualSerial('${p.id}')">
-     </div>
-    </div>`;
-  }
-  return `<div class="product"><div class="name">${esc(p.name)}</div><div class="price">$${money(p.price)}</div><input class="qty saleQty" data-id="${p.id}" type="number" min="0" value="0" oninput="calcSale()">${serialBlock}</div>`;
- }).join('');
-}
-function renderProductManage(){
- manageList.innerHTML=db.products.length?db.products.map(p=>`
- <div class="edititem">
-  <span class="lbl">項目</span><input value="${esc(p.name)}" oninput="updateProductField('${p.id}','name',this.value)">
-  <span class="lbl">金額</span><input type="number" min="0" value="${p.price}" oninput="updateProductField('${p.id}','price',this.value)">
+function openEditor(b={}){
+ let id=b.id||uid();
+ showModal(`<h2>手動新增作品</h2>
+ <div class="formgrid">
+ <div class="full"><label>系列／作品名稱</label><input id="fTitle" value="${esc(b.title||'')}"></div>
+ <div><label>收藏類型</label>${typeSelectHtml('fType','書籍',"updateFormForType('f',this.value)")}</div>
+ <div id="fAuthorWrap"><label>作者</label><input id="fAuthor" value="${esc((b.authors||[]).join('、'))}"><div id="fAuthorSuggest">${suggestChipsHtml('書籍','author','fAuthor',true)}</div></div>
+ <div><label>語言</label>${langSelectHtml('fLang',b.language||'')}</div>
+ <div><label>分類</label><div id="fCatWrap">${categorySelectHtml('fCat','書籍','')}</div></div>
+ <div id="fItemKindWrap" style="display:none"><label>周邊品項</label><input id="fItemKind" placeholder=""><div id="fItemKindSuggest"></div></div>
+ <div><label>地區限定（選填）</label><input id="fRegion" placeholder="例如：日本限定、機場限定"></div>
+ <div class="full"><label>第一批要建立的項目／集數（可輸入範圍，如 1-12，或直接輸入名稱）</label><input id="fVol" value="1"></div>
+ <div><label>版本</label>${editionSelectHtml('fEdition','')}</div>
+ <div><label>參考／原價</label><input id="fList" type="number" step="0.01" value="${esc(b.listPrice??'')}"></div>
+ <div class="full"><label>封面 URL 或從相簿上傳</label><input id="fCover" value="${esc(b.cover||'')}">
+ <input type="file" accept="image/*" style="margin-top:8px" onchange="handleCoverFile(this,'fCover')"></div>
  </div>
- <div class="edititem" style="margin-top:-2px;margin-bottom:10px">
-  <label class="muted" style="flex:0 0 92px;display:flex;align-items:center;gap:6px"><input type="checkbox" ${p.needSerial?'checked':''} onchange="updateProductField('${p.id}','needSerial',this.checked)">需要票號</label>
-  <input value="${esc(p.serialPrefix||'')}" placeholder="前綴 例如BC" oninput="updateProductField('${p.id}','serialPrefix',this.value)">
-  <div class="productActions"><button class="secondary" title="上移" onclick="moveProduct('${p.id}',-1)">↑</button><button class="secondary" title="下移" onclick="moveProduct('${p.id}',1)">↓</button><button class="secondary danger" title="刪除" onclick="deleteProduct('${p.id}')">✕</button></div>
+ <div class="switch"><span>這一集已購入</span><input id="fOwned" type="checkbox" checked></div>
+ <details style="margin-top:12px"><summary style="cursor:pointer;font-weight:800;color:var(--muted)">更多欄位（出版社、狀態、ISBN、價格細節⋯）</summary>
+ <div class="formgrid" style="margin-top:10px">
+ <div id="fPublisherWrap"><label>出版社</label><input id="fPublisher" value="${esc(b.publisher||'')}"></div>
+ <div id="fStatusWrap"><label>連載狀態</label><select id="fStatus"><option value="未知">未知</option><option value="連載中">連載中（還會繼續出）</option><option value="已完結">已完結（不用再追）</option></select></div>
+ <div id="fISBN13Wrap"><label>ISBN-13</label><input id="fISBN13" value="${esc(b.isbn13||'')}"></div>
+ <div id="fISBN10Wrap"><label>ISBN-10</label><input id="fISBN10" value="${esc(b.isbn10||'')}"></div>
+ <div id="fDateWrap"><label>出版日</label><input id="fDate" value="${esc(b.publishedDate||'')}"></div>
+ <div id="fPagesWrap"><label>頁數</label><input id="fPages" type="number" value="${esc(b.pageCount||'')}"></div>
+ <div><label>實際購入價</label><input id="fBuy" type="number" step="0.01" value=""></div>
+ <div><label>折扣</label><input id="fDiscount" type="number" step="0.01" placeholder="例如 0.8 或 20"></div>
+ <div><label>優先順序（想買清單用）</label><select id="fPriority"><option value="中">中</option><option value="高">高</option><option value="低">低</option></select></div>
+ <div class="full"><label>備註</label><input id="fNotes" placeholder="例如：特典附錄"></div>
  </div>
- `).join(''):'<p class="muted">尚無販售項目</p>';
+ <div class="switch"><span>標記為待出售</span><input id="fSell" type="checkbox"></div>
+ <div class="switch"><span>標記為絕版</span><input id="fOOP" type="checkbox"></div>
+ </details>
+ <button class="btn purple" style="width:100%;margin-top:14px" onclick='createSeries(${JSON.stringify(b)})'>建立作品＋第一項</button>`)
 }
-function manualSaveAllProducts(){save();flashSaved('saveMsgProducts')}
-function flashSaved(elId){
- let el=document.getElementById(elId);
- if(!el)return;
- el.textContent='✅ 已儲存';
- setTimeout(()=>{let e2=document.getElementById(elId);if(e2)e2.textContent=''},1500);
-}
-function addProduct(){
- let name=newProdName.value.trim(),price=+newProdPrice.value;
- if(!name||!price){alert('請輸入項目名稱與金額');return}
- let needSerial=newProdNeedSerial.checked;
- let prefix=newProdPrefix.value.trim().toUpperCase();
- db.products.push({id:uid('p'),name,price,needSerial,serialPrefix:prefix});
- newProdName.value='';newProdPrice.value='';newProdNeedSerial.checked=false;newProdPrefix.value='';
- save();renderProductGrid();renderProductManage();calcSale();
-}
-function updateProductField(id,field,val){
- let p=db.products.find(x=>x.id===id);if(!p)return;
- if(field==='price')p.price=+val||0;
- else if(field==='needSerial')p.needSerial=!!val;
- else if(field==='serialPrefix')p.serialPrefix=(val||'').toUpperCase();
- else p.name=val;
- save();
- if(field==='price'||field==='needSerial'||field==='serialPrefix'){renderProductGrid();calcSale()}
-}
-function moveProduct(id,direction){
- let index=db.products.findIndex(p=>p.id===id),target=index+direction;
- if(index<0||target<0||target>=db.products.length)return;
- [db.products[index],db.products[target]]=[db.products[target],db.products[index]];
- save();renderProductGrid();renderProductManage();calcSale();
-}
-function deleteProduct(id){
- let p=db.products.find(x=>x.id===id);
- if(!confirm(`確定要刪除「${p?p.name:''}」這個項目嗎？\n此動作無法復原（已產生的銷售紀錄不會受影響）。`))return;
- db.products=db.products.filter(x=>x.id!==id);
- save();renderProductGrid();renderProductManage();calcSale();
-}
-
-/* ---------- 票券／發票清點 ---------- */
-function calcStock(){
- let a=stockStart.value.trim(),b=stockEnd.value.trim();
- let ma=a.match(/^([A-Za-z]*)(\d+)$/),mb=b.match(/^([A-Za-z]*)(\d+)$/);
- if(!ma||!mb){stockResult.textContent='請輸入正確格式的票號（例如 000000 或 000315）';return}
- let start=parseInt(ma[2],10),end=parseInt(mb[2],10);
- if(end<start){let t=start;start=end;end=t}
- let count=end-start+1;
- stockResult.textContent=`共 ${count} 張（${a} ～ ${b}）`;
-}
-
-/* ---------- 收銀 ---------- */
-function calcSale(){
- let subtotal=0;
- document.querySelectorAll('.saleQty').forEach(inp=>{
-  let pid=inp.dataset.id;
-  let p=db.products.find(x=>x.id===pid);
-  if(!p)return;
-  let qty=+inp.value||0;
-  subtotal+=qty*p.price;
-  if(p.needSerial){
-   let startInput=document.querySelector(`.startSerial[data-id="${pid}"]`);
-   let serialInput=document.querySelector(`.saleSerial[data-id="${pid}"]`);
-   if(startInput&&serialInput&&!serialInput.dataset.manual){
-     let startRaw=startInput.value.trim();
-     if(/^\d+$/.test(startRaw)&&qty>0){
-      let startVal=Number(startRaw);
-      let width=startRaw.length;
-     let endVal=startVal+qty-1;
-     let pad=n=>String(n).padStart(width,'0');
-     serialInput.value=qty===1?pad(startVal):(pad(startVal)+'~'+pad(endVal));
-    } else if(qty===0){
-     serialInput.value='';
-    }
-   }
-  }
+function createSeries(b){
+ let type=document.getElementById('fType').value;
+ let cfg=TYPE_FORM_CONFIG[type]||TYPE_FORM_CONFIG['書籍'];
+ let s={id:uid(),title:document.getElementById('fTitle').value.trim(),type,authors:document.getElementById('fAuthor').value.split(/[,、]/).map(x=>x.trim()).filter(Boolean),publisher:document.getElementById('fPublisher').value.trim(),language:readLang('fLang'),category:readCategory('fCat'),status:document.getElementById('fStatus').value,cover:document.getElementById('fCover').value.trim(),pages:document.getElementById('fPages').value,createdAt:new Date().toISOString(),volumes:[]};
+ if(!s.title){toast('請輸入作品名稱');return}
+ let tokens=parseVolumeTokens(document.getElementById('fVol').value.trim()||'1');
+ let owned=document.getElementById('fOwned').checked,sell=document.getElementById('fSell').checked,outOfPrint=document.getElementById('fOOP').checked,today=new Date().toISOString().slice(0,10);
+ let listPrice=document.getElementById('fList').value,purchasePrice=document.getElementById('fBuy').value,discount=document.getElementById('fDiscount').value,priority=document.getElementById('fPriority').value,notes=document.getElementById('fNotes').value.trim(),cover=document.getElementById('fCover').value.trim(),language=s.language,edition=readEdition('fEdition'),isbn13=document.getElementById('fISBN13').value.trim(),isbn10=document.getElementById('fISBN10').value.trim(),publishedDate=document.getElementById('fDate').value.trim(),itemKind=(document.getElementById('fItemKind').value||'').trim(),region=(document.getElementById('fRegion').value||'').trim();
+ tokens.forEach((no,i)=>{
+  s.volumes.push({id:uid(),volumeNo:no,title:tokens.length===1?(b.subtitle||''):'',isbn13:tokens.length===1?isbn13:'',isbn10:tokens.length===1?isbn10:'',publishedDate:tokens.length===1?publishedDate:'',cover,language,edition,itemKind,region,listPrice,purchasePrice,discount,priority,notes,owned,sell,outOfPrint,purchaseDate:owned?today:''})
  });
- let discount=+saleDiscount.value||0;if(discount<0)discount=0;if(discount>subtotal)discount=subtotal;
- let total=subtotal-discount;
- saleSubtotal.textContent=money(subtotal);
- saleDiscountShow.textContent=money(discount);
- discountRow.style.display=discount>0?'block':'none';
- saleTotal.textContent='$'+money(total);
+ s.authors.forEach(a=>bumpSuggest(type,cfg.authorField,a));
+ if(itemKind)bumpSuggest(type,cfg.itemKindField,itemKind);
+ db.series.unshift(s);save();closeModal();toast(tokens.length>1?`已加入書櫃，共建立 ${tokens.length} 集`:'已加入書櫃')}
+let batchMode=false,batchSelected=new Set();
+function openSeries(id){
+ let s=db.series.find(x=>x.id===id);if(!s)return;
+ let vols=s.volumes||[],total=vols.length,owned=vols.filter(v=>v.owned).length,sell=vols.filter(v=>v.sell).length;
+ let sorted=[...vols].sort((a,b)=>{let na=parseFloat(a.volumeNo),nb=parseFloat(b.volumeNo);if(!isNaN(na)&&!isNaN(nb)&&na!==nb)return na-nb;return String(a.volumeNo||'').localeCompare(String(b.volumeNo||''),'zh-Hant',{numeric:true})});
+ let statusClass=s.status==='已完結'?'green':(s.status==='連載中'?'purple':'');
+ let editionBadge=v=>v.edition&&v.edition!=='一般版'?`<span class="ed-badge">${esc(v.edition[0])}</span>`:'';
+ let seenNo={};
+ let chipsHtml=sorted.length?sorted.map(v=>{
+  let key=v.volumeNo||'';seenNo[key]=(seenNo[key]||0)+1;let copyIdx=seenNo[key];
+  let label=`${esc(v.volumeNo||'—')}${copyIdx>1?`<sup style="font-size:9px">×${copyIdx}</sup>`:''}`;
+  let title=copyIdx>1?` title="第 ${copyIdx} 本"`:'';
+  let oopBadge=v.outOfPrint?'<span class="op-badge">絕</span>':'';
+  return batchMode
+   ?`<button class="voltile ${v.owned?'owned':''} ${v.sell?'sell':''} ${batchSelected.has(v.id)?'selected':''}"${title} onclick="toggleBatchSelect('${s.id}','${v.id}')">${label}${editionBadge(v)}${oopBadge}</button>`
+   :`<button class="voltile ${v.owned?'owned':''} ${v.sell?'sell':''}"${title} onpointerdown="volPointerDown(this,'${s.id}','${v.id}')" onpointerup="volPointerUp(this,'${s.id}','${v.id}')" onpointercancel="volPointerCancel(this)" onpointerleave="volPointerCancel(this)">${label}${editionBadge(v)}${oopBadge}</button>`
+ }).join(''):'<div class="empty">還沒有項目，按上面「＋ 新增項目」開始。</div>';
+ showModal(`<div class="row"><img class="cover big" src="${esc(s.cover||'')}" onerror="this.style.visibility='hidden'"><div class="meta"><h2>${esc(s.title)}</h2><div class="muted">${esc((s.authors||[]).join('、'))}</div><div class="muted">${esc(s.publisher||'')} · ${esc(s.language||'')} · ${esc(s.category||'未分類')}</div>
+ <div style="margin-top:6px"><span class="tag">${esc(s.type||'書籍')}</span><span class="tag ${statusClass}">${esc(s.status||'未知')}</span><span class="tag">已收藏 ${owned}/${total}</span>${sell?`<span class="tag">${sell} 項待出售</span>`:''}</div></div></div>
+ <div class="row wrap" style="margin:15px 0"><button class="btn purple" onclick="addVolume('${s.id}')">＋ 新增項目</button><button class="btn" onclick="editSeriesInfo('${s.id}')">編輯作品資訊</button><button class="btn ${batchMode?'purple':''}" onclick="toggleBatchMode('${s.id}')">${batchMode?'結束批次':'批次修改'}</button><button class="btn" onclick="openShareCard('${s.id}')">分享圖卡</button></div>
+ ${batchMode?`<div class="notice" style="background:#eef2ff;color:#3730a3;margin-bottom:12px">
+  <div style="margin-bottom:8px">批次模式：點項目選取，已選 ${batchSelected.size} 項</div>
+  <div class="row wrap"><button class="btn small" onclick="batchSelectAll('${s.id}')">全選</button><button class="btn small" onclick="batchClearSel('${s.id}')">取消全選</button><button class="btn small green" onclick="batchApply('${s.id}',true)">標記已購入</button><button class="btn small" onclick="batchApply('${s.id}',false)">標記待購入</button></div>
+  <div class="row wrap" style="margin-top:8px;gap:6px"><input id="batchPriceInput" type="number" step="0.01" placeholder="輸入金額" style="flex:1;min-width:100px"><button class="btn small purple" onclick="batchApplyPrice('${s.id}','purchase')">套用為實際購入價</button><button class="btn small" onclick="batchApplyPrice('${s.id}','list')">套用為參考價</button></div>
+ </div>`:''}
+ <div class="volgrid">${chipsHtml}</div>
+ <div class="notice" style="margin-top:12px">${batchMode?'點項目多選，再用上面按鈕批次套用購買狀態或金額。':'點一下切換已購入／待購入；按住不放可開啟詳細編輯（價格、ISBN、版本、備註）。'}<span style="color:var(--greentext)">■</span> 已收藏　<span style="color:var(--muted)">■</span> 待購入　右上紅點代表待出售、左下字母代表版本、左上「絕」代表絕版、數字右上角 ×N 代表第幾本重複收藏。${s.status==='連載中'?'這部還在連載中，記得留意有沒有新集數。':(s.status==='已完結'?'這部已經完結了，收齊就不用再追新集數。':'')}</div>`)
 }
-function markManualSerial(pid){
- let serialInput=document.querySelector(`.saleSerial[data-id="${pid}"]`);
- if(!serialInput)return;
- if(serialInput.value.trim()==='')delete serialInput.dataset.manual;
- else serialInput.dataset.manual='1';
+function toggleBatchMode(sid){batchMode=!batchMode;batchSelected.clear();openSeries(sid)}
+function toggleBatchSelect(sid,vid){if(batchSelected.has(vid))batchSelected.delete(vid);else batchSelected.add(vid);openSeries(sid)}
+function batchSelectAll(sid){let s=db.series.find(x=>x.id===sid);(s.volumes||[]).forEach(v=>batchSelected.add(v.id));openSeries(sid)}
+function batchClearSel(sid){batchSelected.clear();openSeries(sid)}
+function batchApply(sid,ownedVal){
+ let s=db.series.find(x=>x.id===sid);if(!s||!batchSelected.size){toast('請先點選要修改的集數');return}
+ let today=new Date().toISOString().slice(0,10);
+ s.volumes.forEach(v=>{if(batchSelected.has(v.id)){v.owned=ownedVal;if(ownedVal&&!v.purchaseDate)v.purchaseDate=today}});
+ save();batchSelected.clear();openSeries(sid);toast('已更新購買狀態')
 }
-function addSale(){
- try{
-  let items=[];
-  let serialAdvances=[];
-  let invalidQty=false;
-  document.querySelectorAll('.saleQty').forEach(inp=>{
-   let pid=inp.dataset.id,qty=+inp.value||0;
-   if(qty<=0)return;
-   if(!Number.isInteger(qty)){invalidQty=true;return}
-  let p=db.products.find(x=>x.id===pid);
-  if(!p)return;
-  let serial='';
-  if(p.needSerial){
-   let serialInput=document.querySelector(`.saleSerial[data-id="${pid}"]`);
-   let rawSerial=serialInput?serialInput.value.trim():'';
-   serial=composeSerial(p,rawSerial);
-   let startInput=document.querySelector(`.startSerial[data-id="${pid}"]`);
-    let startRaw=startInput?startInput.value.trim():'';
-    if(/^\d+$/.test(startRaw)){
-     let startVal=Number(startRaw);
-     serialAdvances.push({pid,newNext:String(startVal+qty).padStart(startRaw.length,'0')});
-    }
-  }
-  items.push({id:p.id,name:p.name,price:p.price,qty,serial});
-  });
-  if(invalidQty){alert('販售數量必須是整數');return}
-  if(!items.length){alert('請先輸入販售數量');return}
- let subtotal=items.reduce((s,i)=>s+i.qty*i.price,0);
- let discount=+saleDiscount.value||0;if(discount<0)discount=0;if(discount>subtotal)discount=subtotal;
- let total=subtotal-discount;
-  let d=saleDate.value||today;
-  let transferLast5=selectedPay==='匯款'?transferLast5Input().value.trim():'';
-  if(selectedPay==='匯款'&&!/^\d{5}$/.test(transferLast5)){alert('匯款請輸入 5 碼數字帳號末碼');return}
-  let note=document.getElementById('saleNote')?saleNote.value.trim():'';
-  let expo=expoForDate(d)||cityDisplay();
-  if(!expo){alert('請先在「展場設定」選擇本場展場城市，再完成收款。');return}
-  let sale={id:uid('s'),date:d,expo,items,discount,subtotal,total,pay:selectedPay,transferLast5,note,time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})};
-  db.sales.push(sale);
-  db.nextSerial=db.nextSerial||{};
-  serialAdvances.forEach(a=>{db.nextSerial[d+'_'+a.pid]=a.newNext});
-  save({cloud:false});
-  pushSaleToCloud(sale,d,serialAdvances);
- document.querySelectorAll('.saleQty').forEach(i=>i.value=0);
- saleDiscount.value=0;
- if(document.getElementById('saleNote'))saleNote.value='';
- transferLast5Input().value='';
- renderProductGrid();
- calcSale();renderQuick();
- alert('收款完成！');
- }catch(err){
-  console.error('addSale failed',err);
-  alert('發生錯誤，收款可能未完全處理：'+err.message+'\n請截圖回報，並確認一下「今日營收」是否已有這筆紀錄。');
- }
+function batchApplyPrice(sid,field){
+ let s=db.series.find(x=>x.id===sid);if(!s||!batchSelected.size){toast('請先點選要修改的項目');return}
+ let val=document.getElementById('batchPriceInput').value;
+ if(val===''||isNaN(Number(val))){toast('請輸入有效金額');return}
+ s.volumes.forEach(v=>{if(batchSelected.has(v.id)){if(field==='purchase')v.purchasePrice=val;else v.listPrice=val}});
+ save();batchSelected.clear();openSeries(sid);toast('已批次更新價格')
 }
-function transferLast5Input(){return document.getElementById('transferLast5')}
-function salesOf(d){return db.sales.filter(x=>x.date===d)}
-function aggregateRows(rows){
- let r={itemQty:{},itemNames:{},itemRevenue:{},現金:0,匯款:0,刷卡:0,total:0,discount:0,subtotal:0,count:rows.length};
- rows.forEach(x=>{
-  (x.items||[]).forEach(it=>{
-   r.itemQty[it.id]=(r.itemQty[it.id]||0)+it.qty;
-   r.itemNames[it.id]=it.name;
-   r.itemRevenue[it.id]=(r.itemRevenue[it.id]||0)+it.qty*it.price;
-  });
-  r[x.pay]=(r[x.pay]||0)+x.total;
-  r.total+=x.total;
-  r.discount+=x.discount||0;
-  r.subtotal+=(x.subtotal!=null?x.subtotal:x.total);
+function volPointerDown(btn,sid,vid){
+ btn._longPressed=false;
+ btn._lpTimer=setTimeout(()=>{btn._longPressed=true;editVolume(sid,vid)},480)
+}
+function volPointerUp(btn,sid,vid){
+ clearTimeout(btn._lpTimer);
+ if(btn._longPressed){btn._longPressed=false;return}
+ quickToggleOwned(sid,vid)
+}
+function volPointerCancel(btn){clearTimeout(btn._lpTimer);btn._longPressed=false}
+function quickToggleOwned(sid,vid){
+ let v=db.series.find(s=>s.id===sid).volumes.find(v=>v.id===vid);
+ v.owned=!v.owned;if(v.owned&&!v.purchaseDate)v.purchaseDate=new Date().toISOString().slice(0,10);
+ save();openSeries(sid)
+}
+function addVolume(sid){
+ let s=db.series.find(x=>x.id===sid);
+ let cfg=TYPE_FORM_CONFIG[s.type]||TYPE_FORM_CONFIG['書籍'];
+ showModal(`<h2>新增項目</h2>
+<div class="notice">卷次／單集可以一次輸入多集，例如「1-12」代表第 1 到 12 集，或「1,3,5-8」混合輸入。其餘欄位會套用到每一項，之後可再個別調整。</div>
+<div class="formgrid">
+<div class="full"><label>卷次／單集（可輸入範圍，如 1-12）</label><input id="nvNo" placeholder="例如 2、25.5、特別篇，或 1-12"></div>
+${cfg.showItemKind?`<div class="full"><label>${esc(cfg.itemKindLabel)}</label><input id="nvItemKind" placeholder="${esc(cfg.itemKindPlaceholder||'')}"><div id="nvItemKindSuggest">${suggestChipsHtml(s.type,cfg.itemKindField,'nvItemKind',false)}</div></div>`:''}
+<div><label>地區限定（選填）</label><input id="nvRegion" placeholder="例如：日本限定"></div>
+<div><label>版本</label>${editionSelectHtml('nvEdition',s.volumes&&s.volumes[0]?.edition||'')}</div>
+<div><label>參考／原價（套用到每一集）</label><input id="nvList" type="number" step="0.01"></div>
+</div>
+<div class="switch"><span>已購入（套用到每一集）</span><input id="nvOwned" type="checkbox"></div>
+<details style="margin-top:12px"><summary style="cursor:pointer;font-weight:800;color:var(--muted)">更多欄位（ISBN、出版日、折扣⋯）</summary>
+<div class="formgrid" style="margin-top:10px">
+${cfg.showISBN?'<div><label>ISBN-13（僅單一集數時使用）</label><input id="nvISBN"></div>':''}
+<div><label>${esc(cfg.dateLabel)}（僅單一集數時使用）</label><input id="nvDate"></div>
+<div><label>實際購入價（套用到每一集）</label><input id="nvBuy" type="number" step="0.01"></div>
+<div><label>折扣</label><input id="nvDisc" type="number" step="0.01"></div>
+<div><label>優先順序（想買清單用）</label><select id="nvPriority"><option value="中">中</option><option value="高">高</option><option value="低">低</option></select></div>
+<div class="full"><label>備註（套用到每一集）</label><input id="nvNotes" placeholder="例如：特典附錄"></div>
+<div class="full"><label>封面 URL 或從相簿上傳（套用到每一集）</label><input id="nvCover" value="${esc(s.cover||'')}">
+<input type="file" accept="image/*" style="margin-top:8px" onchange="handleCoverFile(this,'nvCover')"></div></div>
+<div class="switch"><span>標記為絕版（套用到每一集）</span><input id="nvOOP" type="checkbox"></div>
+</details>
+<button class="btn purple" style="width:100%;margin-top:12px" onclick="saveNewVolume('${sid}')">加入單集</button>`) }
+function saveNewVolume(sid){
+ let s=db.series.find(x=>x.id===sid);
+ let cfg=TYPE_FORM_CONFIG[s.type]||TYPE_FORM_CONFIG['書籍'];
+ let tokens=parseVolumeTokens(document.getElementById('nvNo').value.trim());
+ let owned=document.getElementById('nvOwned').checked,today=new Date().toISOString().slice(0,10);
+ let listPrice=document.getElementById('nvList').value,purchasePrice=document.getElementById('nvBuy').value,discount=document.getElementById('nvDisc').value,priority=document.getElementById('nvPriority').value,notes=document.getElementById('nvNotes').value.trim(),cover=document.getElementById('nvCover').value,edition=readEdition('nvEdition'),isbn13=(document.getElementById('nvISBN')?.value||'').trim(),publishedDate=document.getElementById('nvDate').value.trim(),itemKind=(document.getElementById('nvItemKind')?.value||'').trim(),region=(document.getElementById('nvRegion')?.value||'').trim(),outOfPrint=document.getElementById('nvOOP').checked;
+ tokens.forEach((no,i)=>{
+  s.volumes.push({id:uid(),volumeNo:no,isbn13:tokens.length===1?isbn13:'',publishedDate:tokens.length===1?publishedDate:'',listPrice,purchasePrice,discount,priority,notes,cover,edition,itemKind,region,outOfPrint,owned,sell:false,purchaseDate:owned?today:''})
  });
- return r;
+ if(itemKind)bumpSuggest(s.type,cfg.itemKindField,itemKind);
+ save();openSeries(sid);toast(tokens.length>1?`已新增 ${tokens.length} 集`:'已加入單集')
 }
-function totals(d){return aggregateRows(salesOf(d))}
-function buildExpoGroupsHtml(rows){
- let groups=expoGroups(rows),names=Object.keys(groups);
- if(!names.length)return '<p class="muted">此範圍尚無交易</p>';
- return names.map(name=>{let part=groups[name],r=aggregateRows(part);return `<div class="expoGroup"><h3>🏷️ ${esc(name)}</h3>${buildStatsHtml(r)}<h3 style="margin-top:12px">🔖 票號彙總</h3>${buildSerialHtml(part)}<h3>🏦 匯款紀錄</h3>${buildTransferHtml(part)}</div>`}).join('');
-}
-function buildExpoPerformanceHtml(rows){
- let ranked=Object.entries(expoGroups(rows)).map(([name,part])=>({name,r:aggregateRows(part)})).sort((a,b)=>b.r.total-a.r.total);
- if(!ranked.length)return '';
- return `<div class="expoGroup"><h3>🏆 本區間旅展表現排名</h3>`+ranked.map((x,i)=>`<div class="expoRank ${i===0?'champion':''}"><div class="place">${i===0?'🏆':i+1}</div><div class="expoName">${esc(x.name)}<small>${x.r.count} 筆交易</small></div><div class="expoMoney">$${money(x.r.total)}<small>${i===0?'本區間最高營業額':'營業額'}</small></div></div>`).join('')+`</div>`;
-}
-function buildRangeOverallHtml(r){
- let itemCount=Object.values(r.itemQty).reduce((sum,qty)=>sum+qty,0);
- let products=Object.keys(r.itemQty);
- let rows=products.map(id=>{let amount=r.itemRevenue[id]||0,pct=r.subtotal?(amount/r.subtotal*100).toFixed(1):'0.0';return `<tr><td>${esc(r.itemNames[id])}</td><td>${r.itemQty[id]}</td><td>$${money(amount)}</td><td>${pct}%</td></tr>`}).join('')||'<tr><td colspan="4" class="muted">此區間尚無商品銷售</td></tr>';
- return `<div class="expoGroup reportTotal"><h3>📋 區間總報表</h3><div class="summary"><div class="stat"><span>合計營業額</span><b>$${money(r.total)}</b></div><div class="stat"><span>交易筆數</span><b>${r.count}</b></div><div class="stat"><span>販售商品數</span><b>${itemCount}</b></div><div class="stat"><span>折扣總額</span><b>$${money(r.discount||0)}</b></div><div class="stat"><span>現金</span><b>$${money(r.現金||0)}</b></div><div class="stat"><span>匯款</span><b>$${money(r.匯款||0)}</b></div><div class="stat"><span>刷卡</span><b>$${money(r.刷卡||0)}</b></div></div><h3 style="margin-top:14px">商品銷售總計</h3><div class="reportTable"><table><thead><tr><th>商品</th><th>數量</th><th>商品小計</th><th>佔商品總額</th></tr></thead><tbody>${rows}</tbody></table></div><p class="muted" style="margin:8px 0 0">商品小計為折扣前金額；合計營業額已扣除折扣。</p></div>`;
-}
-function buildStatsHtml(r){
- let itemsHtml=Object.keys(r.itemQty).map(id=>`<div class="stat"><span>${esc(r.itemNames[id])}</span><b>${r.itemQty[id]}</b></div>`).join('');
- return `<div class="summary">
- <div class="stat"><span>營業額</span><b>$${money(r.total)}</b></div>
- <div class="stat"><span>交易筆數</span><b>${r.count}</b></div>
- <div class="stat"><span>現金</span><b>$${money(r.現金||0)}</b></div>
- <div class="stat"><span>匯款</span><b>$${money(r.匯款||0)}</b></div>
- <div class="stat"><span>刷卡</span><b>$${money(r.刷卡||0)}</b></div>
- <div class="stat"><span>折扣總額</span><b>$${money(r.discount||0)}</b></div>
- ${itemsHtml}
- </div>`;
-}
-function getFloatAmount(d){
- if(db.floatAmount&&Object.prototype.hasOwnProperty.call(db.floatAmount,d))return +db.floatAmount[d]||0;
- if(db.float&&db.float[d])return sumCash(db.float[d]);
- return null;
-}
-function hasFloatSet(d){
- return !!(db.floatAmount&&Object.prototype.hasOwnProperty.call(db.floatAmount,d))||!!(db.float&&db.float[d]);
-}
-function buildCashCheckHtml(d,r){
- let hasFloat=hasFloatSet(d),hasClose=!!(db.closeFloat&&db.closeFloat[d]),hasCount=!!db.count[d];
- if(!hasFloat&&!hasClose&&!hasCount)return '<div class="check warn">此日期尚未輸入零用金與現金清點資料。</div>';
- let float=getFloatAmount(d)||0;
- let closeFloat=sumCash((db.closeFloat&&db.closeFloat[d])||{});
- let counted=sumCash(db.count[d]||{});
- let floatDiff=closeFloat-float;
- let cashDiff=counted-(r.現金||0);
- let html='<div class="listrow"><span>原零用金</span><b>$'+money(float)+'</b></div>'
- +'<div class="listrow"><span>今日結算零用金</span><b>$'+money(closeFloat)+'</b></div>'
- +'<div class="listrow"><span>零用金差額</span><b>'+(floatDiff===0?'$0':(floatDiff>0?'+':'-')+'$'+money(Math.abs(floatDiff)))+'</b></div>';
- if(hasFloat&&hasClose){
-  html+= floatDiff===0?'<div class="check ok">✅ 零用金相符</div>':`<div class="check bad">⚠️ 零用金差額 $${money(Math.abs(floatDiff))}（結算${floatDiff>0?'多':'少'}於原零用金）</div>`;
- }
- html+='<div class="listrow" style="margin-top:10px"><span>系統計算現金營收</span><b>$'+money(r.現金||0)+'</b></div>'
- +'<div class="listrow"><span>今日營收現金（實際點）</span><b>$'+money(counted)+'</b></div>'
- +'<div class="listrow"><span>現金營收差額</span><b>'+(cashDiff===0?'$0':(cashDiff>0?'+':'-')+'$'+money(Math.abs(cashDiff)))+'</b></div>';
- html+= hasCount?(cashDiff===0?'<div class="check ok">✅ 現金營收相符</div>':`<div class="check bad">⚠️ 現金差額 $${money(Math.abs(cashDiff))}（實際${cashDiff>0?'多':'少'}於系統紀錄）</div>`):'<div class="check warn">尚未輸入今日營收現金清點。</div>';
- return html;
-}
-function parseSerialToken(tok){
- tok=tok.trim();
- if(!tok)return null;
- let parts=tok.split(/[~～]/).map(x=>x.trim()).filter(Boolean);
- if(parts.length===1){
-  let m=parts[0].match(/^([A-Za-z]*)(\d+)$/);
-  if(!m)return {raw:tok};
-  return {prefix:m[1].toUpperCase(),start:parseInt(m[2],10),end:parseInt(m[2],10),width:m[2].length};
- } else if(parts.length===2){
-  let m1=parts[0].match(/^([A-Za-z]*)(\d+)$/);
-  let m2=parts[1].match(/^([A-Za-z]*)(\d+)$/);
-  if(!m1||!m2)return {raw:tok};
-  let prefix=(m1[1]||m2[1]||'').toUpperCase();
-  let start=parseInt(m1[2],10),end=parseInt(m2[2],10);
-  let width=m1[2].length;
-  if(end<start){let t=start;start=end;end=t}
-  return {prefix,start,end,width};
- }
- return {raw:tok};
-}
-function summarizeSerials(list){
- let tokens=[];
- list.forEach(s=>{s.split(/[,、;；]/).forEach(t=>{if(t.trim())tokens.push(t)})});
- let groups={},raws=[];
- tokens.forEach(t=>{
-  let p=parseSerialToken(t);
-  if(!p)return;
-  if(p.raw){raws.push(p.raw);return}
-  groups[p.prefix]=groups[p.prefix]||[];
-  groups[p.prefix].push(p);
- });
- let lines=[],total=0;
- Object.keys(groups).forEach(prefix=>{
-  let ivs=groups[prefix].sort((a,b)=>a.start-b.start);
-  let merged=[];
-  ivs.forEach(iv=>{
-   if(merged.length&&iv.start<=merged[merged.length-1].end+1){
-    merged[merged.length-1].end=Math.max(merged[merged.length-1].end,iv.end);
-    merged[merged.length-1].width=Math.max(merged[merged.length-1].width,iv.width);
-   } else {
-    merged.push({start:iv.start,end:iv.end,width:iv.width});
-   }
-  });
-  merged.forEach(iv=>{
-   total+=iv.end-iv.start+1;
-   let pad=n=>String(n).padStart(iv.width,'0');
-   lines.push(iv.start===iv.end?(prefix+pad(iv.start)):(prefix+pad(iv.start)+'~'+prefix+pad(iv.end)));
-  });
- });
- if(raws.length){total+=raws.length;lines.push(raws.join('、'))}
- return {lines,total};
-}
-function buildSerialHtml(rows){
- let map={};
- rows.forEach(x=>(x.items||[]).forEach(it=>{
-  if(it.serial&&it.serial.trim()){
-   map[it.id]=map[it.id]||{name:it.name,serials:[]};
-   map[it.id].serials.push(it.serial);
-  }
- }));
- let keys=Object.keys(map);
- if(!keys.length)return '<p class="muted">尚無票號紀錄</p>';
- return keys.map(id=>{
-  let sum=summarizeSerials(map[id].serials);
-  return `<div class="listrow" style="display:block"><b>${esc(map[id].name)}</b><div class="muted" style="margin-top:4px">${sum.lines.map(esc).join('、')}，共 ${sum.total} 張</div></div>`;
- }).join('');
-}
-function renderQuick(){
- let d=saleDate.value||today;
- quickTitle.textContent=(d===today?'今日':d)+' 快速統計';
- let r=totals(d);
- quick.innerHTML=buildStatsHtml(r);
-}
-
-/* ---------- 現金清點 ---------- */
-function makeCashTable(kind){
- let saved=db[kind][today]||{};
- let half=Math.ceil(DEN.length/2);
- let col1=DEN.slice(0,half),col2=DEN.slice(half);
- function colHtml(list){
-  return `<table><thead><tr><th>面額</th><th>數量</th><th>小計</th></tr></thead><tbody>`+
-  list.map(d=>`<tr><td>$${money(d)}</td><td><input class="moneyInput cashnum" data-kind="${kind}" data-den="${d}" type="number" min="0" value="${saved[d]||0}" oninput="updateCash('${kind}')"></td><td id="${kind}-${d}">$${money((saved[d]||0)*d)}</td></tr>`).join('')+
-  `</tbody></table>`;
- }
- return `<div class="row cashDual" style="align-items:flex-start">${colHtml(col1)}${colHtml(col2)}</div>`;
-}
-function renderCash(){
- let fa=getFloatAmount(today);
- floatAmount.value=fa!=null?fa:'';
- closeFloatTable.innerHTML=makeCashTable('closeFloat');
- countTable.innerHTML=makeCashTable('count');
- updateCash('closeFloat');updateCash('count');
- renderCashCheck();
-}
-function getCash(kind){let o={};document.querySelectorAll(`.cashnum[data-kind="${kind}"]`).forEach(i=>o[i.dataset.den]=+i.value||0);return o}
-function sumCash(o){return DEN.reduce((s,d)=>s+d*(+o[d]||0),0)}
-function updateCash(kind){let o=getCash(kind);DEN.forEach(d=>document.getElementById(kind+'-'+d).textContent='$'+money(d*(o[d]||0)));document.getElementById(kind+'Total').textContent=money(sumCash(o));if(kind==='closeFloat'||kind==='count')renderCashCheck()}
-function saveFloat(){db.floatAmount[today]=+floatAmount.value||0;save();renderCashCheck();alert('原零用金已儲存')}
-function saveCloseFloat(){db.closeFloat[today]=getCash('closeFloat');save();renderCashCheck();alert('今日結算零用金已儲存')}
-function saveCount(){db.count[today]=getCash('count');save();renderCashCheck();alert('今日營收現金已儲存')}
-function renderCashCheck(){let r=totals(today);cashCheck.innerHTML=buildCashCheckHtml(today,r)}
-
-/* ---------- 文字摘要／複製 ---------- */
-let summaryTexts={};
-function toROCDate(dateStr){
- let parts=dateStr.split('-').map(Number);
- let y=parts[0],m=parts[1],d=parts[2];
- return `${y-1911}/${String(m).padStart(2,'0')}/${String(d).padStart(2,'0')}`;
-}
-function buildSummaryText(r,label){
- let itemsText=Object.keys(r.itemQty).map(id=>`${r.itemNames[id]}*${r.itemQty[id]}`).join('｜')||'無銷售';
- return `${label}\n${itemsText}\n共計 ${money(r.total)} 元`;
-}
-function buildExpoSummaryText(rows,label){
- let groups=expoGroups(rows),names=Object.keys(groups);
- if(!names.length)return `${label}\n無銷售`;
- return `${label}\n\n`+names.map(name=>buildSummaryText(aggregateRows(groups[name]),name)).join('\n\n');
-}
-function renderExpoSummaryBlock(elId,key,rows,label){
- let text=buildExpoSummaryText(rows,label);summaryTexts[key]=text;
- let el=document.getElementById(elId);if(!el)return;
- el.innerHTML=`<div class="summaryBox" id="summary-${key}">${esc(text)}</div><button class="secondary" style="margin-top:8px" onclick="copySummary('${key}')">📋 複製文字摘要</button>`;
-}
-function renderSummaryBlock(elId,key,r,label){
- let text=buildSummaryText(r,label);
- summaryTexts[key]=text;
- let el=document.getElementById(elId);
- if(!el)return;
- el.innerHTML=`<div class="summaryBox">${esc(text)}</div><button class="secondary" style="width:100%;margin-top:8px" id="copyBtn-${key}" onclick="copySummary('${key}')">📋 複製文字摘要</button>`;
-}
-function copySummary(key){
- let text=summaryTexts[key];
- if(!text)return;
- let btn=document.getElementById('copyBtn-'+key);
- if(navigator.clipboard&&navigator.clipboard.writeText){
-  navigator.clipboard.writeText(text).then(()=>flashCopied(btn)).catch(()=>fallbackCopy(text,btn));
- } else fallbackCopy(text,btn);
-}
-function fallbackCopy(text,btn){
- let ta=document.createElement('textarea');
- ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';
- document.body.appendChild(ta);ta.select();
- try{document.execCommand('copy')}catch(e){}
- document.body.removeChild(ta);
- flashCopied(btn);
-}
-function flashCopied(btn){
- if(!btn)return;
- let orig=btn.textContent;
- btn.textContent='✅ 已複製';
- setTimeout(()=>{btn.textContent=orig},1500);
-}
-function bannerHtml(title,expo){
- let name=expo===undefined?(cityDisplay()||''):expo;
- return `<div class="banner"><div class="sub">展場收銀報表${name?'．'+esc(name):''}</div><div class="main">${esc(title)}</div></div>`;
-}
-
-/* ---------- 今日營收（可調整） ---------- */
-function buildTransferHtml(rows){
- let list=rows.filter(x=>x.pay==='匯款');
- if(!list.length)return '<p class="muted">尚無匯款紀錄</p>';
- return list.map(x=>`<div class="listrow"><span>${esc(x.time||'')}　末5碼 ${esc(x.transferLast5||'—')}</span><b>$${money(x.total)}</b></div>`).join('');
-}
-function renderReport(){
- let d=reportEditDate.value||today;
- let r=totals(d),rows=salesOf(d);
- reportBanner.innerHTML=bannerHtml(toROCDate(d),expoForSale(rows[0]||{date:d}));
- todayReport.innerHTML=buildStatsHtml(r);
- todayCash.innerHTML=buildCashCheckHtml(d,r);
- serialList.innerHTML=buildSerialHtml(rows);
- saleEdit.innerHTML=rows.length?rows.map(renderSaleEditRow).join(''):'<p class="muted">此日期尚無交易</p>';
- transferList.innerHTML=buildTransferHtml(rows);
- renderSummaryBlock('reportSummary','report',r,expoForSale(rows[0]||{date:d})+'・'+toROCDate(d));
-}
-function renderReportStatsOnly(){
- let d=reportEditDate.value||today;
- let r=totals(d),rows=salesOf(d);
- todayReport.innerHTML=buildStatsHtml(r);
- todayCash.innerHTML=buildCashCheckHtml(d,r);
- serialList.innerHTML=buildSerialHtml(rows);
- renderSummaryBlock('reportSummary','report',r,toROCDate(d));
-}
-function renderSaleEditRow(sale){
- let itemsHtml=db.products.map(p=>{
-  let it=(sale.items||[]).find(i=>i.id===p.id);
-  let qty=it?it.qty:0;
-  let serialField='';
-  if(p.needSerial){
-   let serialVal=it?serialDisplayValue(p,it.serial||''):'';
-   serialField=`<div class="prefixGroup" style="flex:1"><span class="ptag">${esc(p.serialPrefix||'')}</span><input id="serial-${sale.id}-${p.id}" type="text" placeholder="票號" value="${esc(serialVal)}" oninput="updateSaleItemSerial('${sale.id}','${p.id}')"></div>`;
-  }
-  return `<div class="edititem"><span class="lbl">${esc(p.name)}</span><input id="qty-${sale.id}-${p.id}" type="number" min="0" value="${qty}" oninput="updateSaleItem('${sale.id}','${p.id}')" style="flex:0 0 56px">${serialField}</div>`;
- }).join('');
- return `<div class="saleCard" id="saleRow-${sale.id}">
- <div class="row" style="flex-wrap:wrap">
-  <input type="date" id="date-${sale.id}" value="${sale.date}" onchange="updateSaleDate('${sale.id}',this.value)" style="flex:1 1 130px">
-  <span class="badge" style="flex:0 0 auto">${esc(sale.time||'')}</span>
-  <select onchange="updateSalePay('${sale.id}',this.value)" style="flex:1 1 90px">
-   <option ${sale.pay==='現金'?'selected':''}>現金</option>
-   <option ${sale.pay==='匯款'?'selected':''}>匯款</option>
-   <option ${sale.pay==='刷卡'?'selected':''}>刷卡</option>
-  </select>
-  <button class="secondary danger" style="flex:0 0 40px" onclick="deleteSale('${sale.id}')">✕</button>
+function editVolume(sid,vid){
+ let s=db.series.find(x=>x.id===sid),v=s.volumes.find(x=>x.id===vid);
+ let cfg=TYPE_FORM_CONFIG[s.type]||TYPE_FORM_CONFIG['書籍'];
+ showModal(`<h2>${esc(v.volumeNo)}</h2><div class="formgrid">
+<div><label>卷次／單集</label><input id="evNo" value="${esc(v.volumeNo||'')}"></div>${cfg.showISBN?`<div><label>ISBN-13</label><input id="evISBN" value="${esc(v.isbn13||'')}"></div>`:''}
+<div><label>${esc(cfg.dateLabel)}</label><input id="evDate2" value="${esc(v.publishedDate||'')}"></div><div><label>購入日期</label><input id="evDate" type="date" value="${esc(v.purchaseDate||'')}"></div>
+<div><label>參考／原價</label><input id="evList" type="number" step="0.01" value="${esc(v.listPrice||'')}"></div><div><label>實際購入價</label><input id="evBuy" type="number" step="0.01" value="${esc(v.purchasePrice||'')}"></div>
+<div><label>折扣</label><input id="evDisc" type="number" step="0.01" value="${esc(v.discount||'')}"></div>
+<div><label>版本</label>${editionSelectHtml('evEdition',v.edition||'')}</div>
+${cfg.showItemKind?`<div class="full"><label>${esc(cfg.itemKindLabel)}</label><input id="evItemKind" value="${esc(v.itemKind||'')}" placeholder="${esc(cfg.itemKindPlaceholder||'')}"><div id="evItemKindSuggest">${suggestChipsHtml(s.type,cfg.itemKindField,'evItemKind',false)}</div></div>`:''}
+<div><label>地區限定（選填）</label><input id="evRegion" value="${esc(v.region||'')}" placeholder="例如：日本限定"></div>
+<div><label>優先順序（想買清單用）</label><select id="evPriority"><option value="中" ${!v.priority||v.priority==='中'?'selected':''}>中</option><option value="高" ${v.priority==='高'?'selected':''}>高</option><option value="低" ${v.priority==='低'?'selected':''}>低</option></select></div>
+<div class="full"><label>備註</label><input id="evNotes" value="${esc(v.notes||'')}"></div>
+</div><div class="switch"><span>已購入</span><input id="evOwned" type="checkbox" ${v.owned?'checked':''}></div>
+<div class="switch"><span>待出售</span><input id="evSell" type="checkbox" ${v.sell?'checked':''}></div>
+<div class="switch"><span>絕版</span><input id="evOOP" type="checkbox" ${v.outOfPrint?'checked':''}></div>
+<button class="btn purple" style="width:100%;margin-top:12px" onclick="saveEdit('${sid}','${vid}')">儲存</button>
+<button class="btn red" style="width:100%;margin-top:8px" onclick="deleteVolume('${sid}','${vid}')">刪除這一集</button>`) }
+function saveEdit(sid,vid){
+ let s=db.series.find(x=>x.id===sid),v=s.volumes.find(v=>v.id===vid);
+ let cfg=TYPE_FORM_CONFIG[s.type]||TYPE_FORM_CONFIG['書籍'];
+ v.volumeNo=document.getElementById('evNo').value.trim();
+ v.isbn13=(document.getElementById('evISBN')?.value||'').trim();
+ v.publishedDate=document.getElementById('evDate2').value.trim();
+ v.listPrice=document.getElementById('evList').value;v.purchasePrice=document.getElementById('evBuy').value;v.discount=document.getElementById('evDisc').value;
+ v.edition=readEdition('evEdition');
+ v.itemKind=(document.getElementById('evItemKind')?.value||'').trim();
+ v.region=(document.getElementById('evRegion')?.value||'').trim();
+ let wasOwned=v.owned;v.owned=document.getElementById('evOwned').checked;v.purchaseDate=document.getElementById('evDate').value||(v.owned&&!wasOwned?new Date().toISOString().slice(0,10):v.purchaseDate);
+ v.priority=document.getElementById('evPriority').value;v.notes=document.getElementById('evNotes').value.trim();v.sell=document.getElementById('evSell').checked;v.outOfPrint=document.getElementById('evOOP').checked;
+ if(v.itemKind)bumpSuggest(s.type,cfg.itemKindField,v.itemKind);
+ save();openSeries(sid)}
+function buyVolume(sid,vid){let v=db.series.find(s=>s.id===sid).volumes.find(v=>v.id===vid);v.owned=true;showModal(`<h2>記錄購入價格</h2><label>實際購入價（可輸入小數）</label><input id="quickBuy" type="number" step="0.01" placeholder="例如 25.5"><label>折扣</label><input id="quickDisc" type="number" step="0.01"><button class="btn purple" style="width:100%;margin-top:12px" onclick="finishBuy('${sid}','${vid}')">完成</button>`)}
+function finishBuy(sid,vid){let v=db.series.find(s=>s.id===sid).volumes.find(v=>v.id===vid);v.purchasePrice=document.getElementById('quickBuy').value;v.discount=document.getElementById('quickDisc').value;v.purchaseDate=new Date().toISOString().slice(0,10);save();closeModal();toast('已更新購入紀錄')}
+function deleteVolume(sid,vid){if(!confirm('確定刪除這一集？'))return;let s=db.series.find(x=>x.id===sid);s.volumes=s.volumes.filter(v=>v.id!==vid);if(!s.volumes.length){db.series=db.series.filter(x=>x.id!==sid);save();closeModal()}else{save();openSeries(sid)}}
+function deleteSeries(sid){if(!confirm('確定要刪除整個作品（含所有集數）嗎？此動作無法復原。'))return;db.series=db.series.filter(x=>x.id!==sid);save();closeModal();toast('已刪除作品')}
+function editSeriesInfo(sid){
+ let s=db.series.find(x=>x.id===sid);if(!s)return;
+ let curType=s.type||'書籍';
+ let cfg=TYPE_FORM_CONFIG[curType]||TYPE_FORM_CONFIG['書籍'];
+ showModal(`<h2>編輯作品資訊</h2><div class="formgrid">
+ <div class="full"><label>系列／作品名稱</label><input id="esTitle" value="${esc(s.title)}"></div>
+ <div><label>收藏類型</label>${typeSelectHtml('esType',curType,"updateFormForType('es',this.value)")}</div>
+ <div id="esAuthorWrap"><label>${esc(cfg.authorLabel)}</label><input id="esAuthor" value="${esc((s.authors||[]).join('、'))}"><div id="esAuthorSuggest">${suggestChipsHtml(curType,cfg.authorField,'esAuthor',true)}</div></div>
+ <div id="esPublisherWrap"><label>${esc(cfg.publisherLabel)}</label><input id="esPublisher" value="${esc(s.publisher||'')}"></div>
+ <div><label>語言</label>${langSelectHtml('esLang',s.language||'')}</div>
+ <div><label>分類</label><div id="esCatWrap">${categorySelectHtml('esCat',curType,s.category||'')}</div></div>
+ <div id="esStatusWrap"><label>連載狀態</label><select id="esStatus"><option value="未知" ${!s.status||s.status==='未知'?'selected':''}>未知</option><option value="連載中" ${s.status==='連載中'?'selected':''}>連載中（還會繼續出）</option><option value="已完結" ${s.status==='已完結'?'selected':''}>已完結（不用再追）</option></select></div>
+ <div class="full"><label>封面 URL 或從相簿上傳</label><input id="esCover" value="${esc(s.cover||'')}">
+ <input type="file" accept="image/*" style="margin-top:8px" onchange="handleCoverFile(this,'esCover')"></div>
  </div>
- <div id="transferRow-${sale.id}" class="edititem" style="display:${sale.pay==='匯款'?'flex':'none'}">
-  <span class="lbl">末5碼</span><input id="transfer-${sale.id}" type="text" maxlength="5" inputmode="numeric" placeholder="匯款末5碼" value="${esc(sale.transferLast5||'')}" oninput="updateSaleTransfer('${sale.id}',this.value)">
- </div>
- ${itemsHtml}
- <div class="edititem"><span class="lbl">折扣</span><input type="number" min="0" value="${sale.discount||0}" oninput="updateSaleDiscount('${sale.id}',this.value)"></div>
- <div class="edititem"><span class="lbl">備註</span><input type="text" value="${esc(sale.note||'')}" placeholder="備註" oninput="updateSaleNote('${sale.id}',this.value)"></div>
- <div style="text-align:right;font-weight:700;margin-top:6px">小計 $<span id="saleSub-${sale.id}">${money(sale.subtotal!=null?sale.subtotal:sale.total)}</span>　應收 $<span id="saleFinal-${sale.id}">${money(sale.total)}</span></div>
- </div>`;
+ <button class="btn purple" style="width:100%;margin-top:12px" onclick="saveSeriesInfo('${sid}')">儲存</button>
+ <button class="btn red" style="width:100%;margin-top:8px" onclick="deleteSeries('${sid}')">刪除整個作品</button>`)
 }
-function recalcSale(sale){
- sale.subtotal=(sale.items||[]).reduce((s,i)=>s+i.qty*i.price,0);
- if(sale.discount>sale.subtotal)sale.discount=sale.subtotal;
- if(sale.discount<0)sale.discount=0;
- sale.total=sale.subtotal-(sale.discount||0);
+function saveSeriesInfo(sid){
+ let s=db.series.find(x=>x.id===sid);if(!s)return;
+ let type=document.getElementById('esType').value;
+ let cfg=TYPE_FORM_CONFIG[type]||TYPE_FORM_CONFIG['書籍'];
+ s.title=document.getElementById('esTitle').value.trim()||s.title;
+ s.type=type;
+ s.authors=document.getElementById('esAuthor').value.split(/[,、]/).map(x=>x.trim()).filter(Boolean);
+ s.publisher=document.getElementById('esPublisher').value.trim();
+ s.language=readLang('esLang');
+ s.category=readCategory('esCat');
+ s.status=document.getElementById('esStatus').value;
+ s.cover=document.getElementById('esCover').value.trim();
+ s.authors.forEach(a=>bumpSuggest(type,cfg.authorField,a));
+ save();openSeries(sid)
 }
-function refreshSaleRowTotals(sale){
- let subEl=document.getElementById('saleSub-'+sale.id),finEl=document.getElementById('saleFinal-'+sale.id);
- if(subEl)subEl.textContent=money(sale.subtotal);
- if(finEl)finEl.textContent=money(sale.total);
+function openShare(){
+ let names=Object.keys(THEMES),cur=db.settings.theme;
+ showModal(`<h2>設定</h2>
+<h3>外觀主題</h3>
+<div class="row wrap" style="margin-bottom:16px">${names.map(n=>`<button class="btn ${n===cur?'purple':''}" onclick="chooseTheme('${n}')">${esc(n)}</button>`).join('')}</div>
+<hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+<h3>備份與還原</h3><div class="muted" style="margin-bottom:10px">資料只存在這台裝置的瀏覽器裡，建議定期匯出備份。</div>
+<div class="row wrap"><button class="btn" onclick="exportData()">⬇︎ 匯出備份 JSON</button><button class="btn" onclick="document.getElementById('importFile').click()">⬆︎ 匯入備份 JSON</button></div>`)
 }
-function manualSaveAllSales(){save();flashSaved('saveMsgSales')}
-function updateSaleItem(saleId,pid){
- let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
- let qtyInput=document.getElementById('qty-'+saleId+'-'+pid);
- let serialInput=document.getElementById('serial-'+saleId+'-'+pid);
- let qty=+(qtyInput?qtyInput.value:0)||0;
- let p=db.products.find(x=>x.id===pid);
- let serial=(p&&p.needSerial)?composeSerial(p,serialInput?serialInput.value:''):'';
- let existing=(sale.items||[]).find(i=>i.id===pid);
- if(qty<=0){sale.items=(sale.items||[]).filter(i=>i.id!==pid)}
- else if(existing){existing.qty=qty;existing.serial=serial}
- else{sale.items=sale.items||[];sale.items.push({id:pid,name:p?p.name:pid,price:p?p.price:0,qty,serial})}
- recalcSale(sale);save();refreshSaleRowTotals(sale);renderReportStatsOnly();
+function chooseTheme(name){db.settings.theme=name;save();applyTheme(name);openShare()}
+function loadImageSafe(src){
+ return new Promise((resolve,reject)=>{
+  if(!src){reject(new Error('no src'));return}
+  let img=new Image();
+  if(!src.startsWith('data:'))img.crossOrigin='anonymous';
+  img.onload=()=>resolve(img);
+  img.onerror=()=>reject(new Error('封面載入失敗'));
+  img.src=src
+ })
 }
-function updateSaleItemSerial(saleId,pid){
- let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
- let existing=(sale.items||[]).find(i=>i.id===pid);
- if(!existing)return;
- let p=db.products.find(x=>x.id===pid);
- let serialInput=document.getElementById('serial-'+saleId+'-'+pid);
- existing.serial=(p&&p.needSerial)?composeSerial(p,serialInput?serialInput.value:''):'';
- save();
- serialList.innerHTML=buildSerialHtml(salesOf(sale.date));
+function roundRectPath(ctx,x,y,w,h,r){
+ ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()
 }
-function updateSaleDiscount(saleId,val){
- let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
- sale.discount=+val||0;recalcSale(sale);save();refreshSaleRowTotals(sale);renderReportStatsOnly();
+function drawCoverContain(ctx,img,x,y,w,h){
+ let ir=img.width/img.height,br=w/h,dw,dh,dx,dy;
+ if(ir>br){dh=h;dw=h*ir;dx=x-(dw-w)/2;dy=y}else{dw=w;dh=w/ir;dx=x;dy=y-(dh-h)/2}
+ ctx.drawImage(img,dx,dy,dw,dh)
 }
-function updateSaleNote(saleId,val){
- let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
- sale.note=val;save();
-}
-function updateSaleDate(saleId,val){
- let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
- if(!val)return;
- let viewDate=reportEditDate.value||today;
- sale.date=val;
- save();
- renderReport();
- if(val!==viewDate){
-  alert('已將這筆交易的日期改為 '+val+'，可切換到該日期查看。');
+function wrapCJKText(ctx,text,x,y,maxWidth,lineHeight,maxLines,align){
+ let line='',lines=[];
+ for(let ch of String(text||'')){
+  let test=line+ch;
+  if(ctx.measureText(test).width>maxWidth && line){lines.push(line);line=ch}else{line=test}
+  if(lines.length>=maxLines)break
  }
+ if(line && lines.length<maxLines)lines.push(line);
+ if(lines.length===maxLines){let last=lines[maxLines-1];if(ctx.measureText(last+'…').width>maxWidth)last=last.slice(0,-1);lines[maxLines-1]=last+(String(text||'').length>lines.join('').length?'…':'')}
+ lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lineHeight));
+ return lines.length
 }
-function updateSalePay(saleId,val){
- let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
- sale.pay=val;save();
- let row=document.getElementById('transferRow-'+saleId);
- if(row)row.style.display=val==='匯款'?'flex':'none';
- renderReportStatsOnly();
- transferList.innerHTML=buildTransferHtml(salesOf(sale.date));
-}
-function updateSaleTransfer(saleId,val){
- let sale=db.sales.find(s=>s.id===saleId);if(!sale)return;
- sale.transferLast5=val;save();
- transferList.innerHTML=buildTransferHtml(salesOf(sale.date));
-}
-function deleteSale(saleId){
- let sale=db.sales.find(s=>s.id===saleId);
- if(!confirm(`確定要刪除這筆交易紀錄嗎？（金額 $${sale?money(sale.total):''}）\n此動作無法復原。`))return;
- db.sales=db.sales.filter(s=>s.id!==saleId);
- save();renderReport();
-}
-
-/* ---------- 日期報表 ---------- */
-function quickRange(type){
- let end=new Date();
- let start=new Date();
- if(type==='7d')start.setDate(start.getDate()-6);
- else if(type==='1m')start.setMonth(start.getMonth()-1);
- else if(type==='6m')start.setMonth(start.getMonth()-6);
- else if(type==='1y')start.setFullYear(start.getFullYear()-1);
- rangeStart.value=fmtDate(start);
- rangeEnd.value=fmtDate(end);
- renderRange();
-}
-function renderRange(){
- let s=rangeStart.value,e=rangeEnd.value;
- if(!s||!e){alert('請選擇起訖日期');return}
- if(s>e){alert('起始日期需早於或等於結束日期');return}
- let rows=db.sales.filter(x=>x.date>=s&&x.date<=e);
- let r=aggregateRows(rows);
- let title=s===e?toROCDate(s):(toROCDate(s)+'～'+toROCDate(e));
- rangeBanner.innerHTML=bannerHtml(title,'依旅展分類');
- rangeReport.innerHTML=buildRangeOverallHtml(r)+buildExpoPerformanceHtml(rows)+'<h3>旅展分類</h3>'+buildExpoGroupsHtml(rows);
- renderExpoSummaryBlock('rangeSummary','range',rows,title);
- rangeTransfer.innerHTML='';
- renderRangeChart(rows,s,e);
- renderDailyExpoChart(rows);
-}
-function renderRangeChart(rows,s,e){
- let canvas=document.getElementById('rangeChartCanvas');
- if(!canvas||typeof Chart==='undefined')return;
- if(window._rangeChart){window._rangeChart.destroy()}
- let ranked=Object.entries(expoGroups(rows)).map(([name,part])=>({name,total:aggregateRows(part).total})).sort((a,b)=>b.total-a.total);
- if(!ranked.length)ranked=[{name:'尚無交易',total:0}];
- let labels=ranked.map(x=>x.name),values=ranked.map(x=>x.total);
+async function drawShareCard(canvas,s,ratio){
+ let w=ratio==='16:9'?1200:675, h=ratio==='16:9'?675:1200;
+ canvas.width=w;canvas.height=h;
  let ctx=canvas.getContext('2d');
- window._rangeChart=new Chart(ctx,{
-  type:'bar',
-  data:{labels,datasets:[{label:'營業額',data:values,backgroundColor:ranked.map((x,i)=>i===0?'#d39b13':'#17324d'),borderRadius:7}]},
-  options:{animation:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'營業額：$'+money(c.raw)}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+money(v)}},x:{ticks:{maxRotation:0,minRotation:0,autoSkip:false,font:{size:11}}}}}
- });
-}
-function renderDailyExpoChart(rows){
- let canvas=document.getElementById('dailyExpoChartCanvas');
- if(!canvas||typeof Chart==='undefined')return;
- if(window._dailyExpoChart){window._dailyExpoChart.destroy()}
- let groups=expoGroups(rows),labels=Array.from(new Set(rows.map(x=>x.date))).sort();
- if(!labels.length)labels=[today];
- let colors=['#17324d','#d39b13','#317a5a','#9b4d96','#bc5b31','#3b7ea1'];
- let datasets=Object.entries(groups).map(([expo,part],i)=>{
-  let totalsByDate={};part.forEach(x=>totalsByDate[x.date]=(totalsByDate[x.date]||0)+x.total);
-  return {label:expo,data:labels.map(d=>totalsByDate[d]||0),backgroundColor:colors[i%colors.length],borderRadius:5};
- });
- if(!datasets.length)datasets=[{label:'尚無交易',data:[0],backgroundColor:'#17324d'}];
- window._dailyExpoChart=new Chart(canvas.getContext('2d'),{
-  type:'bar',data:{labels:labels.map(d=>d.slice(5).replace('-','/')),datasets},
-  options:{animation:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}},tooltip:{callbacks:{title:items=>labels[items[0].dataIndex].replaceAll('-','/'),label:c=>c.dataset.label+'：$'+money(c.raw)}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+money(v)}},x:{stacked:false,ticks:{autoSkip:false,maxRotation:45,minRotation:45,font:{size:10}}}}}
- });
-}
-function renderDateList(){
- let dates=Array.from(new Set(db.sales.map(x=>x.date))).sort().reverse();
- let dailyListPanel=document.getElementById('dailyRevenueDetails');if(dailyListPanel)dailyListPanel.style.display=dates.length?'block':'none';
- if(!dates.length){dateList.innerHTML='<p class="muted">尚無銷售紀錄</p>';return}
- dateList.innerHTML=`<table><thead><tr><th>旅展</th><th>日期</th><th>營業額</th><th>筆數</th></tr></thead><tbody>`+
- dates.map(d=>{let r=totals(d),first=salesOf(d)[0];return `<tr><td>${esc(expoForSale(first||{date:d}))}</td><td>${d}</td><td>$${money(r.total)}</td><td>${r.count}</td></tr>`}).join('')+`</tbody></table>`;
-}
-
-/* ---------- Excel 匯出 ---------- */
-function excelSheetName(name,used){
- let base=String(name||'旅展');['\\\\','/','?', '*', ':','[',']'].forEach(ch=>base=base.split(ch).join('-'));
- base=base.slice(0,31)||'旅展';let candidate=base,n=2;
- while(used.has(candidate)){candidate=(base.slice(0,28)+'_'+n).slice(0,31);n++}
- used.add(candidate);return candidate;
-}
-function exportExcel(rows,label,cashDate,dailyBreakdown){
- if(typeof XLSX==='undefined'){alert('Excel功能載入失敗，請確認網路連線後重試');return}
- let wb=XLSX.utils.book_new();
- let sheetNames=new Set(['營業報表總覽','旅展總表','交易明細','票號彙總','每日明細']);
- let r=aggregateRows(rows);
- let aoa=[];
- aoa.push(['展場收銀　營業報表']);
- aoa.push(['旅展分類',Object.keys(expoGroups(rows)).join('／')||'（未設定）']);
- aoa.push(['報表範圍',label]);
- aoa.push(['產生時間',new Date().toLocaleString('zh-TW')]);
- aoa.push([]);
- aoa.push(['營收總覽']);
- aoa.push(['項目','金額']);
- aoa.push(['現金營收',r.現金||0]);
- aoa.push(['匯款營收',r.匯款||0]);
- aoa.push(['刷卡營收',r.刷卡||0]);
- aoa.push(['折扣總額',r.discount||0]);
- aoa.push(['營業額（淨額）',r.total]);
- aoa.push(['交易筆數',r.count]);
- aoa.push([]);
- aoa.push(['商品銷售明細']);
- aoa.push(['商品','數量','小計金額','佔營業額比例']);
- Object.keys(r.itemQty).forEach(id=>{
-  let rev=r.itemRevenue[id]||0;
-  let pct=r.total?(rev/r.total*100).toFixed(1)+'%':'0%';
-  aoa.push([r.itemNames[id],r.itemQty[id],rev,pct]);
- });
- if(cashDate){
-  let float=getFloatAmount(cashDate)||0,closeFloat=sumCash((db.closeFloat&&db.closeFloat[cashDate])||{}),counted=sumCash(db.count[cashDate]||{});
-  aoa.push([]);
-  aoa.push(['現金驗算（'+cashDate+'）']);
-  aoa.push(['項目','金額']);
-  aoa.push(['原零用金',float]);
-  aoa.push(['今日結算零用金',closeFloat]);
-  aoa.push(['零用金差額',closeFloat-float]);
-  aoa.push(['系統計算現金營收',r.現金||0]);
-  aoa.push(['今日營收現金(實際)',counted]);
-  aoa.push(['現金營收差額',counted-(r.現金||0)]);
+ let cs=getComputedStyle(document.documentElement);
+ let bg=(cs.getPropertyValue('--bg')||'#f6f1e9').trim();
+ let accent=(cs.getPropertyValue('--accent')||'#b3623c').trim();
+ let accent2=(cs.getPropertyValue('--accent2')||'#f3e3d3').trim();
+ let text=(cs.getPropertyValue('--text')||'#3b332c').trim();
+ let cardbg=(cs.getPropertyValue('--card')||'#fffaf3').trim();
+ let grad=ctx.createLinearGradient(0,0,w,h);grad.addColorStop(0,accent2);grad.addColorStop(1,bg);
+ ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+ let total=(s.volumes||[]).length,owned=(s.volumes||[]).filter(v=>v.owned).length,pct=total?Math.round(owned/total*100):0;
+ let pad=w*0.07,landscape=ratio==='16:9';
+ let coverOk=false,img=null;
+ if(s.cover){try{img=await loadImageSafe(s.cover);coverOk=true}catch(e){coverOk=false}}
+ let font=w=>`-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif`;
+ let textX,textY,textW,textH;
+ if(landscape){
+  let coverW=h-pad*2,coverX=pad,coverY=pad;
+  ctx.save();roundRectPath(ctx,coverX,coverY,coverW,coverW,28);ctx.clip();
+  if(coverOk){drawCoverContain(ctx,img,coverX,coverY,coverW,coverW)}
+  else{ctx.fillStyle=cardbg;ctx.fillRect(coverX,coverY,coverW,coverW);ctx.fillStyle=accent;ctx.font=`900 ${coverW*0.32}px ${font()}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText((s.title||'?').slice(0,1),coverX+coverW/2,coverY+coverW/2)}
+  ctx.restore();
+  textX=coverX+coverW+pad*0.9;textY=pad;textW=w-textX-pad;textH=h-pad*2
+ } else {
+  let coverH=w*0.62-pad,coverX=pad,coverY=pad,coverW=w-pad*2;
+  ctx.save();roundRectPath(ctx,coverX,coverY,coverW,coverH,28);ctx.clip();
+  if(coverOk){drawCoverContain(ctx,img,coverX,coverY,coverW,coverH)}
+  else{ctx.fillStyle=cardbg;ctx.fillRect(coverX,coverY,coverW,coverH);ctx.fillStyle=accent;ctx.font=`900 ${coverH*0.32}px ${font()}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText((s.title||'?').slice(0,1),coverX+coverW/2,coverY+coverH/2)}
+  ctx.restore();
+  textX=pad;textY=coverY+coverH+pad*0.9;textW=w-pad*2;textH=h-textY-pad
  }
- let ws=XLSX.utils.aoa_to_sheet(aoa);
- ws['!cols']=[{wch:20},{wch:16},{wch:14},{wch:14}];
- XLSX.utils.book_append_sheet(wb,ws,'營業報表總覽');
-
- /* 一頁看完各展營運數字，方便比較與交接。 */
- let rankedExpos=Object.entries(expoGroups(rows)).map(([expo,expoRows])=>{
-  let er=aggregateRows(expoRows),dates=expoRows.map(x=>x.date).sort();
-  return {expo,er,period:dates.length?(dates[0]+'～'+dates[dates.length-1]):''};
- }).sort((a,b)=>b.er.total-a.er.total);
- let totalAOA=[['展場收銀　旅展總表'],['報表範圍',label],['產生時間',new Date().toLocaleString('zh-TW')],[],['排名','旅展','日期區間','營業額','現金','匯款','刷卡','折扣','交易筆數','每筆平均']];
- rankedExpos.forEach((x,i)=>totalAOA.push([i===0?'🏆 1':i+1,x.expo,x.period,x.er.total,x.er.現金||0,x.er.匯款||0,x.er.刷卡||0,x.er.discount||0,x.er.count,x.er.count?Math.round(x.er.total/x.er.count):0]));
- totalAOA.push(['總計','','',r.total,r.現金||0,r.匯款||0,r.刷卡||0,r.discount||0,r.count,r.count?Math.round(r.total/r.count):0]);
- let totalWs=XLSX.utils.aoa_to_sheet(totalAOA);
- totalWs['!cols']=[{wch:9},{wch:26},{wch:24},{wch:14},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:14}];
- XLSX.utils.book_append_sheet(wb,totalWs,'旅展總表');
-
- let detailAOA=[['交易編號','旅展','日期','時間','付款方式','匯款末5碼','項目','數量','單價','金額','票號','折扣(整筆)','應收(整筆)','備註']];
- rows.forEach((x,idx)=>{
-  (x.items||[]).forEach(it=>{detailAOA.push(['T'+(idx+1),expoForSale(x),x.date,x.time||'',x.pay,x.transferLast5||'',it.name,it.qty,it.price,it.qty*it.price,it.serial||'',x.discount||0,x.total,x.note||''])});
- });
- let ws2=XLSX.utils.aoa_to_sheet(detailAOA);
- ws2['!cols']=[{wch:6},{wch:12},{wch:11},{wch:8},{wch:8},{wch:10},{wch:10},{wch:6},{wch:8},{wch:9},{wch:16},{wch:8},{wch:9},{wch:20}];
- XLSX.utils.book_append_sheet(wb,ws2,'交易明細');
-
- /* 每場旅展另建工作表，避免跨展期交易混在同一份明細中。 */
- Object.entries(expoGroups(rows)).forEach(([expo,expoRows],n)=>{
-  let er=aggregateRows(expoRows);
-  let eaoa=[['旅展',expo],['營業額',er.total],['交易筆數',er.count],[],['日期','時間','付款方式','項目','數量','金額','票號','備註']];
-  expoRows.forEach(x=>(x.items||[]).forEach(it=>eaoa.push([x.date,x.time||'',x.pay,it.name,it.qty,it.qty*it.price,it.serial||'',x.note||''])));
-  let ews=XLSX.utils.aoa_to_sheet(eaoa);
-  ews['!cols']=[{wch:12},{wch:10},{wch:10},{wch:12},{wch:8},{wch:10},{wch:18},{wch:20}];
-  XLSX.utils.book_append_sheet(wb,ews,excelSheetName('旅展'+(n+1)+'_'+expo,sheetNames));
- });
-
- let serialAOA=[['項目','票號彙總','總張數']];
- let smap={};
- rows.forEach(x=>(x.items||[]).forEach(it=>{if(it.serial&&it.serial.trim()){smap[it.id]=smap[it.id]||{name:it.name,serials:[]};smap[it.id].serials.push(it.serial)}}));
- Object.keys(smap).forEach(id=>{let sum=summarizeSerials(smap[id].serials);serialAOA.push([smap[id].name,sum.lines.join('、'),sum.total])});
- let ws3=XLSX.utils.aoa_to_sheet(serialAOA);
- ws3['!cols']=[{wch:14},{wch:30},{wch:10}];
- XLSX.utils.book_append_sheet(wb,ws3,'票號彙總');
-
- if(dailyBreakdown){
-  let dates=Array.from(new Set(rows.map(x=>x.date))).sort();
-  let daoa=[['日期','營業額','現金','匯款','刷卡','交易筆數']];
-  dates.forEach(d=>{let rr=aggregateRows(rows.filter(x=>x.date===d));daoa.push([d,rr.total,rr.現金||0,rr.匯款||0,rr.刷卡||0,rr.count])});
-  let ws4=XLSX.utils.aoa_to_sheet(daoa);
-  ws4['!cols']=[{wch:12},{wch:12},{wch:10},{wch:10},{wch:10},{wch:10}];
-  XLSX.utils.book_append_sheet(wb,ws4,'每日明細');
+ ctx.textAlign=landscape?'left':'center';ctx.textBaseline='top';
+ let cx=landscape?textX:textX+textW/2;
+ let titleSize=textW*(landscape?0.1:0.09);
+ ctx.font=`900 ${titleSize}px ${font()}`;ctx.fillStyle=text;
+ let linesUsed=wrapCJKText(ctx,s.title||'未命名作品',cx,textY,textW,titleSize*1.25,2,landscape?'left':'center');
+ let curY=textY+linesUsed*titleSize*1.25+titleSize*0.35;
+ if((s.authors||[]).length){
+  ctx.font=`600 ${textW*0.05}px ${font()}`;ctx.globalAlpha=.72;
+  ctx.fillText((s.authors||[]).join('、'),cx,curY);ctx.globalAlpha=1;
+  curY+=textW*0.05*1.7
  }
- XLSX.writeFile(wb,label+'.xlsx');
+ curY+=textW*0.03;
+ ctx.font=`900 ${textW*0.17}px ${font()}`;ctx.fillStyle=accent;
+ ctx.fillText(pct+'%',cx,curY);
+ curY+=textW*0.17*1.05;
+ ctx.font=`700 ${textW*0.05}px ${font()}`;ctx.fillStyle=text;ctx.globalAlpha=.82;
+ ctx.fillText(`已收藏 ${owned}/${total}`,cx,curY);ctx.globalAlpha=1;
+ curY+=textW*0.05*1.7;
+ if(s.status && s.status!=='未知'){
+  ctx.font=`700 ${textW*0.042}px ${font()}`;ctx.fillStyle=accent;
+  ctx.fillText(s.status,cx,curY)
+ }
+ ctx.fillStyle=text;ctx.globalAlpha=.5;ctx.font=`700 ${w*0.022}px ${font()}`;ctx.textAlign='right';ctx.textBaseline='alphabetic';
+ ctx.fillText('我的收藏櫃',w-pad*0.6,h-pad*0.35);ctx.globalAlpha=1;
+ return coverOk
 }
-function exportExcelRange(){
- let s=rangeStart.value,e=rangeEnd.value;
- if(!s||!e){alert('請先選擇並統計區間');return}
- let rows=db.sales.filter(x=>x.date>=s&&x.date<=e);
- exportExcel(rows,'區間報表_'+s+'_'+e,null,true);
+function openShareCard(sid){
+ let s=db.series.find(x=>x.id===sid);if(!s)return;
+ showModal(`<h2>分享圖卡</h2>
+<div class="notice">產生一張可以下載、分享到限時動態或社群的收藏卡圖片。如果封面是從其他網站貼網址進來的，因為瀏覽器安全限制，有時候沒辦法把封面一起放進圖片裡，屆時會自動改用純文字版本，資料本身不受影響。</div>
+<div class="row wrap" style="margin:10px 0"><button class="btn small purple" onclick="renderShareCardPreview('${sid}','16:9')">橫式 16:9</button><button class="btn small" onclick="renderShareCardPreview('${sid}','9:16')">直式 9:16（限動）</button></div>
+<div style="display:flex;justify-content:center;background:var(--accent2);border-radius:16px;padding:12px"><canvas id="shareCanvas" style="max-width:100%;height:auto;border-radius:12px"></canvas></div>
+<button class="btn purple" style="width:100%;margin-top:12px" onclick="downloadShareCard('${esc(s.title).replace(/'/g,"\\'")}')">下載圖片</button>`)
+ renderShareCardPreview(sid,'16:9')
 }
-
-/* ---------- 清空交易資料 ---------- */
-function resetTransactionData(){
- let input=prompt('此動作將清空所有交易紀錄、現金清點與票號起始資料（不含商品設定與城市設定）！\n若有連線雲端同步，會影響所有使用同一組班次代碼的人，且無法復原。\n\n若確定要清空，請輸入「清空資料會爆炸」七個字：');
- if(input===null)return;
- if(input.trim()!=='清空資料會爆炸'){alert('輸入不符，已取消，未清空任何資料。');return}
- db.sales=[];
- db.float={};
- db.closeFloat={};
- db.floatAmount={};
- db.count={};
- db.nextSerial={};
- save();
- refreshAll();
- alert('已清空所有交易與清點資料。');
+async function renderShareCardPreview(sid,ratio){
+ let s=db.series.find(x=>x.id===sid);if(!s)return;
+ let canvas=document.getElementById('shareCanvas');if(!canvas)return;
+ let ok=await drawShareCard(canvas,s,ratio);
+ if(!ok && s.cover)toast('封面圖片無法放入（外部網站限制），已改用純文字版本')
 }
-
-/* ---------- Excel 匯入 ---------- */
-function downloadImportTemplate(){
- if(typeof XLSX==='undefined'){alert('Excel功能載入失敗，請確認網路連線後重試');return}
- let aoa=[
-  ['交易編號','日期','時間','付款方式','匯款末5碼','項目','數量','單價','票號','折扣(整筆)','備註'],
-  ['T1','2026-08-24','10:15','現金','','門票',2,100,'BC442786~BC442787','',''],
-  ['T1','2026-08-24','10:15','現金','','肉捲',1,280,'',0,''],
-  ['T2','2026-08-24','10:40','匯款','88888','套票',1,1588,'BC442788','','客人臨時加購']
- ];
- let ws=XLSX.utils.aoa_to_sheet(aoa);
- ws['!cols']=[{wch:10},{wch:12},{wch:8},{wch:10},{wch:10},{wch:10},{wch:6},{wch:8},{wch:18},{wch:10},{wch:18}];
- let wb=XLSX.utils.book_new();
- XLSX.utils.book_append_sheet(wb,ws,'交易明細範例');
- let noteWs=XLSX.utils.aoa_to_sheet([
-  ['匯入說明'],
-  ['1. 「交易編號」相同的列會合併成同一筆交易（例如同一筆訂單買了多樣商品）。'],
-  ['2. 「日期」請填 YYYY-MM-DD 格式，例如 2026-08-24。'],
-  ['3. 「付款方式」請填：現金／匯款／刷卡。'],
-  ['4. 「項目」名稱若與目前設定的販售項目相同會自動對應；不同的話會另外建立一筆對應紀錄。'],
-  ['5. 「折扣(整筆)」與「備註」同一筆交易只需填在其中一列即可。'],
-  ['6. 匯入為「附加」，不會覆蓋或刪除既有資料，建議先備份確認再匯入。']
- ]);
- XLSX.utils.book_append_sheet(wb,noteWs,'說明');
- XLSX.writeFile(wb,'展場收銀_匯入範例檔.xlsx');
+function downloadShareCard(title){
+ let canvas=document.getElementById('shareCanvas');if(!canvas)return;
+ canvas.toBlob(blob=>{
+  if(!blob){toast('產生圖片失敗');return}
+  let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${title||'收藏卡'}.png`;a.click()
+ },'image/png')
 }
-function importExcelFile(input){
- let file=input.files[0];if(!file)return;
- if(typeof XLSX==='undefined'){alert('Excel功能載入失敗，請確認網路連線後重試');return}
+function importData(inputEl){
+ let f=inputEl.files&&inputEl.files[0];if(!f)return;
  let reader=new FileReader();
  reader.onload=e=>{
   try{
-   let data=new Uint8Array(e.target.result);
-   let wb=XLSX.read(data,{type:'array'});
-   let sheetName=wb.SheetNames.find(n=>n.indexOf('交易')>=0)||wb.SheetNames[0];
-   let ws=wb.Sheets[sheetName];
-   let json=XLSX.utils.sheet_to_json(ws,{defval:''});
-   if(!json.length){alert('找不到資料，請確認檔案格式');return}
-   let groups={},order=[];
-   json.forEach(row=>{
-    let tid=String(row['交易編號']||'').trim()||('row_'+order.length);
-    if(!groups[tid]){groups[tid]={date:'',time:'',pay:'現金',transferLast5:'',discount:0,note:'',items:[]};order.push(tid)}
-    let g=groups[tid];
-    if(row['日期'])g.date=String(row['日期']).trim();
-    if(row['時間'])g.time=String(row['時間']).trim();
-    if(row['付款方式'])g.pay=String(row['付款方式']).trim();
-    if(row['匯款末5碼'])g.transferLast5=String(row['匯款末5碼']).trim();
-    if(row['折扣(整筆)']!==undefined&&row['折扣(整筆)']!=='')g.discount=+row['折扣(整筆)']||0;
-    if(row['備註'])g.note=String(row['備註']).trim();
-    let name=String(row['項目']||'').trim();
-    let qty=+row['數量']||0;
-    if(name&&qty>0)g.items.push({name,qty,price:+row['單價']||0,serial:String(row['票號']||'').trim()});
-   });
-   let newSales=order.map(tid=>{
-    let g=groups[tid];
-    let subtotal=g.items.reduce((s,i)=>s+i.qty*i.price,0);
-    let discount=Math.min(Math.max(g.discount,0),subtotal);
-    let total=subtotal-discount;
-    let items=g.items.map(it=>{
-     let p=db.products.find(pp=>pp.name===it.name);
-     return {id:p?p.id:uid('imp'),name:it.name,price:it.price,qty:it.qty,serial:it.serial};
-    });
-    let date=g.date||today;
-    return {id:uid('s'),date,time:g.time||'',expo:expoForDate(date)||cityDisplay()||'未設定展會',items,discount,subtotal,total,pay:g.pay||'現金',transferLast5:g.transferLast5,note:g.note};
-   }).filter(s=>s.items.length);
-   if(!newSales.length){alert('沒有可匯入的交易資料，請確認欄位格式');return}
-   if(!confirm(`即將匯入 ${newSales.length} 筆交易紀錄，確定要繼續嗎？（附加匯入，不會覆蓋既有資料）`))return;
-   db.sales=db.sales.concat(newSales);
-   save();
-   alert('匯入完成，共新增 '+newSales.length+' 筆交易！');
-   renderDateList();
-   input.value='';
-  }catch(err){alert('匯入失敗：'+err.message)}
+   let data=JSON.parse(e.target.result);
+   if(!data||!Array.isArray(data.series))throw new Error('格式錯誤');
+   if(!confirm(`確定要匯入嗎？將合併 ${data.series.length} 筆作品到目前的書櫃（不會刪除現有資料，重複的 id 會略過）。`))return;
+   let existingIds=new Set(db.series.map(s=>s.id)),added=0;
+   data.series.forEach(s=>{if(!existingIds.has(s.id)){db.series.push(s);added++}});
+   save();toast(`已匯入 ${added} 筆作品`);closeModal()
+  }catch(err){toast('匯入失敗，請確認是本 App 匯出的備份檔')}
  };
- reader.readAsArrayBuffer(file);
+ reader.readAsText(f);
+ inputEl.value=''
 }
-
-/* ---------- 圖片報表匯出 ---------- */
-function downloadImage(elId,filename){
- let el=document.getElementById(elId);
- if(!el)return;
- if(typeof html2canvas==='undefined'){alert('圖片功能載入失敗，請確認網路連線後重試');return}
- html2canvas(el,{backgroundColor:'#eef2f5',scale:2}).then(canvas=>{
-  showImagePreview(canvas,filename);
- }).catch(err=>{alert('圖片產生失敗：'+err.message)});
-}
-function showImagePreview(canvas,filename){
- let overlay=document.createElement('div');
- overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px;overflow:auto';
- let img=document.createElement('img');
- img.src=canvas.toDataURL('image/png');
- img.style.cssText='max-width:100%;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.5);margin-top:10px';
- let tip=document.createElement('div');
- tip.style.cssText='color:#fff;margin-top:14px;font-size:14px;text-align:center';
- tip.textContent='📱 iPhone 請長按圖片選擇「儲存影像」／電腦請右鍵另存圖片';
- let dlLink=document.createElement('a');
- dlLink.href=img.src;dlLink.download=(filename||'報表')+'.png';dlLink.textContent='⬇️ 下載圖片';
- dlLink.style.cssText='display:inline-block;text-decoration:none;text-align:center;margin-top:14px;padding:12px 26px;border-radius:11px;background:#17324d;color:#fff;font-weight:700';
- let closeBtn=document.createElement('button');
- closeBtn.textContent='關閉';
- closeBtn.className='secondary';
- closeBtn.style.cssText='margin-top:12px;padding:10px 24px;width:auto';
- closeBtn.onclick=()=>overlay.remove();
- overlay.appendChild(img);overlay.appendChild(tip);overlay.appendChild(dlLink);overlay.appendChild(closeBtn);
- document.body.appendChild(overlay);
-}
-
-/* ---------- 雲端同步 ---------- */
-function refreshAll(){
- try{renderProductGrid()}catch(e){}
- try{renderProductManage()}catch(e){}
- try{calcSale()}catch(e){}
- try{renderQuick()}catch(e){}
- try{updateHeaderCity()}catch(e){}
- try{
-  if(citySelect){
-   if(db.city){
-    if(TW_CITIES.includes(db.city)){citySelect.value=db.city;cityCustom.style.display='none'}
-    else{citySelect.value='其他';cityCustom.value=db.city;cityCustom.style.display='block'}
-   } else {citySelect.value='';cityCustom.style.display='none'}
-  }
- }catch(e){}
- try{renderCash()}catch(e){}
- try{renderReport()}catch(e){}
- try{renderDateList()}catch(e){}
- try{renderRange()}catch(e){}
-}
-function connectRoom(code){
- if(!rtdb){let el=document.getElementById('syncStatus');if(el)el.textContent='⚠️ 雲端功能載入失敗，請確認網路連線';return}
- if(currentRoomRef){currentRoomRef.off()}
- let ref=rtdb.ref('rooms/'+code);
- currentRoomRef=ref;
- let statusEl=document.getElementById('syncStatus');
- if(statusEl)statusEl.textContent='⏳ 連線中...';
- ref.once('value').then(snap=>{
-  let val=snap.val();
-  if(val){
-   if(db.sales&&db.sales.length>0){
-    let useCloud=confirm('偵測到雲端代碼「'+code+'」已有資料。\n按「確定」＝改用雲端資料（此裝置目前本機資料將被取代）\n按「取消」＝改用本機資料覆蓋雲端');
-    if(useCloud){db=normalizeDb(val);localStorage.setItem(KEY,JSON.stringify(db));refreshAll()}
-    else{pushToCloud()}
-   } else {
-    db=normalizeDb(val);localStorage.setItem(KEY,JSON.stringify(db));refreshAll();
-   }
-  } else {
-   pushToCloud();
-  }
-  ref.on('value',snap2=>{
-   let v2=snap2.val();
-   if(!v2)return;
-   if(v2._updatedBy===deviceId)return;
-   db=normalizeDb(v2);localStorage.setItem(KEY,JSON.stringify(db));refreshAll();
-  });
-  if(statusEl)statusEl.textContent='☁️ 已連線同步（代碼：'+esc(code)+'）';
- }).catch(err=>{
-  if(statusEl)statusEl.textContent='⚠️ 連線失敗：'+err.message;
- });
-}
-
-/* ---------- 操作說明 ---------- */
-function buildGuideHtml(){
- return `
- <h2 style="margin-top:0">📖 操作說明</h2>
- <h3>1️⃣ 收銀</h3>
- <p class="muted">選擇銷售日期 → 輸入各項目數量（有設定票號的項目會自動帶入起始票號）→ 選付款方式 → 完成收款。「⚙️ 展會設定」可設定城市與管理販售項目（含是否需要票號、票號前綴）。</p>
- <h3>2️⃣ 清點</h3>
- <p class="muted">記錄開店零用金、收班時的結算零用金與今日營收現金，系統會自動核對差額。頁面下方也有票券／發票清點小工具，輸入起訖票號即可算張數。</p>
- <h3>3️⃣ 今日營收</h3>
- <p class="muted">可切換日期查看／修改當天每一筆交易，包含日期、數量、付款方式、票號、備註都能調整，也能下載圖片或Excel報表、複製文字摘要。</p>
- <h3>4️⃣ 日期報表</h3>
- <p class="muted">查詢單日或區間報表，可用快捷鈕篩選近7天／1個月／6個月／1年，也能匯出Excel、匯入Excel交易資料（附加不覆蓋）。</p>
- <p class="muted" style="margin-top:14px">💡 所有資料都存在這台裝置的瀏覽器裡，記得定期用「日期報表→Excel報表」備份。右下角 ❔ 按鈕可隨時再打開這份說明。</p>
- `;
-}
-function showGuide(){
- if(document.getElementById('guideOverlay'))return;
- let overlay=document.createElement('div');
- overlay.id='guideOverlay';
- overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px';
- let box=document.createElement('div');
- box.style.cssText='background:#fff;border-radius:16px;max-width:480px;width:100%;max-height:85vh;overflow:auto;padding:20px';
- box.innerHTML=buildGuideHtml();
- let btnRow=document.createElement('div');
- btnRow.style.cssText='display:flex;gap:8px;margin-top:16px';
- let closeBtn=document.createElement('button');
- closeBtn.className='secondary';closeBtn.style.flex='1';closeBtn.textContent='關閉';
- closeBtn.onclick=()=>overlay.remove();
- let dontShowBtn=document.createElement('button');
- dontShowBtn.className='primary';dontShowBtn.style.flex='1';dontShowBtn.textContent='不再顯示';
- dontShowBtn.onclick=()=>{localStorage.setItem(GUIDE_KEY,'1');overlay.remove()};
- btnRow.appendChild(closeBtn);btnRow.appendChild(dontShowBtn);
- box.appendChild(btnRow);
- overlay.appendChild(box);
- document.body.appendChild(overlay);
-}
-
-/* ---------- 初始化 ---------- */
-renderProductGrid();
-renderProductManage();
-calcSale();
-renderQuick();
-initCitySettings();
-roomCode=localStorage.getItem(ROOMCODE_KEY);
-if(!roomCode){roomCode='cmcp1885';localStorage.setItem(ROOMCODE_KEY,roomCode)}
-if(roomCode){connectRoom(roomCode)}
-else{let se=document.getElementById('syncStatus');if(se)se.textContent='🔌 尚未設定同步（僅本機儲存）'}
-if(!localStorage.getItem(GUIDE_KEY)){showGuide()}
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的紙本書櫃_backup.json';a.click()}
+renderAll();
 </script>
-</body></html>
+</body>
+</html>
